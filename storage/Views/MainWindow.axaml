@@ -9,4 +9,5 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="storage">
         <views:MainView />
+	
 </Window>
