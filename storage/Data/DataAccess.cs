@@ -1,7 +1,6 @@
 ﻿using MsBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using Newtonsoft.Json;
-using storage.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,7 +30,7 @@ namespace storage.Data
                     categoryTable.Columns.Add("id", typeof(int));
                     categoryTable.Columns.Add("name", typeof(string));
                     categoryTable.Columns.Add("measure_unit", typeof(string));
-                    foreach (var item in root.Category)
+                    foreach (var item in root.category)
                     {
                         DataRow row = categoryTable.NewRow();
                         row["id"] = item.Id;
@@ -44,7 +43,7 @@ namespace storage.Data
                     materialTable.Columns.Add("id", typeof(int));
                     materialTable.Columns.Add("name", typeof(string));
                     materialTable.Columns.Add("category_id", typeof(int));
-                    foreach (var item in root.Material)
+                    foreach (var item in root.material)
                     {
                         DataRow row = materialTable.NewRow();
                         row["id"] = item.Id;
@@ -56,7 +55,7 @@ namespace storage.Data
                     DataTable invoiceTable = new DataTable("invoice");
                     invoiceTable.Columns.Add("id", typeof(int));
                     invoiceTable.Columns.Add("created_at", typeof(DateTime));
-                    foreach (var item in root.Invoice)
+                    foreach (var item in root.invoice)
                     {
                         DataRow row = invoiceTable.NewRow();
                         row["id"] = item.Id;
@@ -69,7 +68,7 @@ namespace storage.Data
                     materialConsumptionTable.Columns.Add("count", typeof(int));
                     materialConsumptionTable.Columns.Add("invoice_id", typeof(int));
                     materialConsumptionTable.Columns.Add("material_id", typeof(int));
-                    foreach (var item in root.MaterialConsumption)
+                    foreach (var item in root.material_consumption)
                     {
                         DataRow row = materialConsumptionTable.NewRow();
                         row["id"] = item.Id;
@@ -84,7 +83,7 @@ namespace storage.Data
                     materialReceiptTable.Columns.Add("count", typeof(int));
                     materialReceiptTable.Columns.Add("invoice_id", typeof(int));
                     materialReceiptTable.Columns.Add("material_id", typeof(int));
-                    foreach (var item in root.MaterialReceipt)
+                    foreach (var item in root.material_receipt)
                     {
                         DataRow row = materialReceiptTable.NewRow();
                         row["id"] = item.Id;
