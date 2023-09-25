@@ -11,8 +11,60 @@
         <Button Content="Отчет" Click="OnButtonClick" />
         <TabControl>
             <TabItem Header="Категории">
-                <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Categories}" />
+                <Grid>
+                    <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Categories}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Добавить" Command="{Binding AddCategoryCommand}" />
+                        <Button Content="Редактировать" Command="{Binding UpdateCategoryCommand}" />
+                        <Button Content="Удалить" Command="{Binding DeleteCategoryCommand}" />
+                    </StackPanel>
+                </Grid>
             </TabItem>
+            
+            <TabItem Header="Материалы">
+                <Grid>
+                    <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Materials}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Добавить" Command="{Binding AddMaterialCommand}" />
+                        <Button Content="Редактировать" Command="{Binding UpdateMaterialCommand}" />
+                        <Button Content="Удалить" Command="{Binding DeleteMaterialCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Накладные">
+                <Grid>
+                    <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Invoices}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Добавить" Command="{Binding AddInvoiceCommand}" />
+                        <Button Content="Редактировать" Command="{Binding UpdateInvoiceCommand}" />
+                        <Button Content="Удалить" Command="{Binding DeleteInvoiceCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Поступления">
+                <Grid>
+                    <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Receipts}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Добавить" Command="{Binding AddReceiptCommand}" />
+                        <Button Content="Редактировать" Command="{Binding UpdateReceiptCommand}" />
+                        <Button Content="Удалить" Command="{Binding DeleteReceiptCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Расходы">
+                <Grid>
+                    <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Expenses}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Добавить" Command="{Binding AddExpenseCommand}" />
+                        <Button Content="Редактировать" Command="{Binding UpdateExpenseCommand}" />
+                        <Button Content="Удалить" Command="{Binding DeleteExpenseCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
         </TabControl>
     </StackPanel>
 </UserControl>
