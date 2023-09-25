@@ -5,19 +5,28 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using storage.Models;
 namespace storage.Data
 {
     public class DataAccess
     {
         private const string DataPath = @"./Data/data.json";
         public DataSet DS { get; private set; }
+
+        public List<Category> Categories { get; private set; }
+        public List<Invoice> Invoices { get; private set; }
+        public List<Material> Materials { get; private set; }
+        public List<MaterialConsumption> MaterialConsumptions { get; private set; }
+        public List<MaterialReceipt> MaterialReceipts { get; private set; }
         
         public DataAccess() {
             var dataSet = new DataSet();
+
+            Categories = new List<Category>();
+            Materials = new List<Material>();
+            Invoices = new List<Invoice>();
+            MaterialConsumptions = new List<MaterialConsumption>();
+            MaterialReceipts = new List<MaterialReceipt>();
 
             try
             {
@@ -26,71 +35,107 @@ namespace storage.Data
 
                 if (root != null)
                 {
-                    DataTable categoryTable = new DataTable("category");
-                    categoryTable.Columns.Add("id", typeof(int));
-                    categoryTable.Columns.Add("name", typeof(string));
-                    categoryTable.Columns.Add("measure_unit", typeof(string));
-                    foreach (var item in root.category)
+                    DataTable categoryTable = new DataTable("Category");
+                    categoryTable.Columns.Add("Id", typeof(int));
+                    categoryTable.Columns.Add("Name", typeof(string));
+                    categoryTable.Columns.Add("MeasureUnit", typeof(string));
+                    foreach (var item in root.Category)
                     {
                         DataRow row = categoryTable.NewRow();
-                        row["id"] = item.Id;
-                        row["name"] = item.Name;
-                        row["measure_unit"] = item.MeasureUnit;
+                        row["Id"] = item.Id;
+                        row["Name"] = item.Name;
+                        row["MeasureUnit"] = item.MeasureUnit;
                         categoryTable.Rows.Add(row);
+
+                        Categories.Add(new Category
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            MeasureUnit = item.MeasureUnit,
+                        });
                     }
 
-                    DataTable materialTable = new DataTable("material");
-                    materialTable.Columns.Add("id", typeof(int));
-                    materialTable.Columns.Add("name", typeof(string));
-                    materialTable.Columns.Add("category_id", typeof(int));
-                    foreach (var item in root.material)
+                    DataTable materialTable = new DataTable("Material");
+                    materialTable.Columns.Add("Id", typeof(int));
+                    materialTable.Columns.Add("Name", typeof(string));
+                    materialTable.Columns.Add("CategoryId", typeof(int));
+                    foreach (var item in root.Material)
                     {
                         DataRow row = materialTable.NewRow();
-                        row["id"] = item.Id;
-                        row["name"] = item.Name;
-                        row["category_id"] = item.CategoryId;
+                        row["Id"] = item.Id;
+                        row["Name"] = item.Name;
+                        row["CategoryId"] = item.CategoryId;
                         materialTable.Rows.Add(row);
+
+                        Materials.Add(new Material
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            CategoryId = item.CategoryId,
+                        });
                     }
 
-                    DataTable invoiceTable = new DataTable("invoice");
-                    invoiceTable.Columns.Add("id", typeof(int));
-                    invoiceTable.Columns.Add("created_at", typeof(DateTime));
-                    foreach (var item in root.invoice)
+                    DataTable invoiceTable = new DataTable("Invoice");
+                    invoiceTable.Columns.Add("Id", typeof(int));
+                    invoiceTable.Columns.Add("CreatedAt", typeof(DateTime));
+                    foreach (var item in root.Invoice)
                     {
                         DataRow row = invoiceTable.NewRow();
-                        row["id"] = item.Id;
-                        row["created_at"] = item.CreatedAt;
+                        row["Id"] = item.Id;
+                        row["CreatedAt"] = item.CreatedAt;
                         invoiceTable.Rows.Add(row);
+
+                        Invoices.Add(new Invoice
+                        {
+                            Id = item.Id,
+                            CreatedAt = item.CreatedAt
+                        });
                     }
 
-                    DataTable materialConsumptionTable = new DataTable("material_consumption");
-                    materialConsumptionTable.Columns.Add("id", typeof(int));
+                    DataTable materialConsumptionTable = new DataTable("MaterialConsumption");
+                    materialConsumptionTable.Columns.Add("Id", typeof(int));
                     materialConsumptionTable.Columns.Add("count", typeof(int));
-                    materialConsumptionTable.Columns.Add("invoice_id", typeof(int));
-                    materialConsumptionTable.Columns.Add("material_id", typeof(int));
-                    foreach (var item in root.material_consumption)
+                    materialConsumptionTable.Columns.Add("InvoiceId", typeof(int));
+                    materialConsumptionTable.Columns.Add("MaterialId", typeof(int));
+                    foreach (var item in root.MaterialConsumption)
                     {
                         DataRow row = materialConsumptionTable.NewRow();
-                        row["id"] = item.Id;
+                        row["Id"] = item.Id;
                         row["count"] = item.Count;
-                        row["invoice_id"] = item.InvoiceId;
-                        row["material_id"] = item.MaterialId;
+                        row["InvoiceId"] = item.InvoiceId;
+                        row["MaterialId"] = item.MaterialId;
                         materialConsumptionTable.Rows.Add(row);
+
+                        MaterialConsumptions.Add(new MaterialConsumption
+                        {
+                            Id = item.Id,
+                            Count = item.Count,
+                            InvoiceId = item.InvoiceId,
+                            MaterialId = item.MaterialId,
+                        });
                     }
 
-                    DataTable materialReceiptTable = new DataTable("material_receipt");
-                    materialReceiptTable.Columns.Add("id", typeof(int));
+                    DataTable materialReceiptTable = new DataTable("MaterialReceipt");
+                    materialReceiptTable.Columns.Add("Id", typeof(int));
                     materialReceiptTable.Columns.Add("count", typeof(int));
-                    materialReceiptTable.Columns.Add("invoice_id", typeof(int));
-                    materialReceiptTable.Columns.Add("material_id", typeof(int));
-                    foreach (var item in root.material_receipt)
+                    materialReceiptTable.Columns.Add("InvoiceId", typeof(int));
+                    materialReceiptTable.Columns.Add("MaterialId", typeof(int));
+                    foreach (var item in root.MaterialReceipt)
                     {
                         DataRow row = materialReceiptTable.NewRow();
-                        row["id"] = item.Id;
+                        row["Id"] = item.Id;
                         row["count"] = item.Count;
-                        row["invoice_id"] = item.InvoiceId;
-                        row["material_id"] = item.MaterialId;
+                        row["InvoiceId"] = item.InvoiceId;
+                        row["MaterialId"] = item.MaterialId;
                         materialReceiptTable.Rows.Add(row);
+
+                        MaterialReceipts.Add(new MaterialReceipt
+                        {
+                            Id = item.Id,
+                            Count = item.Count,
+                            InvoiceId = item.InvoiceId,
+                            MaterialId = item.MaterialId,
+                        });
                     }
 
                     dataSet.Tables.Add(categoryTable);
@@ -98,6 +143,8 @@ namespace storage.Data
                     dataSet.Tables.Add(invoiceTable);
                     dataSet.Tables.Add(materialConsumptionTable);
                     dataSet.Tables.Add(materialReceiptTable);
+
+                    dataSet.AcceptChanges();
                 }
             }
             catch (FileNotFoundException e) {

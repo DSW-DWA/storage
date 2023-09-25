@@ -1,120 +1,120 @@
 {
-  "category": [
+  "Category": [
     {
-      "id": 1,
-      "name": "Электроника",
-      "measure_unit": "шт."
+      "Id": 1,
+      "Name": "Электроника",
+      "MeasureUnit": "шт."
     },
     {
-      "id": 2,
-      "name": "Одежда",
-      "measure_unit": "шт."
+      "Id": 2,
+      "Name": "Одежда",
+      "MeasureUnit": "шт."
     },
     {
-      "id": 3,
-      "name": "Мебель",
-      "measure_unit": "шт."
+      "Id": 3,
+      "Name": "Мебель",
+      "MeasureUnit": "шт."
     }
   ],
-  "material": [
+  "Material": [
     {
-      "id": 1,
-      "name": "Ноутбук",
-      "category_id": 1
+      "Id": 1,
+      "Name": "Ноутбук",
+      "CategoryId": 1
     },
     {
-      "id": 2,
-      "name": "Футболка",
-      "category_id": 2
+      "Id": 2,
+      "Name": "Футболка",
+      "CategoryId": 2
     },
     {
-      "id": 3,
-      "name": "Стул",
-      "category_id": 3
+      "Id": 3,
+      "Name": "Стул",
+      "CategoryId": 3
     },
     {
-      "id": 4,
-      "name": "Телевизор",
-      "category_id": 1
+      "Id": 4,
+      "Name": "Телевизор",
+      "CategoryId": 1
     },
     {
-      "id": 5,
-      "name": "Брюки",
-      "category_id": 2
+      "Id": 5,
+      "Name": "Брюки",
+      "CategoryId": 2
     },
     {
-      "id": 6,
-      "name": "Стол",
-      "category_id": 3
+      "Id": 6,
+      "Name": "Стол",
+      "CategoryId": 3
     },
     {
-      "id": 7,
-      "name": "Смартфон",
-      "category_id": 1
+      "Id": 7,
+      "Name": "Смартфон",
+      "CategoryId": 1
     },
     {
-      "id": 8,
-      "name": "Рубашка",
-      "category_id": 2
+      "Id": 8,
+      "Name": "Рубашка",
+      "CategoryId": 2
     },
     {
-      "id": 9,
-      "name": "Диван",
-      "category_id": 3
+      "Id": 9,
+      "Name": "Диван",
+      "CategoryId": 3
     }
   ],
-  "invoice": [
+  "Invoice": [
     {
-      "id": 1,
-      "created_at": "2023-09-20T11:40:00Z"
+      "Id": 1,
+      "CreatedAt": "2023-09-20T11:40:00Z"
     },
     {
-      "id": 2,
-      "created_at": "2023-09-20T11:40:00Z"
+      "Id": 2,
+      "CreatedAt": "2023-09-20T11:40:00Z"
     },
     {
-      "id": 3,
-      "created_at": "2023-09-20T11:40:00Z"
+      "Id": 3,
+      "CreatedAt": "2023-09-20T11:40:00Z"
     }
   ],
-  "material_consumption": [
+  "MaterialConsumption": [
     {
-      "id": 1,
-      "count": 10,
-      "invoice_id": 1,
-      "material_id": 1
+      "Id": 1,
+      "Count": 10,
+      "InvoiceId": 1,
+      "MaterialId": 1
     },
     {
-      "id": 2,
-      "count": 5,
-      "invoice_id": 2,
-      "material_id": 2
+      "Id": 2,
+      "Count": 5,
+      "InvoiceId": 2,
+      "MaterialId": 2
     },
     {
-      "id": 3,
-      "count": 2,
-      "invoice_id": 3,
-      "material_id": 3
+      "Id": 3,
+      "Count": 2,
+      "InvoiceId": 3,
+      "MaterialId": 3
     }
   ],
-  "material_receipt": [
+  "MaterialReceipt": [
     {
-      "id": 1,
-      "count": 20,
-      "invoice_id": 1,
-      "material_id": 1
+      "Id": 1,
+      "Count": 20,
+      "InvoiceId": 1,
+      "MaterialId": 1
     },
     {
-      "id": 2,
-      "count": 10,
-      "invoice_id": 2,
-      "material_id": 2
+      "Id": 2,
+      "Count": 10,
+      "InvoiceId": 2,
+      "MaterialId": 2
     },
     {
-      "id": 3,
-      "count": 5,
-      "invoice_id": 3,
-      "material_id": 3
+      "Id": 3,
+      "Count": 5,
+      "InvoiceId": 3,
+      "MaterialId": 3
     }
   ]
 }

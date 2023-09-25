@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using Newtonsoft.Json;
@@ -11,25 +12,32 @@ using Xceed.Words.NET;
 
 namespace storage.ViewModels;
 
-public class MaterialInventory : ReactiveObject
+public class MainViewModel : ReactiveObject
 {
-    private const string _dataPath = @"./Data/data.json";
-
-    public DataSet MaterialInventoryDataset { get; private set; }
+    public ObservableCollection<Category> Categories { get; }
+    public ObservableCollection<Material> Materials { get; }
+    public ObservableCollection<Invoice> Invoices { get; }
+    public ObservableCollection<MaterialConsumption> MaterialConsumptions { get; }
+    public ObservableCollection<MaterialReceipt> MaterialReceipts { get; }
 
     private DataAccess _dataAccess;
 
-    public MaterialInventory()
+    public MainViewModel()
     {
         _dataAccess = new DataAccess();
-        MaterialInventoryDataset = _dataAccess.DS;
+
+        Categories = new ObservableCollection<Category>(_dataAccess.Categories);
+        Materials = new ObservableCollection<Material>(_dataAccess.Materials);
+        Invoices = new ObservableCollection<Invoice>(_dataAccess.Invoices);
+        MaterialConsumptions = new ObservableCollection<MaterialConsumption>(_dataAccess.MaterialConsumptions);
+        MaterialReceipts = new ObservableCollection<MaterialReceipt>(_dataAccess.MaterialReceipts);
+
     }
 
     public void ExportToWord()
     {
-        var dataSet = MaterialInventoryDataset;
+        var dataSet = _dataAccess.DS;
         var outputPath = @"./report.docx";
-        var mats = MaterialInventoryDataset.Tables["material"];
         using (var doc = DocX.Create(outputPath))
         {
             foreach (DataTable table in dataSet.Tables)
@@ -56,7 +64,7 @@ public class MaterialInventory : ReactiveObject
 
     public void ExportToExcel()
     {
-        var dataSet = MaterialInventoryDataset;
+        var dataSet = _dataAccess.DS;
         var outputPath = @"./report.xlsx";
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         using (var package = new ExcelPackage())

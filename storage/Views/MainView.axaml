@@ -5,14 +5,47 @@
              xmlns:vm="clr-namespace:storage.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="storage.Views.MainView"
-             x:DataType="vm:MaterialInventory">
-
-    <StackPanel>
-        <Button Content="Отчет" Click="OnButtonClick" />
-        <TabControl>
-            <TabItem Header="Категории">
-                <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Categories}" />
-            </TabItem>
-        </TabControl>
-    </StackPanel>
+             x:DataType="vm:MainViewModel">
+	<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+		<TabControl Margin="5">
+			<TabItem Header="Категории">
+				<DataGrid Margin="20" ItemsSource="{Binding Categories}"
+				  AutoGenerateColumns="True"
+				  GridLinesVisibility="All"
+				  BorderThickness="1" BorderBrush="Gray">
+				</DataGrid>
+			</TabItem>
+			<TabItem Header="Материалы">
+				<DataGrid Margin="20" ItemsSource="{Binding Materials}"
+				  AutoGenerateColumns="True"
+				  GridLinesVisibility="All"
+				  BorderThickness="1" BorderBrush="Gray">
+				</DataGrid>
+			</TabItem>
+			<TabItem Header="Накладный">
+				<DataGrid Margin="20" ItemsSource="{Binding Invoices}"
+				  AutoGenerateColumns="True"
+				  GridLinesVisibility="All"
+				  BorderThickness="1" BorderBrush="Gray">
+				</DataGrid>
+			</TabItem>
+			<TabItem Header="Расход">
+				<DataGrid Margin="20" ItemsSource="{Binding MaterialConsumptions}"
+				  AutoGenerateColumns="True"
+				  GridLinesVisibility="All"
+				  BorderThickness="1" BorderBrush="Gray">
+				</DataGrid>
+			</TabItem>
+			<TabItem Header="Приход">
+				<DataGrid Margin="20" ItemsSource="{Binding MaterialReceipts}"
+				  AutoGenerateColumns="True"
+				  GridLinesVisibility="All"
+				  BorderThickness="1" BorderBrush="Gray">
+				</DataGrid>
+			</TabItem>
+			<TabItem Header="Отчеты">
+				<Button  Click="OnButtonClick">Создать отчеты</Button>
+			</TabItem>
+		</TabControl>
+	</StackPanel>
 </UserControl>
