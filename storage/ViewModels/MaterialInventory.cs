@@ -28,7 +28,8 @@ public class MaterialInventory : ReactiveObject
     public void ExportToWord()
     {
         var dataSet = MaterialInventoryDataset;
-        var outputPath = @"./output/report.docx";
+        var outputPath = @"./report.docx";
+        var mats = MaterialInventoryDataset.Tables["material"];
         using (var doc = DocX.Create(outputPath))
         {
             foreach (DataTable table in dataSet.Tables)
@@ -56,7 +57,7 @@ public class MaterialInventory : ReactiveObject
     public void ExportToExcel()
     {
         var dataSet = MaterialInventoryDataset;
-        var outputPath = @"./output/report.xlsx";
+        var outputPath = @"./report.xlsx";
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         using (var package = new ExcelPackage())
         {

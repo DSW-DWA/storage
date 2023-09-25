@@ -20,7 +20,7 @@ public partial class MainView : UserControl
 
         // Initialize the MaterialInventory
         _inventory = new MaterialInventory();
-        var dataSet = _inventory.MaterialInventoryDataset;
+        /*var dataSet = _inventory.MaterialInventoryDataset;
 
         var categories = new List<Category>();
         
@@ -35,7 +35,7 @@ public partial class MainView : UserControl
             });
         }
 
-        Categories = new ObservableCollection<Category>(categories);
+        Categories = new ObservableCollection<Category>(categories);*/
     }
 
     private void OnButtonClick(object sender, RoutedEventArgs e)
