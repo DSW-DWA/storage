@@ -1,6 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using storage.ViewModels;
 
 namespace storage.Views;
 

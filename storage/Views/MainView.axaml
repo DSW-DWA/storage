@@ -5,6 +5,14 @@
              xmlns:vm="clr-namespace:storage.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="storage.Views.MainView"
-             x:DataType="vm:MainViewModel">
-	<Button  Click="OnButtonClick">Отчет</Button>
+             x:DataType="vm:MaterialInventory">
+
+    <StackPanel>
+        <Button Content="Отчет" Click="OnButtonClick" />
+        <TabControl>
+            <TabItem Header="Категории">
+                <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Categories}" />
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 </UserControl>
