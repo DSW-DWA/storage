@@ -3,44 +3,45 @@ using System.Data;
 using storage.Models;
 namespace storage.Data;
 
-public class CategoryAccess : DataAccess
+public class CategoryAccess : IAccess<Category>
 {
-    public void CreateCategory(Category category)
+    readonly DataSet _dataSet;
+    public CategoryAccess(DataSet dataSet)
     {
-        DataRow? newRow = Ds.Tables["Category"]?.NewRow();
-        if (newRow != null)
-        {
-            newRow["Id"] = category.Id;
-            newRow["Name"] = category.Name;
-            newRow["MeasureUnit"] = category.MeasureUnit;
-            Ds.Tables["Category"]?.Rows.Add(newRow);
-        }
-        SaveDataToXml();
+        _dataSet = dataSet;
     }
 
-    public List<Category> GetAllCategories()
+    public void Save(Category element)
+    {
+        var newRow = _dataSet.Tables["Category"]?.NewRow();
+        if (newRow != null)
+        {
+            newRow["Id"] = element.Id;
+            newRow["Name"] = element.Name;
+            newRow["MeasureUnit"] = element.MeasureUnit;
+            _dataSet.Tables["Category"]?.Rows.Add(newRow);
+        }
+        DataAccess.SaveDataToXml(_dataSet);
+    }
+
+    public List<Category> GetAll()
     {
         var categories = new List<Category>();
 
-        var dataRowCollection = Ds.Tables["Category"]?.Rows;
+        var dataRowCollection = _dataSet.Tables["Category"]?.Rows;
         if (dataRowCollection == null)
             return categories;
         foreach (DataRow row in dataRowCollection)
         {
-            categories.Add(new Category
-            {
-                Id = (long)row["Id"],
-                Name = (string)row["Name"],
-                MeasureUnit = (string)row["MeasureUnit"]
-            });
+            categories.Add(new Category((long)row["Id"], (string)row["Name"], (string)row["MeasureUnit"]));
         }
 
         return categories;
     }
-    
-    public void UpdateCategory(Category updatedCategory)
+
+    public void Update(Category updatedCategory)
     {
-        var rows = Ds.Tables["Category"]?.Select($"Id = {updatedCategory.Id}");
+        var rows = _dataSet.Tables["Category"]?.Select($"Id = {updatedCategory.Id}");
         if (rows is { Length: <= 0 })
             return;
         var row = rows?[0];
@@ -49,21 +50,17 @@ public class CategoryAccess : DataAccess
             row["Name"] = updatedCategory.Name;
             row["MeasureUnit"] = updatedCategory.MeasureUnit;
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
-    
-    public void DeleteCategory(long categoryId)
+
+    public void Delete(int categoryId)
     {
-        var rows = Ds.Tables["Category"]?.Select($"Id = {categoryId}");
+        var rows = _dataSet.Tables["Category"]?.Select($"Id = {categoryId}");
         if (rows != null)
             foreach (var row in rows)
             {
-                Ds.Tables["Category"]?.Rows.Remove(row);
+                _dataSet.Tables["Category"]?.Rows.Remove(row);
             }
-        SaveDataToXml();
-    }
-
-    public void SaveCategory(Category category)
-    {
+        DataAccess.SaveDataToXml(_dataSet);
     }
 }

@@ -2,7 +2,14 @@
 
 public class Category
 {
-    public long Id { get; set; }
-    public string Name { get; set; }
-    public string MeasureUnit { get; set; }
+    public long Id { get; init; }
+    public string Name { get; init; }
+    public string MeasureUnit { get; init; }
+
+    public Category(long id, string name, string measureUnit)
+    {
+        Id = id;
+        Name = name;
+        MeasureUnit = measureUnit;
+    }
 }

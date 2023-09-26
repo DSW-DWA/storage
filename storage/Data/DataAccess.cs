@@ -1,33 +1,28 @@
-﻿using MsBox.Avalonia.Enums;
-using MsBox.Avalonia;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using storage.Models;
-using Xceed.Document.NET;
+﻿using System.Data;
 
-namespace storage.Data
+namespace storage.Data;
+
+public class DataAccess
 {
-    public class DataAccess
+    const string DataSchemaPath = @"./Data/schema.xml";
+    const string DataPath = @"./Data/data.xml";
+
+    readonly DataSet _dataSet;
+
+    public DataAccess()
     {
-        const string DataSchemaPath = @"./Data/schema.xml";
-        const string DataPath = @"./Data/data.xml";
+        _dataSet = new DataSet();
+        _dataSet.ReadXmlSchema(DataSchemaPath);
+        _dataSet.ReadXml(DataPath);
+    }
 
-        internal DataSet Ds { get; set; }
+    public DataSet GetDataSet()
+    {
+        return _dataSet;
+    }
 
-        protected DataAccess()
-        {
-            Ds = new DataSet();
-            Ds.ReadXmlSchema(DataSchemaPath);
-            Ds.ReadXml(DataPath);
-        }
-
-        internal void SaveDataToXml()
-        {
-            Ds.WriteXml(DataPath);
-        }
+    public static void SaveDataToXml(DataSet dataSet)
+    {
+        dataSet.WriteXml(DataPath);
     }
 }

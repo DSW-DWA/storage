@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
+﻿using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using storage.Models;
@@ -8,25 +6,26 @@ using storage.ViewModels;
 using System.Threading;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia;
+using storage.Data;
 
 namespace storage.Views;
 
 public partial class MainView : UserControl
 {
-    
-    private MainViewModel _model;
+
+    readonly MainViewModel _model;
 
     public MainView()
     {
         InitializeComponent();
 
-        // Initialize the MaterialInventory
         _model = new MainViewModel();
     }
 
-    private void OnButtonClick(object sender, RoutedEventArgs e)
+    void OnButtonClick(object sender, RoutedEventArgs e)
     {
         var t1 = new Thread(() => _model.ExportToWord());
         var t2 = new Thread(() => _model.ExportToExcel());
@@ -35,185 +34,200 @@ public partial class MainView : UserControl
         t2.Start();
     }
 
-    private async void SaveItemClick(object sender, RoutedEventArgs e)
+    async void UpdateElementClick(object sender, RoutedEventArgs e)
     {
         var btn = (Button)sender;
+        string errorMessage = "Данные элемента имеют неверный формат";
+
         switch (btn.Name)
         {
             case "SaveCategory":
-                var item = (Category)CategoryGrid.SelectedItem;
-                if (item != null && item.Name != null && item.Name != "" && item.MeasureUnit != null && item.MeasureUnit !="")
+                var categoryElement = (Category)CategoryGrid.SelectedItem;
+                if (IsValidCategory(categoryElement))
                 {
-                    _model.CategoryAccess.SaveCategory(item);
-                } else
+                    _model.CategoryAccess.Update(categoryElement);
+                }
+                else
                 {
-                    var box = MessageBoxManager
-                    .GetMessageBoxStandard("Ошибка", "Данные элемента имеют не верный формат",
-                    ButtonEnum.Ok);
-                    var result = await box.ShowAsync();
+                    await ShowErrorMessage(errorMessage);
                 }
                 break;
             case "SaveInvoice":
                 var invoiceItem = (Invoice)InvoiceGrid.SelectedItem;
-                if (invoiceItem != null && invoiceItem.CreatedAt != null)
+                if (IsValidInvoice(invoiceItem))
                 {
-                    _model.InvoiceAccess.SaveInvoice(invoiceItem);
-                } else
-                {
-                    var box = MessageBoxManager
-                    .GetMessageBoxStandard("Ошибка", "Данные элемента имеют не верный формат",
-                    ButtonEnum.Ok);
-                    var result = await box.ShowAsync();
+                    _model.InvoiceAccess.Update(invoiceItem);
                 }
-
+                else
+                {
+                    await ShowErrorMessage(errorMessage);
+                }
                 break;
             case "SaveMaterial":
                 var materialItem = (Material)MaterialGrid.SelectedItem;
-                if (materialItem != null && materialItem.CategoryId != -1 && materialItem.CategoryId != null && materialItem.Name != null && materialItem.Name != "")
+                if (IsValidMaterial(materialItem))
                 {
-                    _model.MaterialAccess.SaveMaterial(materialItem);
-                } else
+                    _model.MaterialAccess.Update(materialItem);
+                }
+                else
                 {
-                    var box = MessageBoxManager
-                    .GetMessageBoxStandard("Ошибка", "Данные элемента имеют не верный формат",
-                    ButtonEnum.Ok);
-                    var result = await box.ShowAsync();
+                    await ShowErrorMessage(errorMessage);
                 }
                 break;
             case "SaveMaterialConsumption":
-                var consumptionItem = (MaterialConsumption)MaterialConsmptionGrid.SelectedItem;
-                if (consumptionItem != null && consumptionItem.Count > 0 && consumptionItem.Count != null && consumptionItem.InvoiceId > 0 && consumptionItem.InvoiceId != null && consumptionItem.MaterialId > 0 && consumptionItem.MaterialId != null)
+                var consumptionItem = (MaterialConsumption)MaterialConsumptionGrid.SelectedItem;
+                if (IsValidMaterialConsumption(consumptionItem))
                 {
-                    _model.MaterialConsumptionAccess.SaveMaterialConsumption(consumptionItem);
-                } else
+                    _model.MaterialConsumptionAccess.Update(consumptionItem);
+                }
+                else
                 {
-                    var box = MessageBoxManager
-                    .GetMessageBoxStandard("Ошибка", "Данные элемента имеют не верный формат",
-                    ButtonEnum.Ok);
-                    var result = await box.ShowAsync();
+                    await ShowErrorMessage(errorMessage);
                 }
                 break;
             case "SaveMaterialReceipt":
                 var receiptItem = (MaterialReceipt)MaterialReceiptGrid.SelectedItem;
-                if (receiptItem != null && receiptItem.Count > 0 && receiptItem.Count != null && receiptItem.InvoiceId > 0 && receiptItem.InvoiceId != null && receiptItem.MaterialId > 0 && receiptItem.MaterialId != null)
+                if (IsValidMaterialReceipt(receiptItem))
                 {
-                    _model.MaterialReceiptAccess.SaveMaterialReceipt(receiptItem);
-                } else
-                {
-                    var box = MessageBoxManager
-                    .GetMessageBoxStandard("Ошибка", "Данные элемента имеют не верный формат",
-                    ButtonEnum.Ok);
-                    var result = await box.ShowAsync();
+                    _model.MaterialReceiptAccess.Update(receiptItem);
                 }
-
+                else
+                {
+                    await ShowErrorMessage(errorMessage);
+                }
                 break;
-
         }
     }
 
-    private void DeleteItemClick(object sender, RoutedEventArgs e)
+    bool IsValidCategory(Category? element)
+    {
+        return element != null && !string.IsNullOrWhiteSpace(element.Name) && !string.IsNullOrWhiteSpace(element.MeasureUnit);
+    }
+
+    bool IsValidInvoice(Invoice? element)
+    {
+        return element?.CreatedAt != null;
+    }
+
+    bool IsValidMaterial(Material? element)
+    {
+        return element != null && element.CategoryId != -1 && !string.IsNullOrWhiteSpace(element.Name);
+    }
+
+    bool IsValidMaterialConsumption(MaterialConsumption? element)
+    {
+        return element is { Count: > 0, InvoiceId: > 0, MaterialId: > 0 };
+    }
+
+    bool IsValidMaterialReceipt(MaterialReceipt? element)
+    {
+        return element is { Count: > 0, InvoiceId: > 0, MaterialId: > 0 };
+    }
+
+    async Task ShowErrorMessage(string message)
+    {
+        var box = MessageBoxManager.GetMessageBoxStandard("Ошибка", message, ButtonEnum.Ok);
+        await box.ShowAsync();
+    }
+
+    void DeleteElementClick(object sender, RoutedEventArgs e)
     {
         var btn = (Button)sender;
+
         switch (btn.Name)
         {
             case "DeleteCategory":
-                var item = (Category)CategoryGrid.SelectedItem;
-                _model.CategoryAccess.DeleteCategory(item.Id);
-                _model.Categories.Remove(item);
-                CategoryGrid.ItemsSource = _model.Categories;
+                DeleteElement<Category>(_model.CategoryAccess, CategoryGrid, _model.Categories);
                 break;
             case "DeleteInvoice":
-                var invoiceItem = (Invoice)InvoiceGrid.SelectedItem;
-                _model.InvoiceAccess.DeleteInvoice(invoiceItem.Id);
-                _model.Invoices.Remove(invoiceItem);
-                InvoiceGrid.ItemsSource = _model.Invoices;
-
+                DeleteElement<Invoice>(_model.InvoiceAccess, InvoiceGrid, _model.Invoices);
                 break;
             case "DeleteMaterial":
-                var materialItem = (Material)MaterialGrid.SelectedItem;
-                _model.MaterialAccess.DeleteMaterial(materialItem.Id); 
-                _model.Materials.Remove(materialItem);
-                MaterialGrid.ItemsSource = _model.Materials;
+                DeleteElement<Material>(_model.MaterialAccess, MaterialGrid, _model.Materials);
                 break;
             case "DeleteMaterialConsumption":
-                var consumptionItem = (MaterialConsumption)MaterialConsmptionGrid.SelectedItem;
-                _model.MaterialConsumptionAccess.DeleteMaterialConsumption(consumptionItem.Id);
-                _model.MaterialConsumptions.Remove(consumptionItem);
-                MaterialConsmptionGrid.ItemsSource = _model.MaterialConsumptions;
+                DeleteElement<MaterialConsumption>(_model.MaterialConsumptionAccess, MaterialConsumptionGrid, _model.MaterialConsumptions);
                 break;
             case "DeleteMaterialReceipt":
-                var receiptItem = (MaterialReceipt)MaterialReceiptGrid.SelectedItem;
-                _model.MaterialReceiptAccess.DeleteMaterialReceipt(receiptItem.Id);
-                _model.MaterialReceipts.Remove(receiptItem);
-                MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
+                DeleteElement<MaterialReceipt>(_model.MaterialReceiptAccess, MaterialReceiptGrid, _model.MaterialReceipts);
                 break;
-
         }
     }
-    private async void CreateItemClick(object sender, RoutedEventArgs e)
+
+    void DeleteElement<T>(IAccess<T> access, DataGrid dataGrid, ObservableCollection<T> collection)
+    {
+        var item = (T)dataGrid.SelectedItem;
+        if (item == null) return;
+
+        int itemId = Convert.ToInt32(item.GetType().GetProperty("Id")?.GetValue(item));
+        access.Delete(itemId);
+        var itemToRemove = collection.First(entity => GetEntityId(entity) == itemId);
+        collection.Remove(itemToRemove);
+        dataGrid.ItemsSource = collection;
+    }
+
+    async void CreateElementClick(object sender, RoutedEventArgs e)
     {
         var btn = (Button)sender;
+
         switch (btn.Name)
         {
             case "CreateCategory":
-                _model.Categories.Add(new Category
-                {
-                    Id = _model.Categories.Select(x => x.Id).Max() + 1,
-                    Name = null,
-                    MeasureUnit = null
-                });
+                int catId = GetNextId(_model.Categories);
+                var category = new Category(catId, $"Категория {catId}", "шт");
+                _model.CategoryAccess.Save(category);
+                _model.Categories.Add(category);
                 CategoryGrid.ItemsSource = _model.Categories;
-                
                 break;
             case "CreateInvoice":
-                _model.Invoices.Add(new Invoice
-                {
-                    Id = _model.Invoices.Select(x => x.Id).Max() + 1,
-                    CreatedAt = DateTime.Now,
-                });
+                var invoice = new Invoice(GetNextId(_model.Invoices), DateTime.Now);
+                _model.InvoiceAccess.Save(invoice);
+                _model.Invoices.Add(invoice);
                 InvoiceGrid.ItemsSource = _model.Invoices;
-
-
                 break;
             case "CreateMaterial":
-                _model.Materials.Add(new Material
-                {
-                    Id = _model.Materials.Select(x => x.Id).Max() + 1,
-                    Name = null,
-                    CategoryId = -1,
-                });
+                int matId = GetNextId(_model.Materials);
+                var material = new Material(matId, $"Материал {matId}", GetLastEntityId(_model.Categories));
+                _model.MaterialAccess.Save(material);
+                _model.Materials.Add(material);
                 MaterialGrid.ItemsSource = _model.Materials;
-
                 break;
-            case "CreateMaterialConsmption":
-                _model.MaterialConsumptions.Add(new MaterialConsumption
-                {
-                    Id = _model.MaterialConsumptions.Select(x => x.Id).Max() + 1,
-                    Count = -1,
-                    MaterialId = -1,
-                    InvoiceId = -1,
-                });
-                MaterialConsmptionGrid.ItemsSource = _model.MaterialConsumptions;
-
+            case "CreateMaterialConsumption":
+                var materialConsumption = new MaterialConsumption(
+                    GetNextId(_model.MaterialConsumptions), 0, GetLastEntityId(_model.Invoices), GetLastEntityId(_model.Materials));
+                _model.MaterialConsumptionAccess.Save(materialConsumption);
+                _model.MaterialConsumptions.Add(materialConsumption);
+                MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
                 break;
             case "CreateMaterialReceipt":
-                _model.MaterialReceipts.Add(new MaterialReceipt
-                {
-                    Id = _model.MaterialReceipts.Select(x => x.Id).Max() + 1,
-                    Count = -1,
-                    MaterialId = -1,
-                    InvoiceId = -1,
-                });
-                MaterialReceiptGrid.ItemsSource= _model.MaterialReceipts;
-
+                var materialReceipt = new MaterialReceipt(GetNextId(_model.MaterialConsumptions), 0, GetLastEntityId(_model.Invoices), GetLastEntityId(_model.Materials));
+                _model.MaterialReceiptAccess.Save(materialReceipt);
+                _model.MaterialReceipts.Add(materialReceipt);
+                MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
                 break;
             default:
-                var box = MessageBoxManager
-                .GetMessageBoxStandard("Ошибка", "Неверная таблица",
-                ButtonEnum.Ok);
-                var result = await box.ShowAsync();
-
+                await ShowErrorMessage("Неверная таблица");
                 break;
         }
+    }
+
+    int GetEntityId<T>(T entity)
+    {
+        var idProperty = entity?.GetType().GetProperty("Id");
+        if (idProperty == null)
+            throw new ArgumentException("Entity does not have a valid ID property.");
+        object? idValue = idProperty.GetValue(entity);
+        if (idValue != null) return Convert.ToInt32(idValue);
+        throw new ArgumentException("Entity does not have a valid ID property.");
+    }
+
+    int GetNextId<T>(ObservableCollection<T> collection)
+    {
+        return collection.Count > 0 ? collection.Max(entity => (int?)GetEntityId(entity)) + 1 ?? 1 : 1;
+    }
+
+    int GetLastEntityId<T>(ObservableCollection<T> collection)
+    {
+        return collection.Count > 0 ? collection.Max(entity => (int?)GetEntityId(entity)) ?? 1 : 1;
     }
 }

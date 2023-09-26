@@ -4,42 +4,44 @@ using System.Data;
 using storage.Models;
 namespace storage.Data;
 
-public class InvoiceAccess : DataAccess
+public class InvoiceAccess : IAccess<Invoice>
 {
-    public void CreateInvoice(Invoice invoice)
+    readonly DataSet _dataSet;
+    public InvoiceAccess(DataSet dataSet)
     {
-        DataRow? newRow = Ds.Tables["Invoice"]?.NewRow();
+        _dataSet = dataSet;
+    }
+
+    public void Save(Invoice invoice)
+    {
+        var newRow = _dataSet.Tables["Invoice"]?.NewRow();
         if (newRow != null)
         {
             newRow["Id"] = invoice.Id;
             newRow["CreatedAt"] = invoice.CreatedAt;
-            Ds.Tables["Invoice"]?.Rows.Add(newRow);
+            _dataSet.Tables["Invoice"]?.Rows.Add(newRow);
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 
-    public List<Invoice> GetAllInvoices()
+    public List<Invoice> GetAll()
     {
         var invoices = new List<Invoice>();
 
-        var dataRowCollection = Ds.Tables["Invoice"]?.Rows;
+        var dataRowCollection = _dataSet.Tables["Invoice"]?.Rows;
         if (dataRowCollection == null)
             return invoices;
         foreach (DataRow row in dataRowCollection)
         {
-            invoices.Add(new Invoice
-            {
-                Id = (long)row["Id"],
-                CreatedAt = (DateTime)row["CreatedAt"]
-            });
+            invoices.Add(new Invoice((long)row["Id"], (DateTime)row["CreatedAt"]));
         }
 
         return invoices;
     }
 
-    public void UpdateInvoice(Invoice updatedInvoice)
+    public void Update(Invoice updatedInvoice)
     {
-        var rows = Ds.Tables["Invoice"]?.Select($"Id = {updatedInvoice.Id}");
+        var rows = _dataSet.Tables["Invoice"]?.Select($"Id = {updatedInvoice.Id}");
         if (rows is { Length: <= 0 })
             return;
         var row = rows?[0];
@@ -47,21 +49,17 @@ public class InvoiceAccess : DataAccess
         {
             row["CreatedAt"] = updatedInvoice.CreatedAt;
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 
-    public void DeleteInvoice(long invoiceId)
+    public void Delete(int invoiceId)
     {
-        var rows = Ds.Tables["Invoice"]?.Select($"Id = {invoiceId}");
+        var rows = _dataSet.Tables["Invoice"]?.Select($"Id = {invoiceId}");
         if (rows != null)
             foreach (var row in rows)
             {
-                Ds.Tables["Invoice"]?.Rows.Remove(row);
+                _dataSet.Tables["Invoice"]?.Rows.Remove(row);
             }
-        SaveDataToXml();
-    }
-
-    public void SaveInvoice(Invoice invoice)
-    {
+        DataAccess.SaveDataToXml(_dataSet);
     }
 }

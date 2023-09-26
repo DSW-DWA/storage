@@ -10,10 +10,11 @@
         <TabControl Margin="5">
             <TabItem Header="Категории">
                 <StackPanel>
-                    <Button Name="CreateCategory" Content="Create New Category" Click="CreateItemClick" />
-                    <DataGrid Name="CategoryGrid" Margin="20" Width="1050" Height="420" ItemsSource="{Binding Categories, Mode=TwoWay}"
-                        GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        BorderThickness="1" BorderBrush="Gray">
+                    <Button Name="CreateCategory" Content="Создание новой категории" Click="CreateElementClick" />
+                    <DataGrid Name="CategoryGrid" Margin="20" Width="1050" Height="420"
+                              ItemsSource="{Binding Categories, Mode=TwoWay}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
@@ -22,8 +23,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Name="SaveCategory" Content="Save" Click="SaveItemClick" />
-                                            <Button Name="DeleteCategory" Content="Delete" Click="DeleteItemClick" />
+                                            <Button Name="SaveCategory" Content="Save" Click="UpdateElementClick" />
+                                            <Button Name="DeleteCategory" Content="Delete" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -33,12 +34,12 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem Header="Накладной">
+            <TabItem Header="Накладные">
                 <StackPanel>
-                    <Button Name="CreateInvoice" Content="Create New Invoice" Click="CreateItemClick" />
+                    <Button Name="CreateInvoice" Content="Создание новой накладной" Click="CreateElementClick" />
                     <DataGrid Name="InvoiceGrid" Margin="20" Width="1050" Height="420" ItemsSource="{Binding Invoices}"
-                        GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        BorderThickness="1" BorderBrush="Gray">
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Created At" Binding="{Binding CreatedAt}" />
@@ -46,8 +47,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Content="Save" Click="SaveItemClick" />
-                                            <Button Name="DeleteInvoice" Content="Delete" Click="DeleteItemClick" />
+                                            <Button Content="Save" Click="UpdateElementClick" />
+                                            <Button Name="DeleteInvoice" Content="Delete" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -59,10 +60,11 @@
 
             <TabItem Header="Материалы">
                 <StackPanel>
-                    <Button Name="CreateMaterial" Content="Create New Material" Click="CreateItemClick" />
-                    <DataGrid Name="MaterialGrid" Margin="20" Width="1050" Height="420" ItemsSource="{Binding Materials}"
-                        GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        BorderThickness="1" BorderBrush="Gray">
+                    <Button Name="CreateMaterial" Content="Создание нового материала" Click="CreateElementClick" />
+                    <DataGrid Name="MaterialGrid" Margin="20" Width="1050" Height="420"
+                              ItemsSource="{Binding Materials}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
@@ -71,8 +73,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Content="Save" Click="SaveItemClick" />
-                                            <Button Name="DeleteMaterial" Content="Delete" Click="DeleteItemClick" />
+                                            <Button Content="Save" Click="UpdateElementClick" />
+                                            <Button Name="DeleteMaterial" Content="Delete" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -84,10 +86,12 @@
 
             <TabItem Header="Расход">
                 <StackPanel>
-                    <Button Name="CreateMaterialConsmption" Content="Create New Consumption" Click="CreateItemClick" />
-                    <DataGrid Name="MaterialConsmptionGrid" Margin="20" Width="1050" Height="420" ItemsSource="{Binding MaterialConsumptions}"
-                        GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        BorderThickness="1" BorderBrush="Gray">
+                    <Button Name="CreateMaterialConsumption" Content="Создание нового расхода материалов"
+                            Click="CreateElementClick" />
+                    <DataGrid Name="MaterialConsumptionGrid" Margin="20" Width="1050" Height="420"
+                              ItemsSource="{Binding MaterialConsumptions}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Count" Binding="{Binding Count}" />
@@ -97,8 +101,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Content="Save" Click="SaveItemClick" />
-                                            <Button Name="DeleteMaterialConsumption" Content="Delete" Click="DeleteItemClick" />
+                                            <Button Content="Save" Click="UpdateElementClick" />
+                                            <Button Name="DeleteMaterialConsumption" Content="Delete"
+                                                    Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -110,10 +115,12 @@
 
             <TabItem Header="Приход">
                 <StackPanel>
-                    <Button Name="CreateMaterialReceipt" Content="Create New Receipt" Click="CreateItemClick" />
-                    <DataGrid Name="MaterialReceiptGrid" Margin="20" Width="1050" Height="420" ItemsSource="{Binding MaterialReceipts}"
-                        GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        BorderThickness="1" BorderBrush="Gray">
+                    <Button Name="CreateMaterialReceipt" Content="Создание нового прихода материалов"
+                            Click="CreateElementClick" />
+                    <DataGrid Name="MaterialReceiptGrid" Margin="20" Width="1050" Height="420"
+                              ItemsSource="{Binding MaterialReceipts}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Count" Binding="{Binding Count}" />
@@ -123,8 +130,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Content="Save" Click="SaveItemClick" />
-                                            <Button Name="DeleteMaterialReceipt" Content="Delete" Click="DeleteItemClick" />
+                                            <Button Content="Save" Click="UpdateElementClick" />
+                                            <Button Name="DeleteMaterialReceipt" Content="Delete"
+                                                    Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -133,9 +141,9 @@
                     </DataGrid>
                 </StackPanel>
             </TabItem>
-            
+
             <TabItem Header="Отчеты">
-                <Button  Click="OnButtonClick">Создать отчеты</Button>
+                <Button Click="OnButtonClick">Создать отчеты</Button>
             </TabItem>
         </TabControl>
     </StackPanel>

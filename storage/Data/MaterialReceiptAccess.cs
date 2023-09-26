@@ -3,55 +3,73 @@ using System.Data;
 using storage.Models;
 namespace storage.Data;
 
-public class MaterialReceiptAccess : DataAccess
+public class MaterialReceiptAccess : IAccess<MaterialReceipt>
 {
-    public void CreateMaterialReceipt(MaterialReceipt materialReceipt)
+    readonly DataSet _dataSet;
+
+    public MaterialReceiptAccess(DataSet dataSet)
     {
-        DataRow? newRow = Ds.Tables["MaterialReceipt"]?.NewRow();
+        _dataSet = dataSet;
+    }
+
+    public void Save(MaterialReceipt materialReceipt)
+    {
+        var newRow = _dataSet.Tables["MaterialReceipt"]?.NewRow();
         if (newRow != null)
         {
             newRow["Id"] = materialReceipt.Id;
             newRow["Count"] = materialReceipt.Count;
             newRow["InvoiceId"] = materialReceipt.InvoiceId;
             newRow["MaterialId"] = materialReceipt.MaterialId;
-            Ds.Tables["MaterialReceipt"]?.Rows.Add(newRow);
+            _dataSet.Tables["MaterialReceipt"]?.Rows.Add(newRow);
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 
-    public List<MaterialReceipt> GetAllMaterialReceipts()
+    public List<MaterialReceipt> GetAll()
     {
         var materialReceipts = new List<MaterialReceipt>();
 
-        var dataRowCollection = Ds.Tables["MaterialReceipt"]?.Rows;
+        var dataRowCollection = _dataSet.Tables["MaterialReceipt"]?.Rows;
         if (dataRowCollection == null)
             return materialReceipts;
         foreach (DataRow row in dataRowCollection)
         {
-            materialReceipts.Add(new MaterialReceipt
-            {
-                Id = (long)row["Id"],
-                Count = (long)row["Count"],
-                InvoiceId = (long)row["InvoiceId"],
-                MaterialId = (long)row["MaterialId"]
-            });
+            materialReceipts.Add(new MaterialReceipt(
+                    (long)row["Id"],
+                    (long)row["Count"],
+                    (long)row["InvoiceId"],
+                    (long)row["MaterialId"]
+                    )
+                );
         }
 
         return materialReceipts;
     }
 
-    public void DeleteMaterialReceipt(long materialReceiptId)
+    public void Update(MaterialReceipt updatedMaterialReceipt)
     {
-        var rows = Ds.Tables["MaterialReceipt"]?.Select($"Id = {materialReceiptId}");
+        var rows = _dataSet.Tables["MaterialReceipt"]?.Select($"Id = {updatedMaterialReceipt.Id}");
+        if (rows is { Length: <= 0 })
+            return;
+        var row = rows?[0];
+        if (row != null)
+        {
+            row["Count"] = updatedMaterialReceipt.Count;
+            row["InvoiceId"] = updatedMaterialReceipt.InvoiceId;
+            row["MaterialId"] = updatedMaterialReceipt.MaterialId;
+        }
+        DataAccess.SaveDataToXml(_dataSet);
+    }
+
+    public void Delete(int materialReceiptId)
+    {
+        var rows = _dataSet.Tables["MaterialReceipt"]?.Select($"Id = {materialReceiptId}");
         if (rows != null)
             foreach (var row in rows)
             {
-                Ds.Tables["MaterialReceipt"]?.Rows.Remove(row);
+                _dataSet.Tables["MaterialReceipt"]?.Rows.Remove(row);
             }
-        SaveDataToXml();
-    }
-
-    public void SaveMaterialReceipt(MaterialReceipt materialReceipt)
-    {
+        DataAccess.SaveDataToXml(_dataSet);
     }
 }

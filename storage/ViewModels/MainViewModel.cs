@@ -20,22 +20,22 @@ public class MainViewModel : ReactiveObject
     public ObservableCollection<MaterialConsumption> MaterialConsumptions { get; }
     public ObservableCollection<MaterialReceipt> MaterialReceipts { get; }
 
-    public CategoryAccess CategoryAccess = new CategoryAccess();
-    public MaterialAccess MaterialAccess = new MaterialAccess();
-    public InvoiceAccess InvoiceAccess = new InvoiceAccess();
-    public MaterialConsumptionAccess MaterialConsumptionAccess = new MaterialConsumptionAccess();
-    public MaterialReceiptAccess MaterialReceiptAccess = new MaterialReceiptAccess();
+    static readonly DataAccess DataAccess = new DataAccess();
+    public readonly CategoryAccess CategoryAccess = new CategoryAccess(DataAccess.GetDataSet());
+    public readonly MaterialAccess MaterialAccess = new MaterialAccess(DataAccess.GetDataSet());
+    public readonly InvoiceAccess InvoiceAccess = new InvoiceAccess(DataAccess.GetDataSet());
+    public readonly MaterialConsumptionAccess MaterialConsumptionAccess = new MaterialConsumptionAccess(DataAccess.GetDataSet());
+    public readonly MaterialReceiptAccess MaterialReceiptAccess = new MaterialReceiptAccess(DataAccess.GetDataSet());
 
     public MainViewModel()
     {
-        Categories = new ObservableCollection<Category>(CategoryAccess.GetAllCategories());
-        Materials = new ObservableCollection<Material>(MaterialAccess.GetAllMaterials());
-        Invoices = new ObservableCollection<Invoice>(InvoiceAccess.GetAllInvoices());
-        MaterialConsumptions = new ObservableCollection<MaterialConsumption>(MaterialConsumptionAccess.GetAllMaterialConsumptions());
-        MaterialReceipts = new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAllMaterialReceipts());
-        
+        Categories = new ObservableCollection<Category>(CategoryAccess.GetAll());
+        Materials = new ObservableCollection<Material>(MaterialAccess.GetAll());
+        Invoices = new ObservableCollection<Invoice>(InvoiceAccess.GetAll());
+        MaterialConsumptions = new ObservableCollection<MaterialConsumption>(MaterialConsumptionAccess.GetAll());
+        MaterialReceipts = new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAll());
     }
-    
+
     public void ExportToWord()
     {
         // var dataSet = _dataAccess.DS;

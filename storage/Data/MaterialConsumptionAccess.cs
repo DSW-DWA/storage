@@ -3,46 +3,54 @@ using System.Data;
 using storage.Models;
 namespace storage.Data;
 
-public class MaterialConsumptionAccess : DataAccess
+public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
 {
-    public void CreateMaterialConsumption(MaterialConsumption materialConsumption)
+    readonly DataSet _dataSet;
+
+    public MaterialConsumptionAccess(DataSet dataSet)
     {
-        DataRow? newRow = Ds.Tables["MaterialConsumption"]?.NewRow();
+        _dataSet = dataSet;
+    }
+
+    public void Save(MaterialConsumption materialConsumption)
+    {
+        var newRow = _dataSet.Tables["MaterialConsumption"]?.NewRow();
         if (newRow != null)
         {
             newRow["Id"] = materialConsumption.Id;
             newRow["Count"] = materialConsumption.Count;
             newRow["InvoiceId"] = materialConsumption.InvoiceId;
             newRow["MaterialId"] = materialConsumption.MaterialId;
-            Ds.Tables["MaterialConsumption"]?.Rows.Add(newRow);
+            _dataSet.Tables["MaterialConsumption"]?.Rows.Add(newRow);
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 
-    public List<MaterialConsumption> GetAllMaterialConsumptions()
+    public List<MaterialConsumption> GetAll()
     {
         var materialConsumptions = new List<MaterialConsumption>();
 
-        var dataRowCollection = Ds.Tables["MaterialConsumption"]?.Rows;
+        var dataRowCollection = _dataSet.Tables["MaterialConsumption"]?.Rows;
         if (dataRowCollection == null)
             return materialConsumptions;
         foreach (DataRow row in dataRowCollection)
         {
             materialConsumptions.Add(new MaterialConsumption
-            {
-                Id = (long)row["Id"],
-                Count = (long)row["Count"],
-                InvoiceId = (long)row["InvoiceId"],
-                MaterialId = (long)row["MaterialId"]
-            });
+                    (
+                    (long)row["Id"],
+                    (long)row["Count"],
+                    (long)row["InvoiceId"],
+                    (long)row["MaterialId"]
+                    )
+                );
         }
 
         return materialConsumptions;
     }
 
-    public void UpdateMaterialConsumption(MaterialConsumption updatedMaterialConsumption)
+    public void Update(MaterialConsumption updatedMaterialConsumption)
     {
-        var rows = Ds.Tables["MaterialConsumption"]?.Select($"Id = {updatedMaterialConsumption.Id}");
+        var rows = _dataSet.Tables["MaterialConsumption"]?.Select($"Id = {updatedMaterialConsumption.Id}");
         if (rows is { Length: <= 0 })
             return;
         var row = rows?[0];
@@ -52,21 +60,17 @@ public class MaterialConsumptionAccess : DataAccess
             row["InvoiceId"] = updatedMaterialConsumption.InvoiceId;
             row["MaterialId"] = updatedMaterialConsumption.MaterialId;
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 
-    public void DeleteMaterialConsumption(long materialConsumptionId)
+    public void Delete(int materialConsumptionId)
     {
-        var rows = Ds.Tables["MaterialConsumption"]?.Select($"Id = {materialConsumptionId}");
+        var rows = _dataSet.Tables["MaterialConsumption"]?.Select($"Id = {materialConsumptionId}");
         if (rows != null)
             foreach (var row in rows)
             {
-                Ds.Tables["MaterialConsumption"]?.Rows.Remove(row);
+                _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(row);
             }
-        SaveDataToXml();
-    }
-
-    public void SaveMaterialConsumption(MaterialConsumption materialConsumption)
-    {
+        DataAccess.SaveDataToXml(_dataSet);
     }
 }

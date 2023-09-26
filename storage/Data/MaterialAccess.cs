@@ -3,44 +3,46 @@ using System.Data;
 using storage.Models;
 namespace storage.Data;
 
-public class MaterialAccess : DataAccess
+public class MaterialAccess : IAccess<Material>
 {
-    public void CreateMaterial(Material material)
+    readonly DataSet _dataSet;
+
+    public MaterialAccess(DataSet dataSet)
     {
-        DataRow? newRow = Ds.Tables["Material"]?.NewRow();
+        _dataSet = dataSet;
+    }
+
+    public void Save(Material material)
+    {
+        var newRow = _dataSet.Tables["Material"]?.NewRow();
         if (newRow != null)
         {
             newRow["Id"] = material.Id;
             newRow["Name"] = material.Name;
             newRow["CategoryId"] = material.CategoryId;
-            Ds.Tables["Material"]?.Rows.Add(newRow);
+            _dataSet.Tables["Material"]?.Rows.Add(newRow);
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 
-    public List<Material> GetAllMaterials()
+    public List<Material> GetAll()
     {
         var materials = new List<Material>();
 
-        var dataRowCollection = Ds.Tables["Material"]?.Rows;
+        var dataRowCollection = _dataSet.Tables["Material"]?.Rows;
         if (dataRowCollection == null)
             return materials;
         foreach (DataRow row in dataRowCollection)
         {
-            materials.Add(new Material
-            {
-                Id = (long)row["Id"],
-                Name = (string)row["Name"],
-                CategoryId = (long)row["CategoryId"]
-            });
+            materials.Add(new Material((long)row["Id"], (string)row["Name"], (long)row["CategoryId"]));
         }
 
         return materials;
     }
 
-    public void UpdateMaterial(Material updatedMaterial)
+    public void Update(Material updatedMaterial)
     {
-        var rows = Ds.Tables["Material"]?.Select($"Id = {updatedMaterial.Id}");
+        var rows = _dataSet.Tables["Material"]?.Select($"Id = {updatedMaterial.Id}");
         if (rows is { Length: <= 0 })
             return;
         var row = rows?[0];
@@ -49,30 +51,17 @@ public class MaterialAccess : DataAccess
             row["Name"] = updatedMaterial.Name;
             row["CategoryId"] = updatedMaterial.CategoryId;
         }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 
-    public void DeleteMaterial(long materialId)
+    public void Delete(int materialId)
     {
-        var rows = Ds.Tables["Material"]?.Select($"Id = {materialId}");
+        var rows = _dataSet.Tables["Material"]?.Select($"Id = {materialId}");
         if (rows != null)
             foreach (var row in rows)
             {
-                Ds.Tables["Material"]?.Rows.Remove(row);
+                _dataSet.Tables["Material"]?.Rows.Remove(row);
             }
-        SaveDataToXml();
-    }
-
-    public void SaveMaterial(Material material)
-    {
-        DataRow? newRow = Ds.Tables["Material"]?.NewRow();
-        if (newRow != null)
-        {
-            newRow["Id"] = material.Id;
-            newRow["Name"] = material.Name;
-            newRow["CategoryId"] = material.CategoryId;
-            Ds.Tables["Material"]?.Rows.Add(newRow);
-        }
-        SaveDataToXml();
+        DataAccess.SaveDataToXml(_dataSet);
     }
 }
