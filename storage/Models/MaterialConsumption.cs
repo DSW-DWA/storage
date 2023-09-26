@@ -2,8 +2,8 @@
 
 public class MaterialConsumption
 {
-    public int Id { get; set; }
-    public int Count { get; set; }
-    public int InvoiceId { get; set; }
-    public int MaterialId { get; set; }
+    public long Id { get; set; }
+    public long Count { get; set; }
+    public long InvoiceId { get; set; }
+    public long MaterialId { get; set; }
 }

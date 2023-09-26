@@ -35,6 +35,7 @@ public partial class MainView : UserControl
     private void SaveCategoryClick(object sender, RoutedEventArgs e)
     {
         // Implement the logic to save changes for the selected category
+
     }
 
     private void DeleteCategoryClick(object sender, RoutedEventArgs e)

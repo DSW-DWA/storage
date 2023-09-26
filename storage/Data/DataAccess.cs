@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using storage.Models;
+using Xceed.Document.NET;
+
 namespace storage.Data
 {
     public class DataAccess
@@ -22,9 +24,6 @@ namespace storage.Data
         public DataAccess() {
             var dataSet = new DataSet();
 
-            /*dataSet.ReadXmlSchema(@"./Data/schema.xml");
-            dataSet.ReadXml(@"./Data/data.xml");*/
-
             Categories = new List<Category>();
             Materials = new List<Material>();
             Invoices = new List<Invoice>();
@@ -33,121 +32,61 @@ namespace storage.Data
 
             try
             {
-                var json = File.ReadAllText(DataPath);
-                var root = JsonConvert.DeserializeObject<Root>(json);
+                dataSet.ReadXmlSchema(@"./Data/schema.xml");
+                dataSet.ReadXml(@"./Data/data.xml");
 
-                if (root != null)
+                foreach (DataRow row in dataSet.Tables["Category"].Rows)
+                { 
+                    Categories.Add(new Category
+                    {
+                        Id = (long)row["Id"],
+                        Name = (string)row["Name"],
+                        MeasureUnit = (string)row["MeasureUnit"],
+                    });
+                }
+
+                foreach (DataRow row in dataSet.Tables["Material"].Rows)
                 {
-                    DataTable categoryTable = new DataTable("Category");
-                    categoryTable.Columns.Add("Id", typeof(int));
-                    categoryTable.Columns.Add("Name", typeof(string));
-                    categoryTable.Columns.Add("MeasureUnit", typeof(string));
-                    foreach (var item in root.Category)
+
+                    Materials.Add(new Material
                     {
-                        DataRow row = categoryTable.NewRow();
-                        row["Id"] = item.Id;
-                        row["Name"] = item.Name;
-                        row["MeasureUnit"] = item.MeasureUnit;
-                        categoryTable.Rows.Add(row);
+                        Id = (long)row["Id"],
+                        Name = (string)row["Name"],
+                        CategoryId = (long)row["CategoryId"],
+                    });
+                }
 
-                        Categories.Add(new Category
-                        {
-                            Id = item.Id,
-                            Name = item.Name,
-                            MeasureUnit = item.MeasureUnit,
-                        });
-                    }
-
-                    DataTable materialTable = new DataTable("Material");
-                    materialTable.Columns.Add("Id", typeof(int));
-                    materialTable.Columns.Add("Name", typeof(string));
-                    materialTable.Columns.Add("CategoryId", typeof(int));
-                    foreach (var item in root.Material)
+                foreach (DataRow row in dataSet.Tables["Invoice"].Rows)
+                {
+                    Invoices.Add(new Invoice
                     {
-                        DataRow row = materialTable.NewRow();
-                        row["Id"] = item.Id;
-                        row["Name"] = item.Name;
-                        row["CategoryId"] = item.CategoryId;
-                        materialTable.Rows.Add(row);
+                        Id = (long)row["Id"],
+                        CreatedAt = (DateTime)row["CreatedAt"]
+                    });
+                }
 
-                        Materials.Add(new Material
-                        {
-                            Id = item.Id,
-                            Name = item.Name,
-                            CategoryId = item.CategoryId,
-                        });
-                    }
+                foreach (DataRow row in dataSet.Tables["MaterialConsumption"].Rows)
+                {
 
-                    DataTable invoiceTable = new DataTable("Invoice");
-                    invoiceTable.Columns.Add("Id", typeof(int));
-                    invoiceTable.Columns.Add("CreatedAt", typeof(DateTime));
-                    foreach (var item in root.Invoice)
+                    MaterialConsumptions.Add(new MaterialConsumption
                     {
-                        DataRow row = invoiceTable.NewRow();
-                        row["Id"] = item.Id;
-                        row["CreatedAt"] = item.CreatedAt;
-                        invoiceTable.Rows.Add(row);
+                        Id = (long)row["Id"],
+                        Count = (long)row["count"],
+                        InvoiceId = (long)row["InvoiceId"],
+                        MaterialId = (long)row["MaterialId"],
+                    });
+                }
 
-                        Invoices.Add(new Invoice
-                        {
-                            Id = item.Id,
-                            CreatedAt = item.CreatedAt
-                        });
-                    }
+                foreach (DataRow row in dataSet.Tables["MaterialReceipt"].Rows)
+                {
 
-                    DataTable materialConsumptionTable = new DataTable("MaterialConsumption");
-                    materialConsumptionTable.Columns.Add("Id", typeof(int));
-                    materialConsumptionTable.Columns.Add("count", typeof(int));
-                    materialConsumptionTable.Columns.Add("InvoiceId", typeof(int));
-                    materialConsumptionTable.Columns.Add("MaterialId", typeof(int));
-                    foreach (var item in root.MaterialConsumption)
+                    MaterialReceipts.Add(new MaterialReceipt
                     {
-                        DataRow row = materialConsumptionTable.NewRow();
-                        row["Id"] = item.Id;
-                        row["count"] = item.Count;
-                        row["InvoiceId"] = item.InvoiceId;
-                        row["MaterialId"] = item.MaterialId;
-                        materialConsumptionTable.Rows.Add(row);
-
-                        MaterialConsumptions.Add(new MaterialConsumption
-                        {
-                            Id = item.Id,
-                            Count = item.Count,
-                            InvoiceId = item.InvoiceId,
-                            MaterialId = item.MaterialId,
-                        });
-                    }
-
-                    DataTable materialReceiptTable = new DataTable("MaterialReceipt");
-                    materialReceiptTable.Columns.Add("Id", typeof(int));
-                    materialReceiptTable.Columns.Add("count", typeof(int));
-                    materialReceiptTable.Columns.Add("InvoiceId", typeof(int));
-                    materialReceiptTable.Columns.Add("MaterialId", typeof(int));
-                    foreach (var item in root.MaterialReceipt)
-                    {
-                        DataRow row = materialReceiptTable.NewRow();
-                        row["Id"] = item.Id;
-                        row["count"] = item.Count;
-                        row["InvoiceId"] = item.InvoiceId;
-                        row["MaterialId"] = item.MaterialId;
-                        materialReceiptTable.Rows.Add(row);
-
-                        MaterialReceipts.Add(new MaterialReceipt
-                        {
-                            Id = item.Id,
-                            Count = item.Count,
-                            InvoiceId = item.InvoiceId,
-                            MaterialId = item.MaterialId,
-                        });
-                    }
-
-                    dataSet.Tables.Add(categoryTable);
-                    dataSet.Tables.Add(materialTable);
-                    dataSet.Tables.Add(invoiceTable);
-                    dataSet.Tables.Add(materialConsumptionTable);
-                    dataSet.Tables.Add(materialReceiptTable);
-
-                    dataSet.AcceptChanges();
+                        Id = (long)row["Id"],
+                        Count = (long)row["count"],
+                        InvoiceId = (long)row["InvoiceId"],
+                        MaterialId = (long)row["MaterialId"],
+                    });
                 }
             }
             catch (FileNotFoundException e) {
