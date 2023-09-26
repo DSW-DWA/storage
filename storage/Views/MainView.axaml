@@ -44,7 +44,10 @@
 				</DataGrid>
 			</TabItem>
 			<TabItem Header="Отчеты">
-				<Button  Click="OnButtonClick">Создать отчеты</Button>
+				<StackPanel>
+					<Button  Click="OnButtonClick">Создать отчеты</Button>
+					<Button  Click="AddRow">Тест</Button>
+				</StackPanel>
 			</TabItem>
 		</TabControl>
 	</StackPanel>

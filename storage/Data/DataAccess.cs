@@ -22,6 +22,9 @@ namespace storage.Data
         public DataAccess() {
             var dataSet = new DataSet();
 
+            /*dataSet.ReadXmlSchema(@"./Data/schema.xml");
+            dataSet.ReadXml(@"./Data/data.xml");*/
+
             Categories = new List<Category>();
             Materials = new List<Material>();
             Invoices = new List<Invoice>();

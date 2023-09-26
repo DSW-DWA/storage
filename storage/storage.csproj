@@ -29,5 +29,11 @@
         <None Update="Data\data.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Data\data.xml">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\schema.xml">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>

@@ -33,7 +33,14 @@ public class MainViewModel : ReactiveObject
         MaterialReceipts = new ObservableCollection<MaterialReceipt>(_dataAccess.MaterialReceipts);
 
     }
-
+    public void AddRow()
+    {
+        Categories.Add(new Category{
+            Id = 5,
+            Name = "Тест",
+            MeasureUnit = "кг"
+        });
+    }
     public void ExportToWord()
     {
         var dataSet = _dataAccess.DS;
