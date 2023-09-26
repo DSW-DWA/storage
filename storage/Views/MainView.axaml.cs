@@ -30,4 +30,85 @@ public partial class MainView : UserControl
         t1.Start();
         t2.Start();
     }
+
+    // Category Save and Delete
+    private void SaveCategoryClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to save changes for the selected category
+    }
+
+    private void DeleteCategoryClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to delete the selected category
+    }
+
+    // Invoice Save and Delete
+    private void SaveInvoiceClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to save changes for the selected invoice
+    }
+
+    private void DeleteInvoiceClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to delete the selected invoice
+    }
+
+    // Material Save and Delete
+    private void SaveMaterialClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to save changes for the selected material
+    }
+
+    private void DeleteMaterialClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to delete the selected material
+    }
+
+    // MaterialConsumption Save and Delete
+    private void SaveConsumptionClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to save changes for the selected consumption
+    }
+
+    private void DeleteConsumptionClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to delete the selected consumption
+    }
+
+    // MaterialReceipt Save and Delete
+    private void SaveReceiptClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to save changes for the selected receipt
+    }
+
+    private void DeleteReceiptClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to delete the selected receipt
+    }
+
+    // Create button functions
+    private void CreateCategoryClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to create a new category
+    }
+
+    private void CreateInvoiceClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to create a new invoice
+    }
+
+    private void CreateMaterialClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to create a new material
+    }
+
+    private void CreateConsumptionClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to create a new consumption
+    }
+
+    private void CreateReceiptClick(object sender, RoutedEventArgs e)
+    {
+        // Implement the logic to create a new receipt
+    }
 }

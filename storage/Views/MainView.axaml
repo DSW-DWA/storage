@@ -3,52 +3,141 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:storage.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="storage.Views.MainView"
              x:DataType="vm:MainViewModel">
-	<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
-		<TabControl Margin="5">
-			<TabItem Header="Категории">
-				<DataGrid Margin="20" ItemsSource="{Binding Categories}"
-				  AutoGenerateColumns="True"
-				  GridLinesVisibility="All"
-				  BorderThickness="1" BorderBrush="Gray">
-				</DataGrid>
-			</TabItem>
-			<TabItem Header="Материалы">
-				<DataGrid Margin="20" ItemsSource="{Binding Materials}"
-				  AutoGenerateColumns="True"
-				  GridLinesVisibility="All"
-				  BorderThickness="1" BorderBrush="Gray">
-				</DataGrid>
-			</TabItem>
-			<TabItem Header="Накладный">
-				<DataGrid Margin="20" ItemsSource="{Binding Invoices}"
-				  AutoGenerateColumns="True"
-				  GridLinesVisibility="All"
-				  BorderThickness="1" BorderBrush="Gray">
-				</DataGrid>
-			</TabItem>
-			<TabItem Header="Расход">
-				<DataGrid Margin="20" ItemsSource="{Binding MaterialConsumptions}"
-				  AutoGenerateColumns="True"
-				  GridLinesVisibility="All"
-				  BorderThickness="1" BorderBrush="Gray">
-				</DataGrid>
-			</TabItem>
-			<TabItem Header="Приход">
-				<DataGrid Margin="20" ItemsSource="{Binding MaterialReceipts}"
-				  AutoGenerateColumns="True"
-				  GridLinesVisibility="All"
-				  BorderThickness="1" BorderBrush="Gray">
-				</DataGrid>
-			</TabItem>
-			<TabItem Header="Отчеты">
-				<StackPanel>
-					<Button  Click="OnButtonClick">Создать отчеты</Button>
-					<Button  Click="AddRow">Тест</Button>
-				</StackPanel>
-			</TabItem>
-		</TabControl>
-	</StackPanel>
+	
+    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+        <TabControl Margin="5">
+            <TabItem Header="Категории">
+                <StackPanel>
+                    <Button Content="Create New Category" Click="CreateCategoryClick" />
+                    <DataGrid Margin="20" ItemsSource="{Binding Categories}"
+                        GridLinesVisibility="All"
+                        BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Measure Unit" Binding="{Binding MeasureUnit}" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Save" Click="SaveCategoryClick" />
+                                            <Button Content="Delete" Click="DeleteCategoryClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Накладной">
+                <StackPanel>
+                    <Button Content="Create New Invoice" Click="CreateInvoiceClick" />
+                    <DataGrid Margin="20" ItemsSource="{Binding Invoices}"
+                        GridLinesVisibility="All"
+                        BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Created At" Binding="{Binding CreatedAt}" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Save" Click="SaveInvoiceClick" />
+                                            <Button Content="Delete" Click="DeleteInvoiceClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Материалы">
+                <StackPanel>
+                    <Button Content="Create New Material" Click="CreateMaterialClick" />
+                    <DataGrid Margin="20" ItemsSource="{Binding Materials}"
+                        GridLinesVisibility="All"
+                        BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Category ID" Binding="{Binding CategoryId}" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Save" Click="SaveMaterialClick" />
+                                            <Button Content="Delete" Click="DeleteMaterialClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Расход">
+                <StackPanel>
+                    <Button Content="Create New Consumption" Click="CreateConsumptionClick" />
+                    <DataGrid Margin="20" ItemsSource="{Binding MaterialConsumptions}"
+                        GridLinesVisibility="All"
+                        BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Count" Binding="{Binding Count}" />
+                            <DataGridTextColumn Header="Invoice ID" Binding="{Binding InvoiceId}" />
+                            <DataGridTextColumn Header="Material ID" Binding="{Binding MaterialId}" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Save" Click="SaveConsumptionClick" />
+                                            <Button Content="Delete" Click="DeleteConsumptionClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Приход">
+                <StackPanel>
+                    <Button Content="Create New Receipt" Click="CreateReceiptClick" />
+                    <DataGrid Margin="20" ItemsSource="{Binding MaterialReceipts}"
+                        GridLinesVisibility="All"
+                        BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Count" Binding="{Binding Count}" />
+                            <DataGridTextColumn Header="Invoice ID" Binding="{Binding InvoiceId}" />
+                            <DataGridTextColumn Header="Material ID" Binding="{Binding MaterialId}" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Save" Click="SaveReceiptClick" />
+                                            <Button Content="Delete" Click="DeleteReceiptClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+            
+            <TabItem Header="Отчеты">
+                <Button  Click="OnButtonClick">Создать отчеты</Button>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 </UserControl>
