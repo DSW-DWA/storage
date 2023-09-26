@@ -60,4 +60,8 @@ public class InvoiceAccess : DataAccess
             }
         SaveDataToXml();
     }
+
+    public void SaveInvoice(Invoice invoice)
+    {
+    }
 }

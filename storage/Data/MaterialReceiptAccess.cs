@@ -39,4 +39,19 @@ public class MaterialReceiptAccess : DataAccess
 
         return materialReceipts;
     }
+
+    public void DeleteMaterialReceipt(long materialReceiptId)
+    {
+        var rows = Ds.Tables["MaterialReceipt"]?.Select($"Id = {materialReceiptId}");
+        if (rows != null)
+            foreach (var row in rows)
+            {
+                Ds.Tables["MaterialReceipt"]?.Rows.Remove(row);
+            }
+        SaveDataToXml();
+    }
+
+    public void SaveMaterialReceipt(MaterialReceipt materialReceipt)
+    {
+    }
 }

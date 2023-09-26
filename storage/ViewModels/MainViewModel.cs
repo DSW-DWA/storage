@@ -20,21 +20,22 @@ public class MainViewModel : ReactiveObject
     public ObservableCollection<MaterialConsumption> MaterialConsumptions { get; }
     public ObservableCollection<MaterialReceipt> MaterialReceipts { get; }
 
-    readonly CategoryAccess _categoryAccess = new CategoryAccess();
-    readonly MaterialAccess _materialAccess = new MaterialAccess();
-    readonly InvoiceAccess _invoiceAccess = new InvoiceAccess();
-    readonly MaterialConsumptionAccess _materialConsumptionAccess = new MaterialConsumptionAccess();
-    readonly MaterialReceiptAccess _materialReceiptAccess = new MaterialReceiptAccess();
+    public CategoryAccess CategoryAccess = new CategoryAccess();
+    public MaterialAccess MaterialAccess = new MaterialAccess();
+    public InvoiceAccess InvoiceAccess = new InvoiceAccess();
+    public MaterialConsumptionAccess MaterialConsumptionAccess = new MaterialConsumptionAccess();
+    public MaterialReceiptAccess MaterialReceiptAccess = new MaterialReceiptAccess();
 
     public MainViewModel()
     {
-        Categories = new ObservableCollection<Category>(_categoryAccess.GetAllCategories());
-        Materials = new ObservableCollection<Material>(_materialAccess.GetAllMaterials());
-        Invoices = new ObservableCollection<Invoice>(_invoiceAccess.GetAllInvoices());
-        MaterialConsumptions = new ObservableCollection<MaterialConsumption>(_materialConsumptionAccess.GetAllMaterialConsumptions());
-        MaterialReceipts = new ObservableCollection<MaterialReceipt>(_materialReceiptAccess.GetAllMaterialReceipts());
+        Categories = new ObservableCollection<Category>(CategoryAccess.GetAllCategories());
+        Materials = new ObservableCollection<Material>(MaterialAccess.GetAllMaterials());
+        Invoices = new ObservableCollection<Invoice>(InvoiceAccess.GetAllInvoices());
+        MaterialConsumptions = new ObservableCollection<MaterialConsumption>(MaterialConsumptionAccess.GetAllMaterialConsumptions());
+        MaterialReceipts = new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAllMaterialReceipts());
+        
     }
-
+    
     public void ExportToWord()
     {
         // var dataSet = _dataAccess.DS;

@@ -62,4 +62,8 @@ public class CategoryAccess : DataAccess
             }
         SaveDataToXml();
     }
+
+    public void SaveCategory(Category category)
+    {
+    }
 }

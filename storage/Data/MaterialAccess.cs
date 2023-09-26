@@ -62,4 +62,17 @@ public class MaterialAccess : DataAccess
             }
         SaveDataToXml();
     }
+
+    public void SaveMaterial(Material material)
+    {
+        DataRow? newRow = Ds.Tables["Material"]?.NewRow();
+        if (newRow != null)
+        {
+            newRow["Id"] = material.Id;
+            newRow["Name"] = material.Name;
+            newRow["CategoryId"] = material.CategoryId;
+            Ds.Tables["Material"]?.Rows.Add(newRow);
+        }
+        SaveDataToXml();
+    }
 }
