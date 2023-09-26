@@ -6,13 +6,12 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="storage.Views.MainView"
              x:DataType="vm:MainViewModel">
-	
     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
         <TabControl Margin="5">
             <TabItem Header="Категории">
                 <StackPanel>
-                    <Button Content="Create New Category" Click="CreateCategoryClick" />
-                    <DataGrid Margin="20" ItemsSource="{Binding Categories}"
+                    <Button Name="AddCategory" Content="Create New Category" Click="CreateCategoryClick" />
+                    <DataGrid Name="Category" Margin="20" ItemsSource="{Binding Categories, Mode=TwoWay}"
                         GridLinesVisibility="All"
                         BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>

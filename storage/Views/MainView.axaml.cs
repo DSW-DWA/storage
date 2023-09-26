@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using storage.Models;
 using storage.ViewModels;
 using System.Threading;
+using System.Linq;
 
 namespace storage.Views;
 
@@ -91,6 +92,22 @@ public partial class MainView : UserControl
     private void CreateCategoryClick(object sender, RoutedEventArgs e)
     {
         // Implement the logic to create a new category
+        var btn = (Button)sender;
+        switch (btn.Name)
+        {
+            case "AddCategory":
+                _model.Categories.Add(new Category
+                {
+                    Id = _model.Categories.Select(x => x.Id).Max() + 1,
+                    Name = null,
+                    MeasureUnit = null
+                });
+                Category.ItemsSource = _model.Categories;
+                
+                break;
+            default:
+                break;
+        }
     }
 
     private void CreateInvoiceClick(object sender, RoutedEventArgs e)
