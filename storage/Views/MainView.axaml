@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="storage.Views.MainView"
              x:DataType="vm:MainViewModel">
-	
+
     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
         <TabControl Margin="5">
             <TabItem Header="Категории">
