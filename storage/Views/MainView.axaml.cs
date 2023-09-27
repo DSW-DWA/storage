@@ -324,4 +324,8 @@ public partial class MainView : UserControl
     {
 
     }
+    void EditCategory_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var wn = new CategoryEditWindow((Category)CategoryGrid.SelectedItem);
+    }
 }

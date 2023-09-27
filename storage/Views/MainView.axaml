@@ -11,6 +11,7 @@
             <TabItem Header="Категории">
                 <StackPanel>
                     <Button Name="CreateCategory" Content="Создание новой категории" Click="CreateCategory_OnClick" />
+					<Button Name="EditCategory" Content="Редактрование категории" Click="EditCategory_OnClick" />
                     <DataGrid Name="CategoryGrid" Margin="20" Width="1050" Height="420"
                               ItemsSource="{Binding Categories, Mode=TwoWay}"
                               GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
