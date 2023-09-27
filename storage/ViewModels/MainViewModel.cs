@@ -62,11 +62,13 @@ public class MainViewModel : ReactiveObject
             
             for(var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
             {
+                var time = RecTable.Where(x => x.Material.Id == MatTable[rowIndex].Id).OrderBy(x => x.Invoice.CreatedAt).Select(x => x.Invoice.CreatedAt).FirstOrDefault();
+                
                 wordTable.Rows[rowIndex + 1].Cells[0].Paragraphs[0].Append(MatTable[rowIndex].Id.ToString());
                 wordTable.Rows[rowIndex + 1].Cells[1].Paragraphs[0].Append(MatTable[rowIndex].Name.ToString());
                 wordTable.Rows[rowIndex + 1].Cells[2].Paragraphs[0].Append(MatTable[rowIndex].Category.Name);
                 wordTable.Rows[rowIndex + 1].Cells[3].Paragraphs[0].Append(MatTable[rowIndex].Category.MeasureUnit);
-                //wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(InvTable.Where(x => recId.Contains(x.Id)).OrderBy(x => x.CreatedAt).FirstOrDefault()?.CreatedAt.ToString());
+                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(time == null ?  "NULL" : time.ToString());
             }
 
             doc.InsertTable(wordTable);
