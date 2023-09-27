@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
+using System.Threading;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using ReactiveUI;
@@ -38,6 +41,7 @@ public class MainViewModel : ReactiveObject
 
     public void ExportToWord()
     {
+        Thread.Sleep(5000);
         // var dataSet = _dataAccess.DS;
         // var outputPath = @"./report.docx";
         // using (var doc = DocX.Create(outputPath))
@@ -66,6 +70,7 @@ public class MainViewModel : ReactiveObject
 
     public void ExportToExcel()
     {
+        Thread.Sleep(5000);
         // var dataSet = _dataAccess.DS;
         // var outputPath = @"./report.xlsx";
         // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
