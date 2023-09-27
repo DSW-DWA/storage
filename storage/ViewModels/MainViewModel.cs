@@ -64,13 +64,13 @@ public class MainViewModel : ReactiveObject
             
             for(var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
             {
-                var recId = RecTable.Where(x => x.MaterialId == MatTable[rowIndex].Id).Select(x => x.Id).ToList();
+                var recId = RecTable.Where(x => x.Material.Id == MatTable[rowIndex].Id).Select(x => x.Id).ToList();
 
                 wordTable.Rows[rowIndex + 1].Cells[0].Paragraphs[0].Append(MatTable[rowIndex].Id.ToString());
                 wordTable.Rows[rowIndex + 1].Cells[1].Paragraphs[0].Append(MatTable[rowIndex].Name.ToString());
                 wordTable.Rows[rowIndex + 1].Cells[2].Paragraphs[0].Append(CatTable.Where(x => x.Id == MatTable[rowIndex].Id).FirstOrDefault()?.Name);
                 wordTable.Rows[rowIndex + 1].Cells[3].Paragraphs[0].Append(CatTable.Where(x => x.Id == MatTable[rowIndex].Id).FirstOrDefault()?.MeasureUnit);
-                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(InvTable.Where(x => recId.Contains(x.Id)).OrderBy(x => x.CreatedAt).FirstOrDefault()?.ToString());
+                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(InvTable.Where(x => recId.Contains(x.Id)).OrderBy(x => x.CreatedAt).FirstOrDefault()?.CreatedAt.ToString());
             }
 
             doc.InsertTable(wordTable);
