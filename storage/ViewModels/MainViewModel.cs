@@ -43,14 +43,12 @@ public class MainViewModel : ReactiveObject
 
     public void ExportToWord()
     {
-        Thread.Sleep(5000);
         var dataset = DataAccess.GetDataSet();
         var outputpath = @"./report.docx";
         using (var doc = DocX.Create(outputpath))
         {
             doc.InsertParagraph("Материалы").Bold().FontSize(14d).SpacingBefore(10d).SpacingAfter(10d);
             var MatTable = MaterialAccess.GetAll();
-            var CatTable = CategoryAccess.GetAll();
             var RecTable = MaterialReceiptAccess.GetAll();
             var InvTable = InvoiceAccess.GetAll();
 
@@ -64,13 +62,11 @@ public class MainViewModel : ReactiveObject
             
             for(var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
             {
-                var recId = RecTable.Where(x => x.Material.Id == MatTable[rowIndex].Id).Select(x => x.Id).ToList();
-
                 wordTable.Rows[rowIndex + 1].Cells[0].Paragraphs[0].Append(MatTable[rowIndex].Id.ToString());
                 wordTable.Rows[rowIndex + 1].Cells[1].Paragraphs[0].Append(MatTable[rowIndex].Name.ToString());
-                wordTable.Rows[rowIndex + 1].Cells[2].Paragraphs[0].Append(CatTable.Where(x => x.Id == MatTable[rowIndex].Id).FirstOrDefault()?.Name);
-                wordTable.Rows[rowIndex + 1].Cells[3].Paragraphs[0].Append(CatTable.Where(x => x.Id == MatTable[rowIndex].Id).FirstOrDefault()?.MeasureUnit);
-                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(InvTable.Where(x => recId.Contains(x.Id)).OrderBy(x => x.CreatedAt).FirstOrDefault()?.CreatedAt.ToString());
+                wordTable.Rows[rowIndex + 1].Cells[2].Paragraphs[0].Append(MatTable[rowIndex].Category.Name);
+                wordTable.Rows[rowIndex + 1].Cells[3].Paragraphs[0].Append(MatTable[rowIndex].Category.MeasureUnit);
+                //wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(InvTable.Where(x => recId.Contains(x.Id)).OrderBy(x => x.CreatedAt).FirstOrDefault()?.CreatedAt.ToString());
             }
 
             doc.InsertTable(wordTable);
