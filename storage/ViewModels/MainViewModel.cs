@@ -80,7 +80,6 @@ public class MainViewModel : ReactiveObject
 
     public void ExportToExcel()
     {
-        Thread.Sleep(5000);
         /*var dataset = _dataaccess.ds;
         var outputpath = @"./report.xlsx";
         excelpackage.licensecontext = licensecontext.noncommercial;
