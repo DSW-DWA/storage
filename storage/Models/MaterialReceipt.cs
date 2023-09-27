@@ -4,14 +4,14 @@ public class MaterialReceipt
 {
     public long Id { get; init; }
     public long Count { get; init; }
-    public long InvoiceId { get; init; }
-    public long MaterialId { get; init; }
+    public Invoice Invoice { get; init; }
+    public Material Material { get; init; }
 
-    public MaterialReceipt(long id, long count, long invoiceId, long materialId)
+    public MaterialReceipt(long id, long count, Invoice invoice, Material material)
     {
         Id = id;
         Count = count;
-        InvoiceId = invoiceId;
-        MaterialId = materialId;
+        Invoice = invoice;
+        Material = material;
     }
 }

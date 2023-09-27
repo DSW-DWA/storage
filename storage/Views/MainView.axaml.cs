@@ -43,24 +43,24 @@ public partial class MainView : UserControl
                 InvoiceGrid.ItemsSource = _model.Invoices;
                 break;
             case "CreateMaterial":
-                int matId = GetNextId(_model.Materials);
-                var material = new Material(matId, $"Материал {matId}", GetLastEntityId(_model.Categories));
-                _model.MaterialAccess.Save(material);
-                _model.Materials.Add(material);
-                MaterialGrid.ItemsSource = _model.Materials;
+                // int matId = GetNextId(_model.Materials);
+                // var material = new Material(matId, $"Материал {matId}", GetLastEntity(_model.Categories));
+                // _model.MaterialAccess.Save(material);
+                // _model.Materials.Add(material);
+                // MaterialGrid.ItemsSource = _model.Materials;
                 break;
             case "CreateMaterialConsumption":
-                var materialConsumption = new MaterialConsumption(
-                    GetNextId(_model.MaterialConsumptions), 0, GetLastEntityId(_model.Invoices), GetLastEntityId(_model.Materials));
-                _model.MaterialConsumptionAccess.Save(materialConsumption);
-                _model.MaterialConsumptions.Add(materialConsumption);
-                MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
+                // var materialConsumption = new MaterialConsumption(
+                //     GetNextId(_model.MaterialConsumptions), 0, GetLastEntity(_model.Invoices), GetLastEntity(_model.Materials));
+                // _model.MaterialConsumptionAccess.Save(materialConsumption);
+                // _model.MaterialConsumptions.Add(materialConsumption);
+                // MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
                 break;
             case "CreateMaterialReceipt":
-                var materialReceipt = new MaterialReceipt(GetNextId(_model.MaterialConsumptions), 0, GetLastEntityId(_model.Invoices), GetLastEntityId(_model.Materials));
-                _model.MaterialReceiptAccess.Save(materialReceipt);
-                _model.MaterialReceipts.Add(materialReceipt);
-                MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
+                // var materialReceipt = new MaterialReceipt(GetNextId(_model.MaterialConsumptions), 0, GetLastEntity(_model.Invoices), GetLastEntity(_model.Materials));
+                // _model.MaterialReceiptAccess.Save(materialReceipt);
+                // _model.MaterialReceipts.Add(materialReceipt);
+                // MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
                 break;
             default:
                 await ShowErrorMessage("Неверная таблица");
@@ -254,7 +254,7 @@ public partial class MainView : UserControl
     /// <typeparam name="T">Тип элемента.</typeparam>
     /// <param name="collection">Коллекция элементов.</param>
     /// <returns>Последний идентификатор элемента.</returns>
-    int GetLastEntityId<T>(ICollection<T> collection)
+    int GetLastEntity<T>(ICollection<T> collection)
     {
         return collection.Count > 0 ? collection.Max(entity => (int?)GetEntityId(entity)) ?? 1 : 1;
     }
@@ -286,7 +286,7 @@ public partial class MainView : UserControl
     /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidMaterial(Material? element)
     {
-        return element != null && element.CategoryId != -1 && !string.IsNullOrWhiteSpace(element.Name);
+        return element != null && element.Category.Id != -1 && !string.IsNullOrWhiteSpace(element.Name);
     }
 
     /// <summary>
@@ -296,7 +296,7 @@ public partial class MainView : UserControl
     /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidMaterialConsumption(MaterialConsumption? element)
     {
-        return element is { Count: > 0, InvoiceId: > 0, MaterialId: > 0 };
+        return element is { Count: > 0, Invoice.Id: > 0, Material.Id: > 0 };
     }
 
     /// <summary>
@@ -306,7 +306,7 @@ public partial class MainView : UserControl
     /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidMaterialReceipt(MaterialReceipt? element)
     {
-        return element is { Count: > 0, InvoiceId: > 0, MaterialId: > 0 };
+        return element is { Count: > 0, Invoice.Id: > 0, Material.Id: > 0 };
     }
 
     /// <summary>

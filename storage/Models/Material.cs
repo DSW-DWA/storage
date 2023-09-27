@@ -4,12 +4,12 @@ public class Material
 {
     public long Id { get; init; }
     public string Name { get; init; }
-    public long CategoryId { get; init; }
+    public Category Category { get; init; }
 
-    public Material(long id, string name, long categoryId)
+    public Material(long id, string name, Category category)
     {
         Id = id;
         Name = name;
-        CategoryId = categoryId;
+        Category = category;
     }
 }
