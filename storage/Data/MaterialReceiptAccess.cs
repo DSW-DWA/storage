@@ -6,10 +6,14 @@ namespace storage.Data;
 public class MaterialReceiptAccess : IAccess<MaterialReceipt>
 {
     readonly DataSet _dataSet;
+    readonly InvoiceAccess _invoiceAccess;
+    readonly MaterialAccess _materialAccess;
 
     public MaterialReceiptAccess(DataSet dataSet)
     {
         _dataSet = dataSet;
+        _invoiceAccess = new InvoiceAccess(dataSet);
+        _materialAccess = new MaterialAccess(dataSet);
     }
 
     public void Save(MaterialReceipt materialReceipt)
@@ -19,8 +23,8 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
         {
             newRow["Id"] = materialReceipt.Id;
             newRow["Count"] = materialReceipt.Count;
-            newRow["InvoiceId"] = materialReceipt.InvoiceId;
-            newRow["MaterialId"] = materialReceipt.MaterialId;
+            newRow["InvoiceId"] = materialReceipt.Invoice.Id;
+            newRow["MaterialId"] = materialReceipt.Material.Id;
             _dataSet.Tables["MaterialReceipt"]?.Rows.Add(newRow);
         }
         DataAccess.SaveDataToXml(_dataSet);
@@ -35,13 +39,12 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
             return materialReceipts;
         foreach (DataRow row in dataRowCollection)
         {
-            materialReceipts.Add(new MaterialReceipt(
-                    (long)row["Id"],
-                    (long)row["Count"],
-                    (long)row["InvoiceId"],
-                    (long)row["MaterialId"]
-                    )
-                );
+            var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
+            var material = _materialAccess.GetById((long)row["MaterialId"]);
+            if (invoice != null && material != null)
+            {
+                materialReceipts.Add(new MaterialReceipt((long)row["Id"], (long)row["Count"], invoice, material));
+            }
         }
 
         return materialReceipts;
@@ -56,8 +59,8 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
         if (row != null)
         {
             row["Count"] = updatedMaterialReceipt.Count;
-            row["InvoiceId"] = updatedMaterialReceipt.InvoiceId;
-            row["MaterialId"] = updatedMaterialReceipt.MaterialId;
+            row["InvoiceId"] = updatedMaterialReceipt.Invoice.Id;
+            row["MaterialId"] = updatedMaterialReceipt.Material.Id;
         }
         DataAccess.SaveDataToXml(_dataSet);
     }

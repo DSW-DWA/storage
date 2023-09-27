@@ -6,10 +6,14 @@ namespace storage.Data;
 public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
 {
     readonly DataSet _dataSet;
+    readonly InvoiceAccess _invoiceAccess;
+    readonly MaterialAccess _materialAccess;
 
     public MaterialConsumptionAccess(DataSet dataSet)
     {
         _dataSet = dataSet;
+        _invoiceAccess = new InvoiceAccess(dataSet);
+        _materialAccess = new MaterialAccess(dataSet);
     }
 
     public void Save(MaterialConsumption materialConsumption)
@@ -19,8 +23,8 @@ public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
         {
             newRow["Id"] = materialConsumption.Id;
             newRow["Count"] = materialConsumption.Count;
-            newRow["InvoiceId"] = materialConsumption.InvoiceId;
-            newRow["MaterialId"] = materialConsumption.MaterialId;
+            newRow["InvoiceId"] = materialConsumption.Invoice.Id;
+            newRow["MaterialId"] = materialConsumption.Material.Id;
             _dataSet.Tables["MaterialConsumption"]?.Rows.Add(newRow);
         }
         DataAccess.SaveDataToXml(_dataSet);
@@ -35,14 +39,12 @@ public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
             return materialConsumptions;
         foreach (DataRow row in dataRowCollection)
         {
-            materialConsumptions.Add(new MaterialConsumption
-                    (
-                    (long)row["Id"],
-                    (long)row["Count"],
-                    (long)row["InvoiceId"],
-                    (long)row["MaterialId"]
-                    )
-                );
+            var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
+            var material = _materialAccess.GetById((long)row["MaterialId"]);
+            if (invoice != null && material != null)
+            {
+                materialConsumptions.Add(new MaterialConsumption((long)row["Id"], (long)row["Count"], invoice, material));
+            }
         }
 
         return materialConsumptions;
@@ -57,8 +59,8 @@ public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
         if (row != null)
         {
             row["Count"] = updatedMaterialConsumption.Count;
-            row["InvoiceId"] = updatedMaterialConsumption.InvoiceId;
-            row["MaterialId"] = updatedMaterialConsumption.MaterialId;
+            row["InvoiceId"] = updatedMaterialConsumption.Invoice.Id;
+            row["MaterialId"] = updatedMaterialConsumption.Material.Id;
         }
         DataAccess.SaveDataToXml(_dataSet);
     }

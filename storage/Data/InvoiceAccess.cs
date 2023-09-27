@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using storage.Models;
 namespace storage.Data;
 
@@ -37,6 +38,15 @@ public class InvoiceAccess : IAccess<Invoice>
         }
 
         return invoices;
+    }
+    public Invoice? GetById(long id)
+    {
+        var invoiceTable = _dataSet.Tables["Invoice"];
+
+        var row = invoiceTable?.Rows.Cast<DataRow>()
+            .FirstOrDefault(row => (long)row["Id"] == id);
+
+        return row == null ? null : new Invoice((long)row["Id"], (DateTime)row["CreatedAt"]);
     }
 
     public void Update(Invoice updatedInvoice)

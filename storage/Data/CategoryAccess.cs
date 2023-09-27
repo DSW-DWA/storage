@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using storage.Models;
 namespace storage.Data;
 
@@ -37,6 +38,16 @@ public class CategoryAccess : IAccess<Category>
         }
 
         return categories;
+    }
+
+    public Category? GetById(long id)
+    {
+        var categoryTable = _dataSet.Tables["Category"];
+
+        var categoryRow = categoryTable?.Rows.Cast<DataRow>()
+            .FirstOrDefault(row => (long)row["Id"] == id);
+
+        return categoryRow == null ? null : new Category((long)categoryRow["Id"], (string)categoryRow["Name"], (string)categoryRow["MeasureUnit"]);
     }
 
     public void Update(Category updatedCategory)
