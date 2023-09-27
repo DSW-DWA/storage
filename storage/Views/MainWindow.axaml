@@ -6,8 +6,9 @@
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="storage.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-		CanResize="False"
-        Title="storage">
+        CanResize="False"
+        Title="storage"
+        WindowStartupLocation="CenterScreen">
     <views:MainView />
 
 </Window>

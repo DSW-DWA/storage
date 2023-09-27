@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using storage.Data;
@@ -318,5 +319,9 @@ public partial class MainView : UserControl
     {
         var box = MessageBoxManager.GetMessageBoxStandard("Ошибка", message, ButtonEnum.Ok);
         await box.ShowAsync();
+    }
+    void CreateCategory_OnClick(object? sender, RoutedEventArgs e)
+    {
+
     }
 }
