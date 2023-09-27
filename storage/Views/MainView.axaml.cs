@@ -54,7 +54,7 @@ public partial class MainView : UserControl
                     GetNextId(_model.MaterialConsumptions), 0, GetLastEntityId(_model.Invoices), GetLastEntityId(_model.Materials));
                 _model.MaterialConsumptionAccess.Save(materialConsumption);
                 _model.MaterialConsumptions.Add(materialConsumption);
-                MaterialConsmptionGrid.ItemsSource = _model.MaterialConsumptions;
+                MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
                 break;
             case "CreateMaterialReceipt":
                 var materialReceipt = new MaterialReceipt(GetNextId(_model.MaterialConsumptions), 0, GetLastEntityId(_model.Invoices), GetLastEntityId(_model.Materials));
@@ -111,8 +111,8 @@ public partial class MainView : UserControl
                     await ShowErrorMessage(errorMessage);
                 }
                 break;
-            case "MaterialConsmptionGrid":
-                if (MaterialConsmptionGrid.SelectedItem is MaterialConsumption consumptionItem && IsValidMaterialConsumption(consumptionItem))
+            case "MaterialConsumptionGrid":
+                if (MaterialConsumptionGrid.SelectedItem is MaterialConsumption consumptionItem && IsValidMaterialConsumption(consumptionItem))
                 {
                     UpdateElement<MaterialConsumption>(_model.MaterialConsumptionAccess, consumptionItem, _model.MaterialConsumptions);
                 }
@@ -150,7 +150,7 @@ public partial class MainView : UserControl
                 DeleteElement<Material>(_model.MaterialAccess, MaterialGrid, _model.Materials);
                 break;
             case "DeleteMaterialConsumption":
-                DeleteElement<MaterialConsumption>(_model.MaterialConsumptionAccess, MaterialConsmptionGrid, _model.MaterialConsumptions);
+                DeleteElement<MaterialConsumption>(_model.MaterialConsumptionAccess, MaterialConsumptionGrid, _model.MaterialConsumptions);
                 break;
             case "DeleteMaterialReceipt":
                 DeleteElement<MaterialReceipt>(_model.MaterialReceiptAccess, MaterialReceiptGrid, _model.MaterialReceipts);
