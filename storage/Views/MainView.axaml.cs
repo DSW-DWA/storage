@@ -184,10 +184,16 @@ public partial class MainView : UserControl
         wordButton.IsEnabled = true;
     }
 
-
-    void UpdateElement<T>(IAccess<T> access, T item, ICollection<T> collection)
+    /// <summary>
+    /// Метод для обновления элемента в базе данных и списке элементов.
+    /// </summary>
+    /// <typeparam name="T">Тип элемента.</typeparam>
+    /// <param name="access">Интерфейс доступа к данным.</param>
+    /// <param name="element">Элемент для обновления.</param>
+    /// <param name="collection">Коллекция элементов.</param>
+    void UpdateElement<T>(IAccess<T> access, T element, ICollection<T> collection)
     {
-        access.Update(item);
+        access.Update(element);
         collection.Clear();
         var updatedCategories = access.GetAll();
         foreach (var category in updatedCategories)
@@ -196,18 +202,31 @@ public partial class MainView : UserControl
         }
     }
 
+    /// <summary>
+    /// Метод для удаления элемента из базы данных и списка элементов.
+    /// </summary>
+    /// <typeparam name="T">Тип элемента.</typeparam>
+    /// <param name="access">Интерфейс доступа к данным.</param>
+    /// <param name="dataGrid">Грид, содержащий элемент.</param>
+    /// <param name="collection">Коллекция элементов.</param>
     void DeleteElement<T>(IAccess<T> access, DataGrid dataGrid, ICollection<T> collection)
     {
         var item = (T)dataGrid.SelectedItem;
         if (item == null) return;
 
-        int itemId = Convert.ToInt32(item.GetType().GetProperty("Id")?.GetValue(item));
+        int itemId = GetEntityId(item);
         access.Delete(itemId);
         var itemToRemove = collection.First(entity => GetEntityId(entity) == itemId);
         collection.Remove(itemToRemove);
         dataGrid.ItemsSource = collection;
     }
 
+    /// <summary>
+    /// Получение идентификатора элемента.
+    /// </summary>
+    /// <typeparam name="T">Тип элемента.</typeparam>
+    /// <param name="entity">Элемент для получения идентификатора.</param>
+    /// <returns>Идентификатор элемента.</returns>
     int GetEntityId<T>(T entity)
     {
         var idProperty = entity?.GetType().GetProperty("Id");
@@ -218,42 +237,83 @@ public partial class MainView : UserControl
         throw new ArgumentException("Entity does not have a valid ID property.");
     }
 
+    /// <summary>
+    /// Получает следующий доступный идентификатор для элемента в коллекции.
+    /// </summary>
+    /// <typeparam name="T">Тип элемента.</typeparam>
+    /// <param name="collection">Коллекция элементов.</param>
+    /// <returns>Следующий доступный идентификатор.</returns>
     int GetNextId<T>(ICollection<T> collection)
     {
         return collection.Count > 0 ? collection.Max(entity => (int?)GetEntityId(entity)) + 1 ?? 1 : 1;
     }
 
+    /// <summary>
+    /// Получает последний идентификатор элемента в коллекции.
+    /// </summary>
+    /// <typeparam name="T">Тип элемента.</typeparam>
+    /// <param name="collection">Коллекция элементов.</param>
+    /// <returns>Последний идентификатор элемента.</returns>
     int GetLastEntityId<T>(ICollection<T> collection)
     {
         return collection.Count > 0 ? collection.Max(entity => (int?)GetEntityId(entity)) ?? 1 : 1;
     }
 
-
+    /// <summary>
+    /// Проверяет, является ли элемент категории (Category) корректным.
+    /// </summary>
+    /// <param name="element">Элемент категории для проверки.</param>
+    /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidCategory(Category? element)
     {
         return element != null && !string.IsNullOrWhiteSpace(element.Name) && !string.IsNullOrWhiteSpace(element.MeasureUnit);
     }
 
+    /// <summary>
+    /// Проверяет, является ли элемент счета (Invoice) корректным.
+    /// </summary>
+    /// <param name="element">Элемент счета для проверки.</param>
+    /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidInvoice(Invoice? element)
     {
         return element?.CreatedAt != null;
     }
 
+    /// <summary>
+    /// Проверяет, является ли элемент материала (Material) корректным.
+    /// </summary>
+    /// <param name="element">Элемент материала для проверки.</param>
+    /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidMaterial(Material? element)
     {
         return element != null && element.CategoryId != -1 && !string.IsNullOrWhiteSpace(element.Name);
     }
 
+    /// <summary>
+    /// Проверяет, является ли элемент записи о расходе материалов (MaterialConsumption) корректным.
+    /// </summary>
+    /// <param name="element">Элемент записи о расходе материалов для проверки.</param>
+    /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidMaterialConsumption(MaterialConsumption? element)
     {
         return element is { Count: > 0, InvoiceId: > 0, MaterialId: > 0 };
     }
 
+    /// <summary>
+    /// Проверяет, является ли элемент записи о поступлении материалов (MaterialReceipt) корректным.
+    /// </summary>
+    /// <param name="element">Элемент записи о поступлении материалов для проверки.</param>
+    /// <returns>True, если элемент корректен, иначе False.</returns>
     bool IsValidMaterialReceipt(MaterialReceipt? element)
     {
         return element is { Count: > 0, InvoiceId: > 0, MaterialId: > 0 };
     }
 
+    /// <summary>
+    /// Отображает сообщение об ошибке в виде диалогового окна.
+    /// </summary>
+    /// <param name="message">Сообщение об ошибке.</param>
+    /// <returns>Задача для асинхронного выполнения.</returns>
     async Task ShowErrorMessage(string message)
     {
         var box = MessageBoxManager.GetMessageBoxStandard("Ошибка", message, ButtonEnum.Ok);
