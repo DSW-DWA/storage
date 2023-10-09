@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using storage.Models;
 namespace storage.Data;
 
@@ -48,6 +50,24 @@ public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
         }
 
         return materialConsumptions;
+    }
+    
+    public MaterialConsumption? GetById(long id)
+    {
+        var materialConsumptionTable = _dataSet.Tables["MaterialConsumption"];
+
+        var row = materialConsumptionTable?.Rows.Cast<DataRow>()
+            .FirstOrDefault(row => (long)row["Id"] == id);
+        if (row == null) 
+            return null;
+        
+        var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
+        var material = _materialAccess.GetById((long)row["MaterialId"]);
+        if (invoice != null && material != null)
+        {
+            return new MaterialConsumption((long)row["Id"], (long)row["Count"], invoice, material);
+        }
+        return null;
     }
 
     public void Update(MaterialConsumption updatedMaterialConsumption)

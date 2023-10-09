@@ -1,14 +1,13 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200"
-		xmlns:vm="clr-namespace:storage.ViewModels"
-        x:Class="storage.Views.CategoryEditWindow"
-        Title="CategoryEditWindow"
-	    x:DataType="vm:CategoryEditWindowModel">
-	<StackPanel>
-		<TextBox Text="{Binding Name, Mode=TwoWay}" Padding="20" Watermark="Название материала" />
-		<TextBox Text="{Binding MeasureUnit, Mode=TwoWay}" Padding="30" Watermark="Единица измерения" />
-	</StackPanel>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200"
+             xmlns:vm="clr-namespace:storage.ViewModels"
+             x:Class="storage.Views.CategoryEditWindow"
+             x:DataType="vm:CategoryEditWindowModel">
+    <StackPanel>
+        <TextBox Text="{Binding Name, Mode=TwoWay}" Padding="20" Watermark="Название материала" />
+        <TextBox Text="{Binding MeasureUnit, Mode=TwoWay}" Padding="30" Watermark="Единица измерения" />
+    </StackPanel>
 </UserControl>

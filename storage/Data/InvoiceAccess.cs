@@ -39,6 +39,7 @@ public class InvoiceAccess : IAccess<Invoice>
 
         return invoices;
     }
+    
     public Invoice? GetById(long id)
     {
         var invoiceTable = _dataSet.Tables["Invoice"];

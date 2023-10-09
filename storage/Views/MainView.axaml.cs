@@ -6,7 +6,6 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Avalonia;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using storage.Data;
@@ -15,7 +14,6 @@ namespace storage.Views;
 
 public partial class MainView : UserControl
 {
-
     readonly MainViewModel _model;
 
     public MainView()
@@ -215,7 +213,7 @@ public partial class MainView : UserControl
         var item = (T)dataGrid.SelectedItem;
         if (item == null) return;
 
-        int itemId = GetEntityId(item);
+        int itemId = (int)GetEntityId(item);
         access.Delete(itemId);
         var itemToRemove = collection.First(entity => GetEntityId(entity) == itemId);
         collection.Remove(itemToRemove);
@@ -228,7 +226,7 @@ public partial class MainView : UserControl
     /// <typeparam name="T">Тип элемента.</typeparam>
     /// <param name="entity">Элемент для получения идентификатора.</param>
     /// <returns>Идентификатор элемента.</returns>
-    int GetEntityId<T>(T entity)
+    long GetEntityId<T>(T entity)
     {
         var idProperty = entity?.GetType().GetProperty("Id");
         if (idProperty == null)
@@ -324,14 +322,22 @@ public partial class MainView : UserControl
     {
 
     }
+    
     void EditCategory_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (CategoryGrid.SelectedItem != null)
-        {
-            var wn = new CategoryEditWindow((Category)CategoryGrid.SelectedItem);
-            wn.Show();
-        }
+        if (CategoryGrid.SelectedItem == null)
+            return;
         
+        // (Category)CategoryGrid.SelectedItem
+        int categoryId = (int)GetEntityId(CategoryGrid.SelectedItem);
+        var categoryToEdit = _model.CategoryAccess.GetById(categoryId);
+        if (categoryToEdit == null)
+            return;
+        
+        // var editWindow = new CategoryEditWindow(categoryToEdit);
+        // editWindow.ShowDialog(this);
 
+        // var wn = new CategoryEditWindow();
+        // wn.Show();
     }
 }

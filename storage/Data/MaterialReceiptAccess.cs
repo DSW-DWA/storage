@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using storage.Models;
 namespace storage.Data;
 
@@ -49,6 +50,25 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
 
         return materialReceipts;
     }
+    
+    public MaterialReceipt? GetById(long id)
+    {
+        var materialReceiptTable = _dataSet.Tables["MaterialReceipt"];
+
+        var row = materialReceiptTable?.Rows.Cast<DataRow>()
+            .FirstOrDefault(row => (long)row["Id"] == id);
+        if (row == null) 
+            return null;
+        
+        var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
+        var material = _materialAccess.GetById((long)row["MaterialId"]);
+        if (invoice != null && material != null)
+        {
+            return new MaterialReceipt((long)row["Id"], (long)row["Count"], invoice, material);
+        }
+        return null;
+    }
+
 
     public void Update(MaterialReceipt updatedMaterialReceipt)
     {

@@ -1,0 +1,14 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:storage.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="storage.Views.MaterialEditWindow"
+        Title="MaterialEditWindows"
+        x:DataType="vm:MaterialEditWindowModel">
+    <StackPanel>
+        <TextBox Text="{Binding Id, Mode=TwoWay}" Padding="20" Watermark="ID" IsReadOnly="True" />
+        <TextBox Text="{Binding Name, Mode=TwoWay}" Padding="20" Watermark="Название материала" />
+    </StackPanel>
+</Window>

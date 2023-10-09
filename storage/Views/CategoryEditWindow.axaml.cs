@@ -2,16 +2,13 @@ using Avalonia.Controls;
 using storage.Models;
 using storage.ViewModels;
 
-namespace storage.Views
-{
-    public partial class CategoryEditWindow : Window
-    {
-        private CategoryEditWindowModel _model;
-        public CategoryEditWindow(Category category)
-        {
-            InitializeComponent();
+namespace storage.Views;
 
-            _model = new CategoryEditWindowModel(category);
-        }
+public partial class CategoryEditWindow : Window
+{
+    public CategoryEditWindow(Category category)
+    {
+        InitializeComponent();
+        DataContext = new CategoryEditWindowModel(category);
     }
 }

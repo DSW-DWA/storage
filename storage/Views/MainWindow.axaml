@@ -2,13 +2,153 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:storage.Views"
+        xmlns:vm="clr-namespace:storage.ViewModels"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="storage.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
         Icon="/Assets/avalonia-logo.ico"
         CanResize="False"
-        Title="storage"
+        Title="Управление складом"
         WindowStartupLocation="CenterScreen">
-    <views:MainView />
 
+    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+        <TabControl Margin="5">
+            <TabItem Header="Категории">
+                <StackPanel>
+                    <Button Name="CreateCategory" Content="Создать" Click="CreateElementClick" />
+                    <DataGrid Name="CategoryGrid" Margin="20" Width="1050" Height="400"
+                              ItemsSource="{Binding Categories, Mode=TwoWay}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Measure Unit" Width="*" Binding="{Binding MeasureUnit}"  IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Name="EditCategory" Content="Edit" Click="EditCategoryClick" />
+                                            <Button Name="DeleteCategory" Content="Delete" Click="DeleteElementClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Накладные">
+                <StackPanel>
+                    <Button Name="CreateInvoice" Content="Создать" Click="CreateElementClick" />
+                    <DataGrid Name="InvoiceGrid" Margin="20" Width="1050" Height="400" ItemsSource="{Binding Invoices}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Created At" Width="*" Binding="{Binding CreatedAt}" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Name="EditInvoice" Content="Edit" Click="EditInvoiceClick" />
+                                            <Button Name="DeleteInvoice" Content="Delete" Click="DeleteElementClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Материалы">
+                <StackPanel>
+                    <Button Name="CreateMaterial" Content="Создать" Click="CreateElementClick" />
+                    <DataGrid Name="MaterialGrid" Margin="20" Width="1050" Height="400"
+                              ItemsSource="{Binding Materials}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Category" Width="*" Binding="{Binding Category.Name}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Name="EditMaterial" Content="Edit" Click="EditMaterialClick" />
+                                            <Button Name="DeleteMaterial" Content="Delete" Click="DeleteElementClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Приход">
+                <StackPanel>
+                    <Button Name="CreateMaterialReceipt" Content="Создать" Click="CreateElementClick" />
+                    <DataGrid Name="MaterialReceiptGrid" Margin="20" Width="1050" Height="400"
+                              ItemsSource="{Binding MaterialReceipts}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Count" Width="*" Binding="{Binding Count}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Invoice ID" Width="*" Binding="{Binding Invoice.Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Material" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Name="EditMaterialReceipt" Content="Edit" Click="EditMaterialReceiptClick" />
+                                            <Button Name="DeleteMaterialReceipt" Content="Delete" Click="DeleteElementClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Расход">
+                <StackPanel>
+                    <Button Name="CreateMaterialConsumption" Content="Создать" Click="CreateElementClick" />
+                    <DataGrid Name="MaterialConsumptionGrid" Margin="20" Width="1050" Height="400"
+                              ItemsSource="{Binding MaterialConsumptions}"
+                              GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              BorderThickness="1" BorderBrush="Gray">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Count" Width="*" Binding="{Binding Count}" IsReadOnly="True"  />
+                            <DataGridTextColumn Header="Invoice ID" Width="*" Binding="{Binding Invoice.Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Material" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Name="EditMaterialConsumption" Content="Edit" Click="EditMaterialConsumptionClick" />
+                                            <Button Name="DeleteMaterialConsumption" Content="Delete" Click="DeleteElementClick" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Отчеты">
+                <StackPanel>
+                    <Button Content="Скачать Excel отчет" Click="DownloadExcelReportClick" />
+                    <Button Content="Скачать Word отчет" Click="DownloadWordReportClick" />
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 </Window>
