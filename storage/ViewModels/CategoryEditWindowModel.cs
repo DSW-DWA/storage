@@ -3,7 +3,7 @@ using storage.Models;
 
 namespace storage.ViewModels;
 
-public class CategoryEditWindowModel
+public class CategoryEditWindowModel : ReactiveObject
 {
     public string Name { get; set; }
     public string MeasureUnit { get; set; }
