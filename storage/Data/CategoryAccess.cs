@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography;
+using DynamicData;
 using storage.Models;
 namespace storage.Data;
 
@@ -72,6 +74,49 @@ public class CategoryAccess : IAccess<Category>
             {
                 _dataSet.Tables["Category"]?.Rows.Remove(row);
             }
+
+        var rowsMat = _dataSet.Tables["Material"]?.Select($"CategoryId = {categoryId}");
+
+        var rowsMatCons = new List<DataRow>();
+        var rowsMatRec = new List<DataRow>();
+
+        if (rowsMat != null)
+        {
+            foreach (var rowMat in rowsMat)
+            {
+                var range = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {rowMat["Id"]}");
+                if (range != null)
+                {
+                    rowsMatCons.AddRange(range);
+                }
+            }
+
+            
+            foreach (var rowMat in rowsMat)
+            {
+                var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {rowMat["Id"]}");
+                if (range != null)
+                {
+                    rowsMatRec.AddRange(range);
+                }
+            }
+
+            foreach (var row in rowsMat)
+            {
+                _dataSet.Tables["Material"]?.Rows.Remove(row);
+            }
+        }
+        
+        foreach (var rowMatCon in rowsMatCons)
+        {
+            _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
+        }
+
+        foreach (var rowMatRec in rowsMatRec)
+        {
+            _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
+        }
+        
         DataAccess.SaveDataToXml(_dataSet);
     }
 }

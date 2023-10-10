@@ -57,6 +57,12 @@ public partial class MainWindow : Window
                 DeleteElement<MaterialReceipt>(_model.MaterialReceiptAccess, MaterialReceiptGrid, _model.MaterialReceipts);
                 break;
         }
+
+        CategoryGrid.ItemsSource = _model.Categories;
+        InvoiceGrid.ItemsSource = _model.Invoices;
+        MaterialGrid.ItemsSource = _model.Materials;
+        MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
+        MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
     }
     
     void DeleteElement<T>(IAccess<T> access, DataGrid dataGrid, ICollection<T> collection)

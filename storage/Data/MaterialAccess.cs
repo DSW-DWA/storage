@@ -82,11 +82,54 @@ public class MaterialAccess : IAccess<Material>
     public void Delete(int materialId)
     {
         var rows = _dataSet.Tables["Material"]?.Select($"Id = {materialId}");
-        if (rows != null)
+        /*if (rows != null)
             foreach (var row in rows)
             {
                 _dataSet.Tables["Material"]?.Rows.Remove(row);
+            }*/
+
+        var rowsMat = rows;
+
+        var rowsMatCons = new List<DataRow>();
+        var rowsMatRec = new List<DataRow>();
+
+        if (rowsMat != null)
+        {
+            foreach (var rowMat in rowsMat)
+            {
+                var range = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {rowMat["Id"]}");
+                if (range != null)
+                {
+                    rowsMatCons.AddRange(range);
+                }
             }
+
+
+            foreach (var rowMat in rowsMat)
+            {
+                var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {rowMat["Id"]}");
+                if (range != null)
+                {
+                    rowsMatRec.AddRange(range);
+                }
+            }
+
+            foreach (var row in rowsMat)
+            {
+                _dataSet.Tables["Material"]?.Rows.Remove(row);
+            }
+        }
+
+        foreach (var rowMatCon in rowsMatCons)
+        {
+            _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
+        }
+
+        foreach (var rowMatRec in rowsMatRec)
+        {
+            _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
+        }
+
         DataAccess.SaveDataToXml(_dataSet);
     }
 }
