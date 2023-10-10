@@ -98,7 +98,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Count" Width="*" Binding="{Binding Count}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Invoice ID" Width="*" Binding="{Binding Invoice.Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Invoice" Width="*" Binding="{Binding Invoice.CreatedAt}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Material" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
                             <DataGridTemplateColumn Header="Actions">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -125,7 +125,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Count" Width="*" Binding="{Binding Count}" IsReadOnly="True"  />
-                            <DataGridTextColumn Header="Invoice ID" Width="*" Binding="{Binding Invoice.Id}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Invoice" Width="*" Binding="{Binding Invoice.CreatedAt}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Material" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
                             <DataGridTemplateColumn Header="Actions">
                                 <DataGridTemplateColumn.CellTemplate>
