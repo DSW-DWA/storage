@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using MsBox.Avalonia.Enums;
+using MsBox.Avalonia;
 using storage.Data;
 using storage.Models;
 using storage.ViewModels;
@@ -24,10 +26,19 @@ public partial class MainWindow : Window
     {
         throw new NotImplementedException();
     }
-    void DeleteElementClick(object sender, RoutedEventArgs e)
+    async void DeleteElementClick(object sender, RoutedEventArgs e)
     {
         var btn = (Button)sender;
 
+        var box = MessageBoxManager
+            .GetMessageBoxStandard("Внимание", "Вы уверены что хотите удалить элемент?",
+                ButtonEnum.YesNo);
+
+        var result = await box.ShowAsync();
+        if (result == ButtonResult.No)
+        {
+            return;
+        }
         switch (btn.Name)
         {
             case "DeleteCategory":

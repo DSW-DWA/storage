@@ -27,8 +27,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button Name="EditCategory" Content="Edit" Click="EditCategoryClick" />
-                                            <Button Name="DeleteCategory" Content="Delete" Click="DeleteElementClick" />
+                                            <Button Name="EditCategory" Content="Ред." Click="EditCategoryClick" />
+                                            <Button Name="DeleteCategory" Content="Удалить" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -51,8 +51,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button Name="EditInvoice" Content="Edit" Click="EditInvoiceClick" />
-                                            <Button Name="DeleteInvoice" Content="Delete" Click="DeleteElementClick" />
+                                            <Button Name="EditInvoice" Content="Ред." Click="EditInvoiceClick" />
+                                            <Button Name="DeleteInvoice" Content="Удалить" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -77,8 +77,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button Name="EditMaterial" Content="Edit" Click="EditMaterialClick" />
-                                            <Button Name="DeleteMaterial" Content="Delete" Click="DeleteElementClick" />
+                                            <Button Name="EditMaterial" Content="Ред." Click="EditMaterialClick" />
+                                            <Button Name="DeleteMaterial" Content="Удалить" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -104,8 +104,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button Name="EditMaterialReceipt" Content="Edit" Click="EditMaterialReceiptClick" />
-                                            <Button Name="DeleteMaterialReceipt" Content="Delete" Click="DeleteElementClick" />
+                                            <Button Name="EditMaterialReceipt" Content="Ред." Click="EditMaterialReceiptClick" />
+                                            <Button Name="DeleteMaterialReceipt" Content="Удалить" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -131,8 +131,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button Name="EditMaterialConsumption" Content="Edit" Click="EditMaterialConsumptionClick" />
-                                            <Button Name="DeleteMaterialConsumption" Content="Delete" Click="DeleteElementClick" />
+                                            <Button Name="EditMaterialConsumption" Content="Ред." Click="EditMaterialConsumptionClick" />
+                                            <Button Name="DeleteMaterialConsumption" Content="Удалить" Click="DeleteElementClick" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

@@ -3,13 +3,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:storage.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+        mc:Ignorable="d" Width="500" Height="300"
         x:Class="storage.Views.MaterialEditWindow"
         Title="MaterialEditWindows"
         x:DataType="vm:MaterialEditWindowModel">
     <StackPanel>
-        <TextBox Text="{Binding Name, Mode=TwoWay}" Padding="20" Watermark="Название материала" />
-		<ComboBox ItemsSource="{Binding AvailableCategories, Mode=TwoWay}" Name="ComboBox" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
-		<Button Content="Save" Padding="20" Click="Save_OnClick"/>
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Название материала</TextBlock>
+        <TextBox Text="{Binding Name, Mode=TwoWay}" Margin="20" Watermark="Название материала" />
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Категория материала</TextBlock>
+		<ComboBox ItemsSource="{Binding AvailableCategories, Mode=TwoWay}" Name="ComboBox" SelectedIndex="0" Margin="20"  MaxDropDownHeight="300"></ComboBox>
+		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>

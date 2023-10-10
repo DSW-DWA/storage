@@ -8,8 +8,10 @@
         Title="CategoryEditWindow"
 	    x:DataType="vm:CategoryEditWindowModel">
 	<StackPanel>
-		<TextBox Text="{Binding Name, Mode=TwoWay}" Padding="20" Watermark="Название материала" />
-		<TextBox Text="{Binding MeasureUnit, Mode=TwoWay}" Padding="20" Watermark="Единица измерения" />
-		<Button Content="Save" Padding="20" Click="Save_OnClick"/>
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Название категории</TextBlock>
+		<TextBox Text="{Binding Name, Mode=TwoWay}" Margin="20" Watermark="Название материала" />
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Еденица измнерения</TextBlock>
+		<TextBox Text="{Binding MeasureUnit, Mode=TwoWay}" Margin="20" Watermark="Единица измерения" />
+		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
 	</StackPanel>
 </Window>

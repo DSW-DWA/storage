@@ -3,14 +3,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:storage.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+        mc:Ignorable="d" Width="500" Height="300"
         x:Class="storage.Views.MaterialReceiptEditWindow"
         Title="MaterialReceiptEditWindow"
         x:DataType="vm:MaterialReceiptEditWindowModel">
     <StackPanel>
-        <TextBox Text="{Binding Count, Mode=TwoWay}" Padding="20" Watermark="Количество" />
-		<ComboBox ItemsSource="{Binding AvailableMaterials, Mode=TwoWay}" Name="ComboBoxMaterial" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
-		<ComboBox ItemsSource="{Binding AvailableInvoicies, Mode=TwoWay}" Name="ComboBoxInvoice" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
-		<Button Content="Save" Padding="20" Click="Save_OnClick"/>
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Колл-во прихода</TextBlock>
+		<TextBox Text="{Binding Count, Mode=TwoWay}" Margin="20" Watermark="Количество" />
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Материал прихода</TextBlock>
+		<ComboBox ItemsSource="{Binding AvailableMaterials, Mode=TwoWay}" Name="ComboBoxMaterial" SelectedIndex="0" Margin="20"  MaxDropDownHeight="300"></ComboBox>
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Накладная прихода</TextBlock>
+		<ComboBox ItemsSource="{Binding AvailableInvoicies, Mode=TwoWay}" Name="ComboBoxInvoice" SelectedIndex="0" Margin="20"  MaxDropDownHeight="300"></ComboBox>
+		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>
