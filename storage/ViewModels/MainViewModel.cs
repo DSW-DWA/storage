@@ -15,7 +15,9 @@ using OfficeOpenXml;
 using ReactiveUI;
 using storage.Data;
 using storage.Models;
+using Xceed.Document.NET;
 using Xceed.Words.NET;
+using LicenseContext = OfficeOpenXml.LicenseContext;
 
 namespace storage.ViewModels;
 
@@ -80,7 +82,6 @@ public class MainViewModel : ReactiveObject
             doc.InsertParagraph("Материалы").Bold().FontSize(14d).SpacingBefore(10d).SpacingAfter(10d);
             var MatTable = MaterialAccess.GetAll();
             var RecTable = MaterialReceiptAccess.GetAll();
-            var InvTable = InvoiceAccess.GetAll();
 
             var wordTable = doc.AddTable(MatTable.Count+1, 5);
 
@@ -95,10 +96,10 @@ public class MainViewModel : ReactiveObject
                 var time = RecTable.Where(x => x.Material.Id == MatTable[rowIndex].Id).OrderBy(x => x.Invoice.CreatedAt).Select(x => x.Invoice.CreatedAt).FirstOrDefault();
                 
                 wordTable.Rows[rowIndex + 1].Cells[0].Paragraphs[0].Append(MatTable[rowIndex].Id.ToString());
-                wordTable.Rows[rowIndex + 1].Cells[1].Paragraphs[0].Append(MatTable[rowIndex].Name.ToString());
+                wordTable.Rows[rowIndex + 1].Cells[1].Paragraphs[0].Append(MatTable[rowIndex].Name);
                 wordTable.Rows[rowIndex + 1].Cells[2].Paragraphs[0].Append(MatTable[rowIndex].Category.Name);
                 wordTable.Rows[rowIndex + 1].Cells[3].Paragraphs[0].Append(MatTable[rowIndex].Category.MeasureUnit);
-                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(time == null ?  "NULL" : time.ToString());
+                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(time.ToString());
             }
 
             doc.InsertTable(wordTable);
@@ -110,23 +111,33 @@ public class MainViewModel : ReactiveObject
 
     public void ExportToExcel()
     {
-        /*var dataset = _dataaccess.ds;
-        var outputpath = @"./report.xlsx";
-        excelpackage.licensecontext = licensecontext.noncommercial;
-        using (var package = new excelpackage())
+        var dataSet = DataAccess.GetDataSet();
+        var outputPath = @"./report.xlsx";
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using (var package = new ExcelPackage())
         {
-            foreach (datatable table in dataset.tables)
-            {
-                var worksheet = package.workbook.worksheets.add(table.tablename);
-                for (var colindex = 0; colindex < table.columns.count; colindex++)
-                    worksheet.cells[1, colindex + 1].value = table.columns[colindex].columnname;
+            var worksheet = package.Workbook.Worksheets.Add("Материалы");
+            var MatTable = MaterialAccess.GetAll();
+            var RecTable = MaterialReceiptAccess.GetAll();
 
-                for (var rowindex = 0; rowindex < table.rows.count; rowindex++)
-                    for (var colindex = 0; colindex < table.columns.count; colindex++)
-                        worksheet.cells[rowindex + 2, colindex + 1].value = table.rows[rowindex][colindex];
+            worksheet.Cells[1, 1].Value = "ID";
+            worksheet.Cells[1, 2].Value = "Имя";
+            worksheet.Cells[1, 3].Value = "Категори";
+            worksheet.Cells[1, 4].Value = "Ed. Измерения";
+            worksheet.Cells[1, 5].Value = "Дата поступления на склад";
+
+            for (var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
+            {
+                var time = RecTable.Where(x => x.Material.Id == MatTable[rowIndex].Id).OrderBy(x => x.Invoice.CreatedAt).Select(x => x.Invoice.CreatedAt).FirstOrDefault();
+
+                worksheet.Cells[rowIndex + 2, 1].Value = MatTable[rowIndex].Id.ToString();
+                worksheet.Cells[rowIndex + 2, 2].Value = MatTable[rowIndex].Name;
+                worksheet.Cells[rowIndex + 2, 3].Value = MatTable[rowIndex].Category.Name;
+                worksheet.Cells[rowIndex + 2, 4].Value = MatTable[rowIndex].Category.MeasureUnit;
+                worksheet.Cells[rowIndex + 2, 5].Value = time.ToString();
             }
 
-            file.writeallbytes(outputpath, package.getasbytearray());
-        }*/
+            File.WriteAllBytes(outputPath, package.GetAsByteArray());
+        }
     }
 }
