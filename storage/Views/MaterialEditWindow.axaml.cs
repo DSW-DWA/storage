@@ -24,7 +24,7 @@ public partial class MaterialEditWindow : Window
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
         var box = MessageBoxManager
-            .GetMessageBoxStandard("Внимание", "Вы хотите сохранить изменения и закрыть окно?",
+            .GetMessageBoxStandard("Внимание", "Вы хотитн сохранить изменения и закрыть окно?",
                 ButtonEnum.YesNo);
 
         var result = await box.ShowAsync();

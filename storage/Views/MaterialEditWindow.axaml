@@ -9,7 +9,7 @@
         x:DataType="vm:MaterialEditWindowModel">
     <StackPanel>
         <TextBox Text="{Binding Name, Mode=TwoWay}" Padding="20" Watermark="Название материала" />
-		<ComboBox Name="ComboBox" SelectedIndex="0" Padding="20" ItemsSource="{Binding AvailableCategories, Mode=TwoWay}" MaxDropDownHeight="300"></ComboBox>
+		<ComboBox ItemsSource="{Binding AvailableCategories, Mode=TwoWay}" Name="ComboBox" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
 		<Button Content="Save" Padding="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>
