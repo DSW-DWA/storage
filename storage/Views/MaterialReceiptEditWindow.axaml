@@ -3,12 +3,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:storage.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
         x:Class="storage.Views.MaterialReceiptEditWindow"
         Title="MaterialReceiptEditWindow"
-        x:DataType="vm:MaterialReceiptWindowModel">
+        x:DataType="vm:MaterialReceiptEditWindowModel">
     <StackPanel>
-        <TextBox Text="{Binding Id, Mode=TwoWay}" Padding="20" Watermark="ID" IsReadOnly="True" />
         <TextBox Text="{Binding Count, Mode=TwoWay}" Padding="20" Watermark="Количество" />
+		<ComboBox ItemsSource="{Binding AvailableMaterials, Mode=TwoWay}" Name="ComboBoxMaterial" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
+		<ComboBox ItemsSource="{Binding AvailableInvoicies, Mode=TwoWay}" Name="ComboBoxInvoice" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
+		<Button Content="Save" Padding="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>

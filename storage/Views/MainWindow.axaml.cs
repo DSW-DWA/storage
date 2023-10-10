@@ -147,7 +147,10 @@ public partial class MainWindow : Window
         var materialReceiptToEdit = _model.MaterialReceiptAccess.GetById(materialReceiptId);
         if (materialReceiptToEdit == null)
             return;
-        var editWindow = new MaterialReceiptEditWindow(materialReceiptToEdit, _model);
+
+        var availableInvoices = _model.InvoiceAccess.GetAll();
+        var availableMaterials = _model.MaterialAccess.GetAll();
+        var editWindow = new MaterialReceiptEditWindow(materialReceiptToEdit, availableInvoices, availableMaterials, _model);
         var task = editWindow.ShowDialog(this);
 
         await task;
@@ -162,7 +165,10 @@ public partial class MainWindow : Window
         var materialConsumptionToEdit = _model.MaterialConsumptionAccess.GetById(materialConsumptionId);
         if (materialConsumptionToEdit == null)
             return;
-        var editWindow = new MaterialConsumptionEditWindow(materialConsumptionToEdit, _model);
+
+        var availableInvoices = _model.InvoiceAccess.GetAll();
+        var availableMaterials = _model.MaterialAccess.GetAll();
+        var editWindow = new MaterialConsumptionEditWindow(materialConsumptionToEdit, availableInvoices, availableMaterials, _model);
         var task = editWindow.ShowDialog(this);
 
         await task;

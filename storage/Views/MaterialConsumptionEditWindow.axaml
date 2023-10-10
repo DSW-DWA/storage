@@ -8,7 +8,9 @@
         Title="MaterialConsumptionEditWindow"
         x:DataType="vm:MaterialConsumptionEditWindowModel">
     <StackPanel>
-        <TextBox Text="{Binding Id, Mode=TwoWay}" Padding="20" Watermark="ID" IsReadOnly="True" />
-        <TextBox Text="{Binding Count, Mode=TwoWay}" Padding="20" Watermark="Количество" />
+		<TextBox Text="{Binding Count, Mode=TwoWay}" Padding="20" Watermark="Количество" />
+		<ComboBox ItemsSource="{Binding AvailableMaterials, Mode=TwoWay}" Name="ComboBoxMaterial" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
+		<ComboBox ItemsSource="{Binding AvailableInvoicies, Mode=TwoWay}" Name="ComboBoxInvoice" SelectedIndex="0" Padding="20"  MaxDropDownHeight="300"></ComboBox>
+		<Button Content="Save" Padding="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>
