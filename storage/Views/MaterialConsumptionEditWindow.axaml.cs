@@ -8,7 +8,7 @@ namespace storage.Views;
 
 public partial class MaterialConsumptionEditWindow : Window
 {
-    public MaterialConsumptionEditWindow(MaterialConsumption materialConsumption)
+    public MaterialConsumptionEditWindow(MaterialConsumption materialConsumption, MainViewModel mainView)
     {
         InitializeComponent();
         DataContext = new MaterialConsumptionEditWindowModel(materialConsumption);

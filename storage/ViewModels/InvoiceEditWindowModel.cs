@@ -5,12 +5,20 @@ namespace storage.ViewModels;
 
 public class InvoiceEditWindowModel : ReactiveObject
 {
-    public long Id { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public TimeSpan CreatedAtTime { get; set; }
+    private Invoice _invoice;
+    private MainViewModel _mainViewModel;
 
-    public InvoiceEditWindowModel(Invoice invoice)
+    public InvoiceEditWindowModel(Invoice invoice, MainViewModel mainView)
     {
-        Id = invoice.Id;
-        CreatedAt = invoice.CreatedAt;
+        _mainViewModel = mainView;
+        _invoice = invoice;
+        CreatedAt = new DateTimeOffset(invoice.CreatedAt);
+        CreatedAtTime = invoice.CreatedAt.TimeOfDay;
+    }
+    public void Save()
+    {
+        _mainViewModel.InvoiceAccess.Update(new Invoice(_invoice.Id, CreatedAt.DateTime.Add(CreatedAtTime)));
     }
 }

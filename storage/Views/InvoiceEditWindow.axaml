@@ -8,7 +8,8 @@
         Title="InvoiceEditWindow"
         x:DataType="vm:InvoiceEditWindowModel">
     <StackPanel>
-        <TextBox Text="{Binding Id, Mode=TwoWay}" Padding="20" Watermark="ID" IsReadOnly="True" />
         <DatePicker SelectedDate="{Binding CreatedAt, Mode=TwoWay}" Padding="20" />
+		<TimePicker SelectedTime="{Binding CreatedAtTime, Mode=TwoWay}" ClockIdentifier="24HourClock" MinuteIncrement="1" Padding="20"/>
+		<Button Content="Save" Padding="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>

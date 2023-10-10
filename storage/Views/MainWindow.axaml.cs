@@ -18,24 +18,12 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         _model = new MainViewModel();
+        DataContext = _model;
     }
     void CreateElementClick(object? sender, RoutedEventArgs e)
     {
         throw new NotImplementedException();
     }
-    
-    void EditCategoryClick(object? sender, RoutedEventArgs e)
-    {
-        if (CategoryGrid.SelectedItem == null)
-            return;
-        int categoryId = (int)GetEntityId(CategoryGrid.SelectedItem);
-        var categoryToEdit = _model.CategoryAccess.GetById(categoryId);
-        if (categoryToEdit == null)
-            return;
-        var editWindow = new CategoryEditWindow(categoryToEdit);
-        editWindow.ShowDialog(this);
-    }
-
     void DeleteElementClick(object sender, RoutedEventArgs e)
     {
         var btn = (Button)sender;
@@ -106,7 +94,21 @@ public partial class MainWindow : Window
         if (idValue != null) return Convert.ToInt32(idValue);
         throw new ArgumentException("Entity does not have a valid ID property.");
     }
-    void EditInvoiceClick(object? sender, RoutedEventArgs e)
+    async void EditCategoryClick(object? sender, RoutedEventArgs e)
+    {
+        if (CategoryGrid.SelectedItem == null)
+            return;
+        int categoryId = (int)GetEntityId(CategoryGrid.SelectedItem);
+        var categoryToEdit = _model.CategoryAccess.GetById(categoryId);
+        if (categoryToEdit == null)
+            return;
+        var editWindow = new CategoryEditWindow(categoryToEdit, _model);
+        var task = editWindow.ShowDialog(this);
+
+        await task;
+        CategoryGrid.ItemsSource = _model.Categories;
+    }
+    async void EditInvoiceClick(object? sender, RoutedEventArgs e)
     {
         if (InvoiceGrid.SelectedItem == null)
             return;
@@ -114,10 +116,13 @@ public partial class MainWindow : Window
         var invoiceToEdit = _model.InvoiceAccess.GetById(invoiceId);
         if (invoiceToEdit == null)
             return;
-        var editWindow = new InvoiceEditWindow(invoiceToEdit);
-        editWindow.ShowDialog(this);
+        var editWindow = new InvoiceEditWindow(invoiceToEdit, _model);
+        var task = editWindow.ShowDialog(this);
+
+        await task;
+        InvoiceGrid.ItemsSource = _model.Invoices;
     }
-    void EditMaterialClick(object? sender, RoutedEventArgs e)
+    async void EditMaterialClick(object? sender, RoutedEventArgs e)
     {
         if (MaterialGrid.SelectedItem == null)
             return;
@@ -127,11 +132,14 @@ public partial class MainWindow : Window
             return;
 
         var availableCategories = _model.CategoryAccess.GetAll();
-        var editWindow = new MaterialEditWindow(materialToEdit, availableCategories);
-        editWindow.ShowDialog(this);
+        var editWindow = new MaterialEditWindow(materialToEdit, availableCategories, _model);
+        var task = editWindow.ShowDialog(this);
+
+        await task;
+        MaterialGrid.ItemsSource = _model.Materials;
     }
 
-    void EditMaterialReceiptClick(object? sender, RoutedEventArgs e)
+    async void EditMaterialReceiptClick(object? sender, RoutedEventArgs e)
     {
         if (MaterialReceiptGrid.SelectedItem == null)
             return;
@@ -139,11 +147,14 @@ public partial class MainWindow : Window
         var materialReceiptToEdit = _model.MaterialReceiptAccess.GetById(materialReceiptId);
         if (materialReceiptToEdit == null)
             return;
-        var editWindow = new MaterialReceiptEditWindow(materialReceiptToEdit);
-        editWindow.ShowDialog(this);
+        var editWindow = new MaterialReceiptEditWindow(materialReceiptToEdit, _model);
+        var task = editWindow.ShowDialog(this);
+
+        await task;
+        MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
     }
 
-    void EditMaterialConsumptionClick(object? sender, RoutedEventArgs e)
+    async void EditMaterialConsumptionClick(object? sender, RoutedEventArgs e)
     {
         if (MaterialConsumptionGrid.SelectedItem == null)
             return;
@@ -151,7 +162,10 @@ public partial class MainWindow : Window
         var materialConsumptionToEdit = _model.MaterialConsumptionAccess.GetById(materialConsumptionId);
         if (materialConsumptionToEdit == null)
             return;
-        var editWindow = new MaterialConsumptionEditWindow(materialConsumptionToEdit);
-        editWindow.ShowDialog(this);
+        var editWindow = new MaterialConsumptionEditWindow(materialConsumptionToEdit, _model);
+        var task = editWindow.ShowDialog(this);
+
+        await task;
+        MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
     }
 }

@@ -1,20 +1,26 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using ReactiveUI;
 using storage.Models;
 namespace storage.ViewModels;
 
 public class MaterialEditWindowModel : ReactiveObject
 {
-    public long Id { get; init; }
     public string Name { get; init; }
-    public Category Category { get; init; }
-    public List<Category> AvailableCategories { get; set; }
+    public ObservableCollection<string> AvailableCategories { get; set; }
+    private Material _material;
+    private MainViewModel _mainViewModel;
     
-    public MaterialEditWindowModel(Material material, List<Category> availableCategories)
+    public MaterialEditWindowModel(Material material, List<Category> availableCategories, MainViewModel mainView)
     {
-        Id = material.Id;
+        _material = material;
+        _mainViewModel = mainView;
         Name = material.Name;
-        Category = material.Category;
-        AvailableCategories = availableCategories;
+        AvailableCategories = new ObservableCollection<string>(availableCategories.Select(x => x.Name));
+    }
+    public void Save(Category category)
+    {
+        _mainViewModel.MaterialAccess.Update(new Material(_material.Id, Name, category));
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Avalonia.Animation.Easings;
 using MsBox.Avalonia;
@@ -19,11 +21,40 @@ namespace storage.ViewModels;
 
 public class MainViewModel : ReactiveObject
 {
-    public ObservableCollection<Category> Categories { get; }
-    public ObservableCollection<Material> Materials { get; }
-    public ObservableCollection<Invoice> Invoices { get; }
-    public ObservableCollection<MaterialConsumption> MaterialConsumptions { get; }
-    public ObservableCollection<MaterialReceipt> MaterialReceipts { get; }
+    public ObservableCollection<Category> Categories {
+        get
+        {
+            return new ObservableCollection<Category>(CategoryAccess.GetAll());
+        }
+    }
+    public ObservableCollection<Material> Materials 
+    { 
+        get
+        {
+            return new ObservableCollection<Material>(MaterialAccess.GetAll());
+        }
+    }
+    public ObservableCollection<Invoice> Invoices 
+    { 
+        get
+        {
+            return new ObservableCollection<Invoice>(InvoiceAccess.GetAll());
+        }
+    }
+    public ObservableCollection<MaterialConsumption> MaterialConsumptions
+    {
+        get
+        {
+            return new ObservableCollection<MaterialConsumption>(MaterialConsumptionAccess.GetAll());
+        }
+    }
+    public ObservableCollection<MaterialReceipt> MaterialReceipts 
+    { 
+        get
+        {
+            return new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAll());
+        }
+    }
 
     static readonly DataAccess DataAccess = new DataAccess();
     public readonly CategoryAccess CategoryAccess = new CategoryAccess(DataAccess.GetDataSet());
@@ -34,13 +65,12 @@ public class MainViewModel : ReactiveObject
 
     public MainViewModel()
     {
-        Categories = new ObservableCollection<Category>(CategoryAccess.GetAll());
+        /*Categories = new ObservableCollection<Category>(CategoryAccess.GetAll());
         Materials = new ObservableCollection<Material>(MaterialAccess.GetAll());
         Invoices = new ObservableCollection<Invoice>(InvoiceAccess.GetAll());
         MaterialConsumptions = new ObservableCollection<MaterialConsumption>(MaterialConsumptionAccess.GetAll());
-        MaterialReceipts = new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAll());
+        MaterialReceipts = new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAll());*/
     }
-
     public void ExportToWord()
     {
         var dataset = DataAccess.GetDataSet();

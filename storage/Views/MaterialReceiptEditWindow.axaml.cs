@@ -8,7 +8,7 @@ namespace storage.Views;
 
 public partial class MaterialReceiptEditWindow : Window
 {
-    public MaterialReceiptEditWindow(MaterialReceipt materialReceipt)
+    public MaterialReceiptEditWindow(MaterialReceipt materialReceipt, MainViewModel mainView)
     {
         InitializeComponent();
         DataContext = new MaterialReceiptWindowModel(materialReceipt);
