@@ -23,7 +23,7 @@ public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
         var newRow = _dataSet.Tables["MaterialConsumption"]?.NewRow();
         if (newRow != null)
         {
-            newRow["Id"] = materialConsumption.Id;
+            newRow["Id"] = GetNextId();
             newRow["Count"] = materialConsumption.Count;
             newRow["InvoiceId"] = materialConsumption.Invoice.Id;
             newRow["MaterialId"] = materialConsumption.Material.Id;
@@ -69,7 +69,12 @@ public class MaterialConsumptionAccess : IAccess<MaterialConsumption>
         }
         return null;
     }
-
+    long GetNextId()
+    {
+        long? maxId = _dataSet.Tables["MaterialConsumption"]?.Rows.Cast<DataRow>()
+            .Max(row => (long)row["Id"]);
+        return maxId == null ? 0 : (long)maxId + 1;
+    }
     public void Update(MaterialConsumption updatedMaterialConsumption)
     {
         var rows = _dataSet.Tables["MaterialConsumption"]?.Select($"Id = {updatedMaterialConsumption.Id}");

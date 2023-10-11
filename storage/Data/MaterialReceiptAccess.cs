@@ -22,7 +22,7 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
         var newRow = _dataSet.Tables["MaterialReceipt"]?.NewRow();
         if (newRow != null)
         {
-            newRow["Id"] = materialReceipt.Id;
+            newRow["Id"] = GetNextId();
             newRow["Count"] = materialReceipt.Count;
             newRow["InvoiceId"] = materialReceipt.Invoice.Id;
             newRow["MaterialId"] = materialReceipt.Material.Id;
@@ -69,7 +69,12 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
         return null;
     }
 
-
+    long GetNextId()
+    {
+        long? maxId = _dataSet.Tables["MaterialReceipt"]?.Rows.Cast<DataRow>()
+            .Max(row => (long)row["Id"]);
+        return maxId == null ? 0 : (long)maxId + 1;
+    }
     public void Update(MaterialReceipt updatedMaterialReceipt)
     {
         var rows = _dataSet.Tables["MaterialReceipt"]?.Select($"Id = {updatedMaterialReceipt.Id}");

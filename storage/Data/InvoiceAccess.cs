@@ -18,7 +18,7 @@ public class InvoiceAccess : IAccess<Invoice>
         var newRow = _dataSet.Tables["Invoice"]?.NewRow();
         if (newRow != null)
         {
-            newRow["Id"] = invoice.Id;
+            newRow["Id"] = GetNextId();
             newRow["CreatedAt"] = invoice.CreatedAt;
             _dataSet.Tables["Invoice"]?.Rows.Add(newRow);
         }
@@ -49,7 +49,12 @@ public class InvoiceAccess : IAccess<Invoice>
 
         return row == null ? null : new Invoice((long)row["Id"], (DateTime)row["CreatedAt"]);
     }
-
+    long GetNextId()
+    {
+        long? maxId = _dataSet.Tables["Invoice"]?.Rows.Cast<DataRow>()
+            .Max(row => (long)row["Id"]);
+        return maxId == null ? 0 : (long)maxId + 1;
+    }
     public void Update(Invoice updatedInvoice)
     {
         var rows = _dataSet.Tables["Invoice"]?.Select($"Id = {updatedInvoice.Id}");

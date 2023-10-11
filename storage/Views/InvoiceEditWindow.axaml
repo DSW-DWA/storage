@@ -10,7 +10,7 @@
     <StackPanel>
 		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Дата накладной</TextBlock>
         <DatePicker SelectedDate="{Binding CreatedAt, Mode=TwoWay}" Margin="20" />
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Время накладой</TextBlock>
+		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Дата создания накладной</TextBlock>
 		<TimePicker SelectedTime="{Binding CreatedAtTime, Mode=TwoWay}" ClockIdentifier="24HourClock" MinuteIncrement="1" Margin="20"/>
 		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
     </StackPanel>

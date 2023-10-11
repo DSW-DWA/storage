@@ -14,6 +14,15 @@ public partial class MaterialReceiptEditWindow : Window
 {
     private List<Invoice> _invoices;
     private List<Material> _materials;
+    public MaterialReceiptEditWindow(List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
+    {
+        InitializeComponent();
+        _invoices = invoices;
+        _materials = materials;
+        DataContext = new MaterialReceiptEditWindowModel(invoices, materials, mainView);
+        ComboBoxInvoice.SelectedIndex = invoices.FindLastIndex(x => true);
+        ComboBoxMaterial.SelectedIndex = materials.FindLastIndex(x => true);
+    }
     public MaterialReceiptEditWindow(MaterialReceipt materialReceipt, List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
     {
         InitializeComponent();
@@ -26,7 +35,6 @@ public partial class MaterialReceiptEditWindow : Window
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
         var box = MessageBoxManager.GetMessageBoxStandard("Внимание", "Вы уверены что хотите сохранить изменения?", ButtonEnum.YesNo);
-
         var result = await box.ShowAsync();
 
         if (result != ButtonResult.Yes || DataContext == null)

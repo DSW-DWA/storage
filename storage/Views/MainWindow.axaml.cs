@@ -22,10 +22,7 @@ public partial class MainWindow : Window
         _model = new MainViewModel();
         DataContext = _model;
     }
-    void CreateElementClick(object? sender, RoutedEventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+
     async void DeleteElementClick(object sender, RoutedEventArgs e)
     {
         var btn = (Button)sender;
@@ -190,5 +187,40 @@ public partial class MainWindow : Window
 
         await task;
         MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
+    }
+    async void CreateCategoryClick(object? sender, RoutedEventArgs e)
+    {
+        var saveWindow = new CategoryEditWindow(_model);
+        await saveWindow.ShowDialog(this);
+        CategoryGrid.ItemsSource = _model.Categories;
+    }
+    async void CreateInvoiceClick(object? sender, RoutedEventArgs e)
+    {
+        var saveWindow = new InvoiceEditWindow(_model);
+        await saveWindow.ShowDialog(this);
+        InvoiceGrid.ItemsSource = _model.Invoices;
+    }
+    async void CreateMaterialClick(object? sender, RoutedEventArgs e)
+    {
+        var availableCategories = _model.CategoryAccess.GetAll();
+        var saveWindow = new MaterialEditWindow(availableCategories, _model);
+        await saveWindow.ShowDialog(this);
+        MaterialGrid.ItemsSource = _model.Materials;
+    }
+    async void CreateMaterialConsumptionClick(object? sender, RoutedEventArgs e)
+    {
+        var availableInvoices = _model.InvoiceAccess.GetAll();
+        var availableMaterials = _model.MaterialAccess.GetAll();
+        var editWindow = new MaterialConsumptionEditWindow(availableInvoices, availableMaterials, _model);
+        await editWindow.ShowDialog(this);
+        MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
+    }
+    async void CreateMaterialReceiptClick(object? sender, RoutedEventArgs e)
+    {
+        var availableInvoices = _model.InvoiceAccess.GetAll();
+        var availableMaterials = _model.MaterialAccess.GetAll();
+        var editWindow = new MaterialReceiptEditWindow(availableInvoices, availableMaterials, _model);
+        await editWindow.ShowDialog(this);
+        MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
     }
 }

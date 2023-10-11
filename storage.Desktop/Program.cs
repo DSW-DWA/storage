@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace storage.Desktop;
 
@@ -12,8 +15,7 @@ internal class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

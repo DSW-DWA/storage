@@ -20,7 +20,7 @@ public class MaterialAccess : IAccess<Material>
         var newRow = _dataSet.Tables["Material"]?.NewRow();
         if (newRow != null)
         {
-            newRow["Id"] = material.Id;
+            newRow["Id"] = GetNextId();
             newRow["Name"] = material.Name;
             newRow["CategoryId"] = material.Category.Id;
             _dataSet.Tables["Material"]?.Rows.Add(newRow);
@@ -64,7 +64,12 @@ public class MaterialAccess : IAccess<Material>
         var category = _categoryAccess.GetById((long)row["CategoryId"]);
         return category == null ? null : new Material((long)row["Id"], (string)row["Name"], category);
     }
-
+    long GetNextId()
+    {
+        long? maxId = _dataSet.Tables["Material"]?.Rows.Cast<DataRow>()
+            .Max(row => (long)row["Id"]);
+        return maxId == null ? 0 : (long)maxId + 1;
+    }
     public void Update(Material updatedMaterial)
     {
         var rows = _dataSet.Tables["Material"]?.Select($"Id = {updatedMaterial.Id}");

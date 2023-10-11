@@ -14,7 +14,7 @@
         <TabControl Margin="5">
             <TabItem Header="Категории">
                 <StackPanel>
-                    <Button Name="CreateCategory" Content="Создать" Click="CreateElementClick" />
+                    <Button Name="CreateCategory" Content="Создать" Click="CreateCategoryClick" />
                     <DataGrid Name="CategoryGrid" Margin="20" Width="1050" Height="400"
                               ItemsSource="{Binding Categories, Mode=TwoWay}"
                               GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -40,7 +40,7 @@
 
             <TabItem Header="Накладные">
                 <StackPanel>
-                    <Button Name="CreateInvoice" Content="Создать" Click="CreateElementClick" />
+                    <Button Name="CreateInvoice" Content="Создать" Click="CreateInvoiceClick" />
                     <DataGrid Name="InvoiceGrid" Margin="20" Width="1050" Height="400" ItemsSource="{Binding Invoices}"
                               GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
                               BorderThickness="1" BorderBrush="Gray">
@@ -64,7 +64,7 @@
 
             <TabItem Header="Материалы">
                 <StackPanel>
-                    <Button Name="CreateMaterial" Content="Создать" Click="CreateElementClick" />
+                    <Button Name="CreateMaterial" Content="Создать" Click="CreateMaterialClick" />
                     <DataGrid Name="MaterialGrid" Margin="20" Width="1050" Height="400"
                               ItemsSource="{Binding Materials}"
                               GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -90,7 +90,7 @@
 
             <TabItem Header="Приход">
                 <StackPanel>
-                    <Button Name="CreateMaterialReceipt" Content="Создать" Click="CreateElementClick" />
+                    <Button Name="CreateMaterialReceipt" Content="Создать" Click="CreateMaterialReceiptClick" />
                     <DataGrid Name="MaterialReceiptGrid" Margin="20" Width="1050" Height="400"
                               ItemsSource="{Binding MaterialReceipts}"
                               GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -117,7 +117,7 @@
 
             <TabItem Header="Расход">
                 <StackPanel>
-                    <Button Name="CreateMaterialConsumption" Content="Создать" Click="CreateElementClick" />
+                    <Button Name="CreateMaterialConsumption" Content="Создать" Click="CreateMaterialConsumptionClick" />
                     <DataGrid Name="MaterialConsumptionGrid" Margin="20" Width="1050" Height="400"
                               ItemsSource="{Binding MaterialConsumptions}"
                               GridLinesVisibility="All" HorizontalAlignment="Center" VerticalAlignment="Center"

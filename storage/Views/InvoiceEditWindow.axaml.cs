@@ -9,6 +9,13 @@ namespace storage.Views;
 
 public partial class InvoiceEditWindow : Window
 {
+    
+    public InvoiceEditWindow(MainViewModel mainView)
+    {
+        InitializeComponent();
+        DataContext = new InvoiceEditWindowModel(mainView);
+    }
+
     public InvoiceEditWindow(Invoice invoice, MainViewModel mainView)
     {
         InitializeComponent();
@@ -24,7 +31,7 @@ public partial class InvoiceEditWindow : Window
             return;
         var model = (InvoiceEditWindowModel)DataContext;
         model.Save();
-        this.Close();
+        Close();
     }
 }
 

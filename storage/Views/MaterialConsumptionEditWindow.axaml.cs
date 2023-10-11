@@ -15,6 +15,15 @@ public partial class MaterialConsumptionEditWindow : Window
     private List<Invoice> _invoices;
     private List<Material> _materials;
 
+    public MaterialConsumptionEditWindow(List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
+    {
+        InitializeComponent();
+        _invoices = invoices;
+        _materials = materials;
+        DataContext = new MaterialConsumptionEditWindowModel(invoices, materials, mainView);
+        ComboBoxInvoice.SelectedIndex = invoices.FindLastIndex(x => true);
+        ComboBoxMaterial.SelectedIndex = materials.FindLastIndex(x => true);
+    }
     public MaterialConsumptionEditWindow(MaterialConsumption materialConsumption, List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
     {
         InitializeComponent();
@@ -33,7 +42,7 @@ public partial class MaterialConsumptionEditWindow : Window
             return;
         var model = (MaterialConsumptionEditWindowModel)DataContext;
         model.Save(_invoices[ComboBoxInvoice.SelectedIndex], _materials[ComboBoxMaterial.SelectedIndex]);
-        this.Close();
+        Close();
     }
 }
 

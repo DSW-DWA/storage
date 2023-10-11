@@ -9,6 +9,12 @@ namespace storage.Views;
 
 public partial class CategoryEditWindow : Window
 {
+    public CategoryEditWindow(MainViewModel mainView)
+    {
+        InitializeComponent();
+        DataContext = new CategoryEditWindowModel(mainView);
+    }
+
     public CategoryEditWindow(Category category, MainViewModel mainView)
     {
         InitializeComponent();
@@ -24,6 +30,6 @@ public partial class CategoryEditWindow : Window
             return;
         var model = (CategoryEditWindowModel)DataContext;
         model.Save();
-        this.Close();
+        Close();
     }
 }

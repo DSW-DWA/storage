@@ -19,7 +19,7 @@ public class CategoryAccess : IAccess<Category>
         var newRow = _dataSet.Tables["Category"]?.NewRow();
         if (newRow != null)
         {
-            newRow["Id"] = element.Id;
+            newRow["Id"] = GetNextId();
             newRow["Name"] = element.Name;
             newRow["MeasureUnit"] = element.MeasureUnit;
             _dataSet.Tables["Category"]?.Rows.Add(newRow);
@@ -51,7 +51,12 @@ public class CategoryAccess : IAccess<Category>
 
         return categoryRow == null ? null : new Category((long)categoryRow["Id"], (string)categoryRow["Name"], (string)categoryRow["MeasureUnit"]);
     }
-
+    long GetNextId()
+    {
+        long? maxId = _dataSet.Tables["Category"]?.Rows.Cast<DataRow>()
+            .Max(row => (long)row["Id"]);
+        return maxId == null ? 0 : (long)maxId + 1;
+    }
     public void Update(Category updatedCategory)
     {
         var rows = _dataSet.Tables["Category"]?.Select($"Id = {updatedCategory.Id}");

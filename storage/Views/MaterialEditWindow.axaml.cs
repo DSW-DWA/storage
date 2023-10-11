@@ -12,7 +12,14 @@ namespace storage.Views;
 
 public partial class MaterialEditWindow : Window
 {
-    private List<Category> _categories;
+    readonly List<Category> _categories;
+    public MaterialEditWindow(List<Category> availableCategories, MainViewModel mainView)
+    {
+        InitializeComponent();
+        DataContext = new MaterialEditWindowModel(availableCategories, mainView);
+        _categories = availableCategories;
+        ComboBox.SelectedIndex = availableCategories.FindLastIndex(x => true);
+    }
     public MaterialEditWindow(Material material, List<Category> availableCategories, MainViewModel mainView)
     {
         InitializeComponent();
@@ -30,7 +37,7 @@ public partial class MaterialEditWindow : Window
             return;
         var model = (MaterialEditWindowModel)DataContext;
         model.Save(_categories[ComboBox.SelectedIndex]);
-        this.Close();
+        Close();
     }
 }
 
