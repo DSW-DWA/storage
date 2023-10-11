@@ -3,15 +3,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Width="500" Height="300"
+        MinWidth="500" MinHeight="300"
+        MaxWidth="500" MaxHeight="300"
         xmlns:vm="clr-namespace:storage.ViewModels"
         x:Class="storage.Views.InvoiceEditWindow"
-        Title="InvoiceEditWindow"
+        Title="Окно редактирования накладной"
         x:DataType="vm:InvoiceEditWindowModel">
-    <StackPanel>
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Дата накладной</TextBlock>
-        <DatePicker SelectedDate="{Binding CreatedAt, Mode=TwoWay}" Margin="20" />
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Дата создания накладной</TextBlock>
-		<TimePicker SelectedTime="{Binding CreatedAtTime, Mode=TwoWay}" ClockIdentifier="24HourClock" MinuteIncrement="1" Margin="20"/>
+	<StackPanel>
+		<StackPanel Margin="20,5,20,0">
+			<TextBlock FontSize="18" FontWeight="Bold">Дата накладной</TextBlock>
+			<DatePicker SelectedDate="{Binding CreatedAt, Mode=TwoWay}" Margin="0" />
+		</StackPanel>
+
+		<StackPanel Margin="20,5,20,0">
+			<TextBlock FontSize="18" FontWeight="Bold">Дата создания накладной</TextBlock>
+			<TimePicker SelectedTime="{Binding CreatedAtTime, Mode=TwoWay}" ClockIdentifier="24HourClock" MinuteIncrement="1" Margin="0"/>
+		</StackPanel>
+
 		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
-    </StackPanel>
+	</StackPanel>
 </Window>

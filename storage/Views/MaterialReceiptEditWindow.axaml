@@ -4,16 +4,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:storage.ViewModels"
         mc:Ignorable="d" Width="500" Height="300"
+        MinWidth="500" MinHeight="300"
+        MaxWidth="500" MaxHeight="300"
         x:Class="storage.Views.MaterialReceiptEditWindow"
         Title="MaterialReceiptEditWindow"
         x:DataType="vm:MaterialReceiptEditWindowModel">
     <StackPanel>
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Колл-во прихода</TextBlock>
-		<TextBox Text="{Binding Count, Mode=TwoWay}" Margin="20" Watermark="Количество" />
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Материал прихода</TextBlock>
-		<ComboBox ItemsSource="{Binding AvailableMaterials, Mode=TwoWay}" Name="ComboBoxMaterial" SelectedIndex="0" Margin="20"  MaxDropDownHeight="300"></ComboBox>
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Накладная прихода</TextBlock>
-		<ComboBox ItemsSource="{Binding AvailableInvoicies, Mode=TwoWay}" Name="ComboBoxInvoice" SelectedIndex="0" Margin="20"  MaxDropDownHeight="300"></ComboBox>
+	    <StackPanel Margin="20,5,20,0">
+		    <TextBlock Margin="5"  FontSize="18" FontWeight="Bold">Колл-во прихода</TextBlock>
+		    <TextBox Margin="5" Text="{Binding Count, Mode=TwoWay}" Watermark="Количество" />
+	    </StackPanel>
+
+	    <StackPanel Margin="20,5,20,0">
+			<TextBlock  Margin="5" FontSize="18" FontWeight="Bold">Материал прихода</TextBlock>
+			<ComboBox  Margin="5" ItemsSource="{Binding AvailableMaterials, Mode=TwoWay}" Name="ComboBoxMaterial" SelectedIndex="0" MaxDropDownHeight="300"></ComboBox>
+	    </StackPanel>
+
+	    <StackPanel Margin="20,5,20,0">
+			<TextBlock Margin="5" FontSize="18" FontWeight="Bold">Накладная прихода</TextBlock>
+			<ComboBox Margin="5" ItemsSource="{Binding AvailableInvoices, Mode=TwoWay}" Name="ComboBoxInvoice" SelectedIndex="0" MaxDropDownHeight="300"></ComboBox>
+		</StackPanel>
+
 		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>

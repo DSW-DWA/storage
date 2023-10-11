@@ -144,8 +144,8 @@
 
             <TabItem Header="Отчеты">
                 <StackPanel>
-                    <Button Content="Скачать Excel отчет" Click="DownloadExcelReportClick" />
-                    <Button Content="Скачать Word отчет" Click="DownloadWordReportClick" />
+                    <Button Content="Сохранить Excel отчет" Click="DownloadExcelReportClick" />
+                    <Button Content="Сохранить Word отчет" Click="DownloadWordReportClick" />
                 </StackPanel>
             </TabItem>
         </TabControl>

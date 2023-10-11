@@ -4,14 +4,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:storage.ViewModels"
         mc:Ignorable="d" Width="500" Height="300"
+        MinWidth="500" MinHeight="300"
+        MaxWidth="500" MaxHeight="300"
         x:Class="storage.Views.MaterialEditWindow"
         Title="MaterialEditWindows"
         x:DataType="vm:MaterialEditWindowModel">
     <StackPanel>
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Название материала</TextBlock>
-        <TextBox Text="{Binding Name, Mode=TwoWay}" Margin="20" Watermark="Название материала" />
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Категория материала</TextBlock>
-		<ComboBox ItemsSource="{Binding AvailableCategories, Mode=TwoWay}" Name="ComboBox" SelectedIndex="0" Margin="20"  MaxDropDownHeight="300"></ComboBox>
-		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
+        <StackPanel Margin="20,5,20,0">
+            <TextBlock FontSize="18" FontWeight="Bold">Название материала</TextBlock>
+            <TextBox Text="{Binding Name, Mode=TwoWay}" Watermark="Название материала" />
+        </StackPanel>
+
+        <StackPanel Margin="20,5,20,0">
+            <TextBlock FontSize="18" FontWeight="Bold">Категория материала</TextBlock>
+            <ComboBox ItemsSource="{Binding AvailableCategories, Mode=TwoWay}" Name="ComboBox" SelectedIndex="0" MaxDropDownHeight="300"></ComboBox>
+        </StackPanel>
+        
+        <Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
     </StackPanel>
 </Window>

@@ -3,15 +3,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		Width="500" Height="300"
+        MinWidth="500" MinHeight="300"
+        MaxWidth="500" MaxHeight="300"
 		xmlns:vm="clr-namespace:storage.ViewModels"
         x:Class="storage.Views.CategoryEditWindow"
-        Title="CategoryEditWindow"
+        Title="Окно редактирования категории"
 	    x:DataType="vm:CategoryEditWindowModel">
 	<StackPanel>
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Название категории</TextBlock>
-		<TextBox Text="{Binding Name, Mode=TwoWay}" Margin="20" Watermark="Название материала" />
-		<TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Eдиница измнерения</TextBlock>
-		<TextBox Text="{Binding MeasureUnit, Mode=TwoWay}" Margin="20" Watermark="Единица измерения" />
+		<StackPanel Margin="20,5,20,0">
+			<TextBlock FontSize="18" FontWeight="Bold" >Название категории:</TextBlock>
+			<TextBox Text="{Binding Name, Mode=TwoWay}" Watermark="Название материала" />
+		</StackPanel>
+		
+		<StackPanel Margin="20,5,20,0">
+			<TextBlock FontSize="18" FontWeight="Bold" >Единица измерения:</TextBlock>
+			<TextBox Text="{Binding MeasureUnit, Mode=TwoWay}"  Watermark="Единица измерения" />
+		</StackPanel>
+		
 		<Button Content="Сохранить" Margin="20" Click="Save_OnClick"/>
 	</StackPanel>
 </Window>
