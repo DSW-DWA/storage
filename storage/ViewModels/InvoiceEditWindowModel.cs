@@ -31,11 +31,11 @@ public class InvoiceEditWindowModel : ReactiveObject
     {
         if (_invoice == null)
         {
-            _mainViewModel.InvoiceAccess.Save(new Invoice(0, CreatedAt.DateTime.Add(CreatedAtTime)));
+            _mainViewModel.InvoiceAccess.Save(new Invoice(0, new DateTime(CreatedAt.DateTime.Year, CreatedAt.DateTime.Month, CreatedAt.DateTime.Day, CreatedAtTime.Hours, CreatedAtTime.Minutes, CreatedAtTime.Seconds)));
         }
         else
         {
-            _mainViewModel.InvoiceAccess.Update(new Invoice(_invoice.Id, CreatedAt.DateTime.Add(CreatedAtTime)));
+            _mainViewModel.InvoiceAccess.Update(new Invoice(_invoice.Id, new DateTime(CreatedAt.DateTime.Year, CreatedAt.DateTime.Month, CreatedAt.DateTime.Day, CreatedAtTime.Hours, CreatedAtTime.Minutes, CreatedAtTime.Seconds)));
         }
     }
 }
