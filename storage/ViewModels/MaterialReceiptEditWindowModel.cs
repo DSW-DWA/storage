@@ -28,7 +28,7 @@ public class MaterialReceiptEditWindowModel : ReactiveObject
         Count = materialReceipt.Count;
         _mainViewModel = mainView;
         _materialReceipt = materialReceipt;
-        AvailableInvoices = new ObservableCollection<string>(invoices.Select(x => x.CreatedAt.ToString(CultureInfo.CurrentCulture)));
+        AvailableInvoices = new ObservableCollection<string>(invoices.Select(x => $"{x.Id} - {x.CreatedAt.ToString(CultureInfo.CurrentCulture)}"));
         AvailableMaterials = new ObservableCollection<string>(materials.Select(x => x.Name));
     }
     public bool Validate(object? obj1, object? obj2)

@@ -28,7 +28,7 @@ public class MaterialConsumptionEditWindowModel : ReactiveObject
         Count = materialConsumption.Count;
         _mainViewModel = mainView;
         _materialConsumption = materialConsumption;
-        AvailableInvoices = new ObservableCollection<string>(invoices.Select(x => x.CreatedAt.ToString(CultureInfo.CurrentCulture)));
+        AvailableInvoices = new ObservableCollection<string>(invoices.Select(x => $"{x.Id} - {x.CreatedAt.ToString(CultureInfo.CurrentCulture)}"));
         AvailableMaterials = new ObservableCollection<string>(materials.Select(x => x.Name));
     }
 

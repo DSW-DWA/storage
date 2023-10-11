@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using DynamicData;
 using storage.Models;
+using Xceed.Document.NET;
+
 namespace storage.Data;
 
 public class CategoryAccess : IAccess<Category>
@@ -13,7 +15,10 @@ public class CategoryAccess : IAccess<Category>
     {
         _dataSet = dataSet;
     }
-
+    public bool IsCascad()
+    {
+        return true;
+    }
     public void Save(Category element)
     {
         var newRow = _dataSet.Tables["Category"]?.NewRow();
@@ -80,46 +85,60 @@ public class CategoryAccess : IAccess<Category>
                 _dataSet.Tables["Category"]?.Rows.Remove(row);
             }
 
-        var rowsMat = _dataSet.Tables["Material"]?.Select($"CategoryId = {categoryId}");
-
-        var rowsMatCons = new List<DataRow>();
-        var rowsMatRec = new List<DataRow>();
-
-        if (rowsMat != null)
+        if (IsCascad())
         {
-            foreach (var rowMat in rowsMat)
+            var rowsMat = _dataSet.Tables["Material"]?.Select($"CategoryId = {categoryId}");
+
+            var rowsMatCons = new List<DataRow>();
+            var rowsMatRec = new List<DataRow>();
+
+            if (rowsMat != null)
             {
-                var range = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {rowMat["Id"]}");
-                if (range != null)
+                foreach (var rowMat in rowsMat)
                 {
-                    rowsMatCons.AddRange(range);
+                    var range = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        rowsMatCons.AddRange(range);
+                    }
+                }
+
+
+                foreach (var rowMat in rowsMat)
+                {
+                    var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        rowsMatRec.AddRange(range);
+                    }
+                }
+
+                foreach (var row in rowsMat)
+                {
+                    _dataSet.Tables["Material"]?.Rows.Remove(row);
                 }
             }
 
-            
-            foreach (var rowMat in rowsMat)
+            foreach (var rowMatCon in rowsMatCons)
             {
-                var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {rowMat["Id"]}");
-                if (range != null)
+                _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
+            }
+
+            foreach (var rowMatRec in rowsMatRec)
+            {
+                _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
+            }
+        } else
+        {
+            var rowsMat = _dataSet.Tables["Material"]?.Select($"CategoryId = {categoryId}");
+
+            if (rowsMat != null)
+            {
+                foreach (var row in rowsMat)
                 {
-                    rowsMatRec.AddRange(range);
+                    row["CategoryId"] = null;
                 }
             }
-
-            foreach (var row in rowsMat)
-            {
-                _dataSet.Tables["Material"]?.Rows.Remove(row);
-            }
-        }
-        
-        foreach (var rowMatCon in rowsMatCons)
-        {
-            _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
-        }
-
-        foreach (var rowMatRec in rowsMatRec)
-        {
-            _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
         }
         
         DataAccess.SaveDataToXml(_dataSet);
