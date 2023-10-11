@@ -46,7 +46,7 @@
                               BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Дата создания" Width="*" Binding="{Binding CreatedAt}" />
+                            <DataGridTextColumn Header="Дата создания" Width="*" Binding="{Binding CreatedAt}"  IsReadOnly="True" />
                             <DataGridTemplateColumn Header="Действия">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>

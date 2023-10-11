@@ -23,6 +23,15 @@ public partial class MainWindow : Window
         DataContext = _model;
     }
 
+    void UpdateAllGrids()
+    {
+        CategoryGrid.ItemsSource = _model.Categories;
+        InvoiceGrid.ItemsSource = _model.Invoices;
+        MaterialGrid.ItemsSource = _model.Materials;
+        MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
+        MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;        
+    }
+
     async void DeleteElementClick(object sender, RoutedEventArgs e)
     {
         var btn = (Button)sender;
@@ -54,14 +63,9 @@ public partial class MainWindow : Window
                 DeleteElement<MaterialReceipt>(_model.MaterialReceiptAccess, MaterialReceiptGrid, _model.MaterialReceipts);
                 break;
         }
-
-        CategoryGrid.ItemsSource = _model.Categories;
-        InvoiceGrid.ItemsSource = _model.Invoices;
-        MaterialGrid.ItemsSource = _model.Materials;
-        MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
-        MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
+        UpdateAllGrids();
     }
-    
+
     void DeleteElement<T>(IAccess<T> access, DataGrid dataGrid, ICollection<T> collection)
     {
         var item = (T)dataGrid.SelectedItem;
@@ -120,7 +124,7 @@ public partial class MainWindow : Window
         var task = editWindow.ShowDialog(this);
 
         await task;
-        CategoryGrid.ItemsSource = _model.Categories;
+        UpdateAllGrids();
     }
     async void EditInvoiceClick(object? sender, RoutedEventArgs e)
     {
@@ -134,7 +138,7 @@ public partial class MainWindow : Window
         var task = editWindow.ShowDialog(this);
 
         await task;
-        InvoiceGrid.ItemsSource = _model.Invoices;
+        UpdateAllGrids();
     }
     async void EditMaterialClick(object? sender, RoutedEventArgs e)
     {
@@ -150,7 +154,7 @@ public partial class MainWindow : Window
         var task = editWindow.ShowDialog(this);
 
         await task;
-        MaterialGrid.ItemsSource = _model.Materials;
+        UpdateAllGrids();
     }
 
     async void EditMaterialReceiptClick(object? sender, RoutedEventArgs e)
@@ -168,7 +172,7 @@ public partial class MainWindow : Window
         var task = editWindow.ShowDialog(this);
 
         await task;
-        MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
+        UpdateAllGrids();
     }
 
     async void EditMaterialConsumptionClick(object? sender, RoutedEventArgs e)
@@ -186,26 +190,26 @@ public partial class MainWindow : Window
         var task = editWindow.ShowDialog(this);
 
         await task;
-        MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
+        UpdateAllGrids();
     }
     async void CreateCategoryClick(object? sender, RoutedEventArgs e)
     {
         var saveWindow = new CategoryEditWindow(_model);
         await saveWindow.ShowDialog(this);
-        CategoryGrid.ItemsSource = _model.Categories;
+        UpdateAllGrids();
     }
     async void CreateInvoiceClick(object? sender, RoutedEventArgs e)
     {
         var saveWindow = new InvoiceEditWindow(_model);
         await saveWindow.ShowDialog(this);
-        InvoiceGrid.ItemsSource = _model.Invoices;
+        UpdateAllGrids();
     }
     async void CreateMaterialClick(object? sender, RoutedEventArgs e)
     {
         var availableCategories = _model.CategoryAccess.GetAll();
         var saveWindow = new MaterialEditWindow(availableCategories, _model);
         await saveWindow.ShowDialog(this);
-        MaterialGrid.ItemsSource = _model.Materials;
+        UpdateAllGrids();
     }
     async void CreateMaterialConsumptionClick(object? sender, RoutedEventArgs e)
     {
@@ -213,7 +217,7 @@ public partial class MainWindow : Window
         var availableMaterials = _model.MaterialAccess.GetAll();
         var editWindow = new MaterialConsumptionEditWindow(availableInvoices, availableMaterials, _model);
         await editWindow.ShowDialog(this);
-        MaterialConsumptionGrid.ItemsSource = _model.MaterialConsumptions;
+        UpdateAllGrids();
     }
     async void CreateMaterialReceiptClick(object? sender, RoutedEventArgs e)
     {
@@ -221,6 +225,6 @@ public partial class MainWindow : Window
         var availableMaterials = _model.MaterialAccess.GetAll();
         var editWindow = new MaterialReceiptEditWindow(availableInvoices, availableMaterials, _model);
         await editWindow.ShowDialog(this);
-        MaterialReceiptGrid.ItemsSource = _model.MaterialReceipts;
+        UpdateAllGrids();
     }
 }

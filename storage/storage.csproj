@@ -27,7 +27,7 @@
 
     <ItemGroup>
         <None Update="Data\data.xml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Data\schema.xml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
