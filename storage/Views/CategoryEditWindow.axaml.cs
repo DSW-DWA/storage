@@ -12,22 +12,23 @@ public partial class CategoryEditWindow : Window
     public CategoryEditWindow(MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Создание категории";
         DataContext = new CategoryEditWindowModel(mainView);
     }
 
     public CategoryEditWindow(Category category, MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Редактирование категории";
         DataContext = new CategoryEditWindowModel(category, mainView);
     }
 
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
-        var model = (CategoryEditWindowModel)DataContext;
-
+        var model = (CategoryEditWindowModel)DataContext!;
         if (model.Validate() == false)
         {
-            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.Ok).ShowAsync();
+            await MessageBoxManager.GetMessageBoxStandard("Внимание", "Данные некорректны", ButtonEnum.Ok).ShowAsync();
             return;
         }
 

@@ -13,22 +13,24 @@ public partial class InvoiceEditWindow : Window
     public InvoiceEditWindow(MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Создание накладной";
         DataContext = new InvoiceEditWindowModel(mainView);
     }
 
     public InvoiceEditWindow(Invoice invoice, MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Редактирование накладной";
         DataContext = new InvoiceEditWindowModel(invoice, mainView);
     }
 
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
-        var model = (InvoiceEditWindowModel)DataContext;
+        var model = (InvoiceEditWindowModel)DataContext!;
 
         if (model.Validate() == false)
         {
-            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.Ok).ShowAsync();
+            await MessageBoxManager.GetMessageBoxStandard("Внимание", "Данные некорректны", ButtonEnum.Ok).ShowAsync();
             return;
         }
 

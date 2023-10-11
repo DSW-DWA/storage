@@ -18,6 +18,7 @@ public partial class MaterialConsumptionEditWindow : Window
     public MaterialConsumptionEditWindow(List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Создание расхода на материал";
         _invoices = invoices;
         _materials = materials;
         DataContext = new MaterialConsumptionEditWindowModel(invoices, materials, mainView);
@@ -27,6 +28,7 @@ public partial class MaterialConsumptionEditWindow : Window
     public MaterialConsumptionEditWindow(MaterialConsumption materialConsumption, List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Редактирование расхода на материал";
         _invoices = invoices;
         _materials = materials;
         DataContext = new MaterialConsumptionEditWindowModel(materialConsumption, invoices, materials, mainView);
@@ -35,10 +37,10 @@ public partial class MaterialConsumptionEditWindow : Window
     }
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
-        var model = (MaterialConsumptionEditWindowModel)DataContext;
+        var model = (MaterialConsumptionEditWindowModel)DataContext!;
         if (model.Validate(ComboBoxInvoice.SelectedItem, ComboBoxMaterial.SelectedItem) == false)
         {
-            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.Ok).ShowAsync();
+            await MessageBoxManager.GetMessageBoxStandard("Внимание", "Данные некорректны", ButtonEnum.Ok).ShowAsync();
             return;
         }
 

@@ -21,9 +21,9 @@
                               BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Measure Unit" Width="*" Binding="{Binding MeasureUnit}"  IsReadOnly="True"/>
-                            <DataGridTemplateColumn Header="Actions">
+                            <DataGridTextColumn Header="Название" Width="*" Binding="{Binding Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Единица измерения" Width="*" Binding="{Binding MeasureUnit}"  IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="Действия">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -46,8 +46,8 @@
                               BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Created At" Width="*" Binding="{Binding CreatedAt}" />
-                            <DataGridTemplateColumn Header="Actions">
+                            <DataGridTextColumn Header="Дата создания" Width="*" Binding="{Binding CreatedAt}" />
+                            <DataGridTemplateColumn Header="Действия">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -71,9 +71,9 @@
                               BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Category" Width="*" Binding="{Binding Category.Name}" IsReadOnly="True" />
-                            <DataGridTemplateColumn Header="Actions">
+                            <DataGridTextColumn Header="Название" Width="*" Binding="{Binding Name}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Категория" Width="*" Binding="{Binding Category.Name}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Действия">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -97,10 +97,10 @@
                               BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Count" Width="*" Binding="{Binding Count}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Invoice" Width="*" Binding="{Binding Invoice.CreatedAt}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Material" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
-                            <DataGridTemplateColumn Header="Actions">
+                            <DataGridTextColumn Header="Количество" Width="*" Binding="{Binding Count}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Накладная" Width="*" Binding="{Binding Invoice.CreatedAt}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Материал" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Действия">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -124,10 +124,10 @@
                               BorderThickness="1" BorderBrush="Gray">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Count" Width="*" Binding="{Binding Count}" IsReadOnly="True"  />
-                            <DataGridTextColumn Header="Invoice" Width="*" Binding="{Binding Invoice.CreatedAt}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Material" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
-                            <DataGridTemplateColumn Header="Actions">
+                            <DataGridTextColumn Header="Количество" Width="*" Binding="{Binding Count}" IsReadOnly="True"  />
+                            <DataGridTextColumn Header="Накладная" Width="*" Binding="{Binding Invoice.CreatedAt}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Материал" Width="*" Binding="{Binding Material.Name}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Действия">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

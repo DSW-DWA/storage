@@ -16,6 +16,7 @@ public partial class MaterialEditWindow : Window
     public MaterialEditWindow(List<Category> availableCategories, MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Создание материала";
         DataContext = new MaterialEditWindowModel(availableCategories, mainView);
         _categories = availableCategories;
         ComboBox.SelectedIndex = availableCategories.FindLastIndex(x => true);
@@ -23,6 +24,7 @@ public partial class MaterialEditWindow : Window
     public MaterialEditWindow(Material material, List<Category> availableCategories, MainViewModel mainView)
     {
         InitializeComponent();
+        Title = "Редактирование категории";
         DataContext = new MaterialEditWindowModel(material, availableCategories, mainView);
         _categories = availableCategories;
         ComboBox.SelectedIndex = availableCategories.FindIndex(x => x.Id == material.Category.Id);
@@ -30,10 +32,10 @@ public partial class MaterialEditWindow : Window
 
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
-        var model = (MaterialEditWindowModel)DataContext;
+        var model = (MaterialEditWindowModel)DataContext!;
         if (model.Validate(ComboBox.SelectedItem) == false)
         {
-            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.Ok).ShowAsync();
+            await MessageBoxManager.GetMessageBoxStandard("Внимание", "Данные некорректны", ButtonEnum.Ok).ShowAsync();
             return;
         }
 
