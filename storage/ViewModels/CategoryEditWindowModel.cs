@@ -24,14 +24,12 @@ public class CategoryEditWindowModel : ReactiveObject
         Name = category.Name;
         MeasureUnit = category.MeasureUnit;
     }
-
+    public bool Validate()
+    {
+        return !(string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(MeasureUnit));
+    }
     public void Save()
     {
-        if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(MeasureUnit))
-        {
-            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.OkAbort).ShowAsync();
-            return;
-        }
         if (_category == null)
         {
             _mainViewModel.CategoryAccess.Save(new Category(0, Name, MeasureUnit));            

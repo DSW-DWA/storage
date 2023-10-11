@@ -31,6 +31,10 @@ public class MaterialReceiptEditWindowModel : ReactiveObject
         AvailableInvoices = new ObservableCollection<string>(invoices.Select(x => x.CreatedAt.ToString(CultureInfo.CurrentCulture)));
         AvailableMaterials = new ObservableCollection<string>(materials.Select(x => x.Name));
     }
+    public bool Validate(object? obj1, object? obj2)
+    {
+        return !(obj1 == null || obj2 == null || Count < 0);
+    }
 
     public void Save(Invoice invoice, Material material)
     {

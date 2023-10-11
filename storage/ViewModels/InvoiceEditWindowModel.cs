@@ -23,13 +23,12 @@ public class InvoiceEditWindowModel : ReactiveObject
         CreatedAt = new DateTimeOffset(invoice.CreatedAt);
         CreatedAtTime = invoice.CreatedAt.TimeOfDay;
     }
+    public bool Validate()
+    {
+        return !(CreatedAtTime == TimeSpan.Zero);
+    }
     public void Save()
     {
-        if (CreatedAtTime == TimeSpan.Zero)
-        {
-            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.OkAbort).ShowAsync();
-            return;
-        }
         if (_invoice == null)
         {
             _mainViewModel.InvoiceAccess.Save(new Invoice(0, CreatedAt.DateTime.Add(CreatedAtTime)));
