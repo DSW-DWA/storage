@@ -25,18 +25,14 @@ public partial class MaterialReceiptEditWindow : Window
     }
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
-        var box = MessageBoxManager
-            .GetMessageBoxStandard("Внимание", "Вы хотитн сохранить изменения и закрыть окно?",
-                ButtonEnum.YesNo);
+        var box = MessageBoxManager.GetMessageBoxStandard("Р’РЅРёРјР°РЅРёРµ", "Р’С‹ СѓРІРµСЂРµРЅС‹ С‡С‚Рѕ С…РѕС‚РёС‚Рµ СЃРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ?", ButtonEnum.YesNo);
 
         var result = await box.ShowAsync();
 
-        if (result == ButtonResult.Yes && DataContext != null)
-        {
-            var model = (MaterialReceiptEditWindowModel)DataContext;
-            model.Save(_invoices[ComboBoxInvoice.SelectedIndex], _materials[ComboBoxMaterial.SelectedIndex]);
-            this.Close();
-        }
+        if (result != ButtonResult.Yes || DataContext == null)
+            return;
+        var model = (MaterialReceiptEditWindowModel)DataContext;
+        model.Save(_invoices[ComboBoxInvoice.SelectedIndex], _materials[ComboBoxMaterial.SelectedIndex]);
+        this.Close();
     }
 }
-

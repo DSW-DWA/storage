@@ -14,29 +14,26 @@ public partial class MaterialConsumptionEditWindow : Window
 {
     private List<Invoice> _invoices;
     private List<Material> _materials;
-    public MaterialConsumptionEditWindow(MaterialConsumption MaterialConsumption, List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
+
+    public MaterialConsumptionEditWindow(MaterialConsumption materialConsumption, List<Invoice> invoices, List<Material> materials, MainViewModel mainView)
     {
         InitializeComponent();
         _invoices = invoices;
         _materials = materials;
-        DataContext = new MaterialConsumptionEditWindowModel(MaterialConsumption, invoices, materials, mainView);
-        ComboBoxInvoice.SelectedIndex = invoices.FindIndex(x => x.Id == MaterialConsumption.Invoice.Id);
-        ComboBoxMaterial.SelectedIndex = materials.FindIndex(x => x.Id == MaterialConsumption.Material.Id);
+        DataContext = new MaterialConsumptionEditWindowModel(materialConsumption, invoices, materials, mainView);
+        ComboBoxInvoice.SelectedIndex = invoices.FindIndex(x => x.Id == materialConsumption.Invoice.Id);
+        ComboBoxMaterial.SelectedIndex = materials.FindIndex(x => x.Id == materialConsumption.Material.Id);
     }
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
-        var box = MessageBoxManager
-            .GetMessageBoxStandard("Внимание", "Вы хотитн сохранить изменения и закрыть окно?",
-                ButtonEnum.YesNo);
-
+        var box = MessageBoxManager.GetMessageBoxStandard("Р’РЅРёРјР°РЅРёРµ", "Р’С‹ СѓРІРµСЂРµРЅС‹ С‡С‚Рѕ С…РѕС‚РёС‚Рµ СЃРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ?", ButtonEnum.YesNo);
         var result = await box.ShowAsync();
 
-        if (result == ButtonResult.Yes && DataContext != null)
-        {
-            var model = (MaterialConsumptionEditWindowModel)DataContext;
-            model.Save(_invoices[ComboBoxInvoice.SelectedIndex], _materials[ComboBoxMaterial.SelectedIndex]);
-            this.Close();
-        }
+        if (result != ButtonResult.Yes || DataContext == null)
+            return;
+        var model = (MaterialConsumptionEditWindowModel)DataContext;
+        model.Save(_invoices[ComboBoxInvoice.SelectedIndex], _materials[ComboBoxMaterial.SelectedIndex]);
+        this.Close();
     }
 }
 
