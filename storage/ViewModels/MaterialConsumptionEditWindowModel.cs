@@ -34,7 +34,7 @@ public class MaterialConsumptionEditWindowModel : ReactiveObject
 
     public bool Validate(object? obj1, object? obj2)
     {
-        return !(obj1 == null || obj2 == null || Count < 0);
+        return !(obj1 == null || obj2 == null || Count <= 0);
     }
     public void Save(Invoice invoice, Material material)
     {
