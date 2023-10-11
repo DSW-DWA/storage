@@ -34,12 +34,19 @@ public partial class MaterialReceiptEditWindow : Window
     }
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
+        var model = (MaterialReceiptEditWindowModel)DataContext;
+        if (model.Validate(ComboBoxInvoice.SelectedItem, ComboBoxMaterial.SelectedItem) == false)
+        {
+            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.Ok).ShowAsync();
+            return;
+        }
+
         var box = MessageBoxManager.GetMessageBoxStandard("Внимание", "Вы уверены что хотите сохранить изменения?", ButtonEnum.YesNo);
         var result = await box.ShowAsync();
 
         if (result != ButtonResult.Yes || DataContext == null)
             return;
-        var model = (MaterialReceiptEditWindowModel)DataContext;
+        
         model.Save(_invoices[ComboBoxInvoice.SelectedIndex], _materials[ComboBoxMaterial.SelectedIndex]);
         this.Close();
     }

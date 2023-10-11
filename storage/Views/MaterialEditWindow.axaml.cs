@@ -30,12 +30,19 @@ public partial class MaterialEditWindow : Window
 
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
+        var model = (MaterialEditWindowModel)DataContext;
+        if (model.Validate(ComboBox.SelectedItem) == false)
+        {
+            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.Ok).ShowAsync();
+            return;
+        }
+
         var box = MessageBoxManager.GetMessageBoxStandard("Внимание", "Вы уверены что хотите сохранить изменения?", ButtonEnum.YesNo);
         var result = await box.ShowAsync();
 
         if (result != ButtonResult.Yes || DataContext == null)
             return;
-        var model = (MaterialEditWindowModel)DataContext;
+        
         model.Save(_categories[ComboBox.SelectedIndex]);
         Close();
     }

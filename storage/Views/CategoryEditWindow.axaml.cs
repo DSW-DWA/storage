@@ -23,12 +23,20 @@ public partial class CategoryEditWindow : Window
 
     async void Save_OnClick(object? sender, RoutedEventArgs e)
     {
+        var model = (CategoryEditWindowModel)DataContext;
+
+        if (model.Validate() == false)
+        {
+            MessageBoxManager.GetMessageBoxStandard("Внимание", "Не все поля заполнены", ButtonEnum.Ok).ShowAsync();
+            return;
+        }
+
         var box = MessageBoxManager.GetMessageBoxStandard("Внимание", "Вы уверены что хотите сохранить изменения?", ButtonEnum.YesNo);
         var result = await box.ShowAsync();
 
         if (result != ButtonResult.Yes || DataContext == null)
             return;
-        var model = (CategoryEditWindowModel)DataContext;
+        
         model.Save();
         Close();
     }
