@@ -57,7 +57,10 @@ public class MainViewModel : ReactiveObject
             return new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAll());
         }
     }
-
+    
+    DateTimeOffset ReportGenerateDateAt { get; set; }
+    TimeSpan ReportGenerateTimeAt { get; set; }
+    
     static readonly DataAccess DataAccess = new DataAccess();
     public readonly CategoryAccess CategoryAccess = new CategoryAccess(DataAccess.GetDataSet());
     public readonly MaterialAccess MaterialAccess = new MaterialAccess(DataAccess.GetDataSet());
@@ -67,15 +70,13 @@ public class MainViewModel : ReactiveObject
 
     public MainViewModel()
     {
-        /*Categories = new ObservableCollection<Category>(CategoryAccess.GetAll());
-        Materials = new ObservableCollection<Material>(MaterialAccess.GetAll());
-        Invoices = new ObservableCollection<Invoice>(InvoiceAccess.GetAll());
-        MaterialConsumptions = new ObservableCollection<MaterialConsumption>(MaterialConsumptionAccess.GetAll());
-        MaterialReceipts = new ObservableCollection<MaterialReceipt>(MaterialReceiptAccess.GetAll());*/
+        var lastDateTime = InvoiceAccess.GetAll().OrderBy(x => x.CreatedAt).Select(x => x.CreatedAt).FirstOrDefault();
+        ReportGenerateDateAt = new DateTimeOffset(lastDateTime);
+        ReportGenerateTimeAt = lastDateTime.TimeOfDay;
     }
+
     public void ExportToWord()
     {
-        var dataset = DataAccess.GetDataSet();
         var outputpath = @"./report.docx";
         using (var doc = DocX.Create(outputpath))
         {
@@ -91,15 +92,24 @@ public class MainViewModel : ReactiveObject
             wordTable.Rows[0].Cells[3].Paragraphs[0].Append("Ед. Измерения");
             wordTable.Rows[0].Cells[4].Paragraphs[0].Append("Дата поступления на склад");
             
-            for(var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
+            for (var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
             {
-                var time = RecTable.Where(x => x.Material.Id == MatTable[rowIndex].Id).OrderBy(x => x.Invoice.CreatedAt).Select(x => x.Invoice.CreatedAt).FirstOrDefault();
-                
+                var time = RecTable
+                    .Where(x => x.Material.Id == MatTable[rowIndex].Id &&
+                        x.Invoice.CreatedAt.Date >= ReportGenerateDateAt.Date && // Filter by date
+                        x.Invoice.CreatedAt.TimeOfDay >= ReportGenerateTimeAt)
+                    .OrderBy(x => x.Invoice.CreatedAt)
+                    .Select(x => x.Invoice.CreatedAt)
+                    .FirstOrDefault();
+                if (time == default(DateTime))
+                {
+                    continue;
+                }
                 wordTable.Rows[rowIndex + 1].Cells[0].Paragraphs[0].Append(MatTable[rowIndex].Id.ToString());
                 wordTable.Rows[rowIndex + 1].Cells[1].Paragraphs[0].Append(MatTable[rowIndex].Name);
                 wordTable.Rows[rowIndex + 1].Cells[2].Paragraphs[0].Append(MatTable[rowIndex].Category.Name);
                 wordTable.Rows[rowIndex + 1].Cells[3].Paragraphs[0].Append(MatTable[rowIndex].Category.MeasureUnit);
-                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(time.ToString());
+                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(time == default(DateTime) ? "Дата не указана" : time.ToString());
             }
 
             doc.InsertTable(wordTable);
@@ -111,7 +121,6 @@ public class MainViewModel : ReactiveObject
 
     public void ExportToExcel()
     {
-        var dataSet = DataAccess.GetDataSet();
         var outputPath = @"./report.xlsx";
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         using (var package = new ExcelPackage())
@@ -128,12 +137,22 @@ public class MainViewModel : ReactiveObject
 
             for (var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
             {
-                var time = RecTable.Where(x => x.Material.Id == MatTable[rowIndex].Id).OrderBy(x => x.Invoice.CreatedAt).Select(x => x.Invoice.CreatedAt).FirstOrDefault();
-
+                var time = RecTable
+                    .Where(x => x.Material.Id == MatTable[rowIndex].Id &&
+                        x.Invoice.CreatedAt.Date >= ReportGenerateDateAt.Date && // Filter by date
+                        x.Invoice.CreatedAt.TimeOfDay >= ReportGenerateTimeAt)
+                    .OrderBy(x => x.Invoice.CreatedAt)
+                    .Select(x => x.Invoice.CreatedAt)
+                    .FirstOrDefault();
+                if (time == default(DateTime))
+                {
+                    continue;
+                }
                 worksheet.Cells[rowIndex + 2, 1].Value = MatTable[rowIndex].Id.ToString();
                 worksheet.Cells[rowIndex + 2, 2].Value = MatTable[rowIndex].Name;
                 worksheet.Cells[rowIndex + 2, 3].Value = MatTable[rowIndex].Category.Name;
                 worksheet.Cells[rowIndex + 2, 4].Value = MatTable[rowIndex].Category.MeasureUnit;
+                worksheet.Cells[rowIndex + 2, 5].Value = time.ToString();
                 worksheet.Cells[rowIndex + 2, 5].Value = time.ToString();
             }
 

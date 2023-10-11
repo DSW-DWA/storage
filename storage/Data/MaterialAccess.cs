@@ -64,12 +64,14 @@ public class MaterialAccess : IAccess<Material>
         var category = _categoryAccess.GetById((long)row["CategoryId"]);
         return category == null ? null : new Material((long)row["Id"], (string)row["Name"], category);
     }
+
     long GetNextId()
     {
         long? maxId = _dataSet.Tables["Material"]?.Rows.Cast<DataRow>()
             .Max(row => (long)row["Id"]);
         return maxId == null ? 0 : (long)maxId + 1;
     }
+
     public void Update(Material updatedMaterial)
     {
         var rows = _dataSet.Tables["Material"]?.Select($"Id = {updatedMaterial.Id}");

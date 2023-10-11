@@ -144,8 +144,23 @@
 
             <TabItem Header="Отчеты">
                 <StackPanel>
-                    <Button Content="Сохранить Excel отчет" Click="DownloadExcelReportClick" />
-                    <Button Content="Сохранить Word отчет" Click="DownloadWordReportClick" />
+                    <StackPanel Margin="20,5,20,0">
+                        <TextBlock FontSize="18" >Дата начала формирования отчетов</TextBlock>
+                        <DatePicker SelectedDate="{Binding ReportGenerateDateAt, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="20,5,20,0">
+                        <TextBlock FontSize="18" >Время начала формирования отчетов</TextBlock>
+                        <TimePicker SelectedTime="{Binding ReportGenerateTimeAt, Mode=TwoWay}" ClockIdentifier="24HourClock" MinuteIncrement="1" />
+                    </StackPanel>
+
+                    <StackPanel Margin="20,5,20,0">
+                        <Button Content="Сохранить Excel отчет" Click="DownloadExcelReportClick" />
+                    </StackPanel>
+
+                    <StackPanel Margin="20,5,20,0">
+                        <Button Content="Сохранить Word отчет" Click="DownloadWordReportClick" />
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
         </TabControl>
