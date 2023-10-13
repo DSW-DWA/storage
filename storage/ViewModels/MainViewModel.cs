@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -90,86 +91,84 @@ public class MainViewModel : ReactiveObject
     }
     public void ExportToWord(DateTimeOffset reportGenerateDateAt, TimeSpan reportGenerateTimeAt)
     {
-        var outputpath = @"./report.docx";
-        using (var doc = DocX.Create(outputpath))
+        const string outPutPath = @"./report.docx";
+        using var doc = DocX.Create(outPutPath);
+        doc.InsertParagraph("Материалы").Bold().FontSize(14d).SpacingBefore(10d).SpacingAfter(10d);
+        var matTable = MaterialAccess.GetAll();
+        var recTable = MaterialReceiptAccess.GetAll();
+
+        var filteredMatTable = new List<Material>();
+        var wordTable = doc.AddTable(matTable.Count + 1, 5);
+
+        wordTable.Rows[0].Cells[0].Paragraphs[0].Append("ID");
+        wordTable.Rows[0].Cells[1].Paragraphs[0].Append("Имя");
+        wordTable.Rows[0].Cells[2].Paragraphs[0].Append("Категория");
+        wordTable.Rows[0].Cells[3].Paragraphs[0].Append("Ед. Измерения");
+        wordTable.Rows[0].Cells[4].Paragraphs[0].Append("Дата поступления на склад");
+
+        foreach (var material in matTable)
         {
-            doc.InsertParagraph("Материалы").Bold().FontSize(14d).SpacingBefore(10d).SpacingAfter(10d);
-            var MatTable = MaterialAccess.GetAll();
-            var RecTable = MaterialReceiptAccess.GetAll();
+            var material1 = material;
+            var relevantReceipts = recTable
+                .Where(x => x.Material.Id == material1.Id &&
+                    x.Invoice.CreatedAt.Date >= reportGenerateDateAt.Date && // Filter by date
+                    x.Invoice.CreatedAt.TimeOfDay >= reportGenerateTimeAt)
+                .OrderBy(x => x.Invoice.CreatedAt)
+                .ToList();
 
-            var wordTable = doc.AddTable(MatTable.Count+1, 5);
-
-            wordTable.Rows[0].Cells[0].Paragraphs[0].Append("ID");
-            wordTable.Rows[0].Cells[1].Paragraphs[0].Append("Имя");
-            wordTable.Rows[0].Cells[2].Paragraphs[0].Append("Категория");
-            wordTable.Rows[0].Cells[3].Paragraphs[0].Append("Ед. Измерения");
-            wordTable.Rows[0].Cells[4].Paragraphs[0].Append("Дата поступления на склад");
-            
-            for (var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
-            {
-                var time = RecTable
-                    .Where(x => x.Material.Id == MatTable[rowIndex].Id &&
-                        x.Invoice.CreatedAt.Date >= reportGenerateDateAt.Date && // Filter by date
-                        x.Invoice.CreatedAt.TimeOfDay >= reportGenerateTimeAt)
-                    .OrderBy(x => x.Invoice.CreatedAt)
-                    .Select(x => x.Invoice.CreatedAt)
-                    .FirstOrDefault();
-                if (time == default(DateTime))
-                {
-                    continue;
-                }
-                wordTable.Rows[rowIndex + 1].Cells[0].Paragraphs[0].Append(MatTable[rowIndex].Id.ToString());
-                wordTable.Rows[rowIndex + 1].Cells[1].Paragraphs[0].Append(MatTable[rowIndex].Name);
-                wordTable.Rows[rowIndex + 1].Cells[2].Paragraphs[0].Append(MatTable[rowIndex].Category.Name);
-                wordTable.Rows[rowIndex + 1].Cells[3].Paragraphs[0].Append(MatTable[rowIndex].Category.MeasureUnit);
-                wordTable.Rows[rowIndex + 1].Cells[4].Paragraphs[0].Append(time == default(DateTime) ? "Дата не указана" : time.ToString());
-            }
-
-            doc.InsertTable(wordTable);
-            doc.InsertParagraph();
-
-            doc.Save();
+            if (!relevantReceipts.Any())
+                continue;
+            filteredMatTable.Add(material);
+            var time = relevantReceipts.First().Invoice.CreatedAt;
+            wordTable.Rows[filteredMatTable.Count].Cells[0].Paragraphs[0].Append(material.Id.ToString());
+            wordTable.Rows[filteredMatTable.Count].Cells[1].Paragraphs[0].Append(material.Name);
+            wordTable.Rows[filteredMatTable.Count].Cells[2].Paragraphs[0].Append(material.Category.Name);
+            wordTable.Rows[filteredMatTable.Count].Cells[3].Paragraphs[0].Append(material.Category.MeasureUnit);
+            wordTable.Rows[filteredMatTable.Count].Cells[4].Paragraphs[0].Append(time.ToString(CultureInfo.CurrentCulture));
         }
+
+        doc.InsertTable(wordTable);
+        doc.InsertParagraph();
+
+        doc.Save();
     }
 
     public void ExportToExcel(DateTimeOffset reportGenerateDateAt, TimeSpan reportGenerateTimeAt)
     {
-        var outputPath = @"./report.xlsx";
+        const string outPutPath = @"./report.xlsx";
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        using (var package = new ExcelPackage())
+        using var package = new ExcelPackage();
+        var worksheet = package.Workbook.Worksheets.Add("Материалы");
+        var matTable = MaterialAccess.GetAll();
+        var recTable = MaterialReceiptAccess.GetAll();
+
+        worksheet.Cells[1, 1].Value = "ID";
+        worksheet.Cells[1, 2].Value = "Имя";
+        worksheet.Cells[1, 3].Value = "Категори";
+        worksheet.Cells[1, 4].Value = "Ed. Измерения";
+        worksheet.Cells[1, 5].Value = "Дата поступления на склад";
+
+        for (int rowIndex = 0; rowIndex < matTable.Count; rowIndex++)
         {
-            var worksheet = package.Workbook.Worksheets.Add("Материалы");
-            var MatTable = MaterialAccess.GetAll();
-            var RecTable = MaterialReceiptAccess.GetAll();
-
-            worksheet.Cells[1, 1].Value = "ID";
-            worksheet.Cells[1, 2].Value = "Имя";
-            worksheet.Cells[1, 3].Value = "Категори";
-            worksheet.Cells[1, 4].Value = "Ed. Измерения";
-            worksheet.Cells[1, 5].Value = "Дата поступления на склад";
-
-            for (var rowIndex = 0; rowIndex < MatTable.Count; rowIndex++)
+            var time = recTable
+                .Where(x => x.Material.Id == matTable[rowIndex].Id &&
+                    x.Invoice.CreatedAt.Date >= reportGenerateDateAt.Date && // Filter by date
+                    x.Invoice.CreatedAt.TimeOfDay >= reportGenerateTimeAt)
+                .OrderBy(x => x.Invoice.CreatedAt)
+                .Select(x => x.Invoice.CreatedAt)
+                .FirstOrDefault();
+            if (time == default(DateTime))
             {
-                var time = RecTable
-                    .Where(x => x.Material.Id == MatTable[rowIndex].Id &&
-                        x.Invoice.CreatedAt.Date >= reportGenerateDateAt.Date && // Filter by date
-                        x.Invoice.CreatedAt.TimeOfDay >= reportGenerateTimeAt)
-                    .OrderBy(x => x.Invoice.CreatedAt)
-                    .Select(x => x.Invoice.CreatedAt)
-                    .FirstOrDefault();
-                if (time == default(DateTime))
-                {
-                    continue;
-                }
-                worksheet.Cells[rowIndex + 2, 1].Value = MatTable[rowIndex].Id.ToString();
-                worksheet.Cells[rowIndex + 2, 2].Value = MatTable[rowIndex].Name;
-                worksheet.Cells[rowIndex + 2, 3].Value = MatTable[rowIndex].Category.Name;
-                worksheet.Cells[rowIndex + 2, 4].Value = MatTable[rowIndex].Category.MeasureUnit;
-                worksheet.Cells[rowIndex + 2, 5].Value = time.ToString();
-                worksheet.Cells[rowIndex + 2, 5].Value = time.ToString();
+                continue;
             }
-
-            File.WriteAllBytes(outputPath, package.GetAsByteArray());
+            worksheet.Cells[rowIndex + 2, 1].Value = matTable[rowIndex].Id.ToString();
+            worksheet.Cells[rowIndex + 2, 2].Value = matTable[rowIndex].Name;
+            worksheet.Cells[rowIndex + 2, 3].Value = matTable[rowIndex].Category.Name;
+            worksheet.Cells[rowIndex + 2, 4].Value = matTable[rowIndex].Category.MeasureUnit;
+            worksheet.Cells[rowIndex + 2, 5].Value = time.ToString(CultureInfo.CurrentCulture);
+            worksheet.Cells[rowIndex + 2, 5].Value = time.ToString(CultureInfo.CurrentCulture);
         }
+
+        File.WriteAllBytes(outPutPath, package.GetAsByteArray());
     }
 }
