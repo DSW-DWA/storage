@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -8,13 +9,13 @@ public class MaterialAccess : IAccess<Material>
 {
     readonly DataSet _dataSet;
     readonly CategoryAccess _categoryAccess;
+    public bool IsCascad { get; set; }
 
     public MaterialAccess(DataSet dataSet)
     {
         _dataSet = dataSet;
         _categoryAccess = new CategoryAccess(dataSet);
     }
-
     public void Save(Material material)
     {
         var newRow = _dataSet.Tables["Material"]?.NewRow();
@@ -38,17 +39,33 @@ public class MaterialAccess : IAccess<Material>
 
         foreach (DataRow row in dataRowCollection)
         {
-            long categoryId = (long)row["CategoryId"];
-            var category = _categoryAccess.GetById(categoryId);
-            if (category != null)
-            {
-                materials.Add(new Material((long)row["Id"], (string)row["Name"], category));
+            var categoryId = row["CategoryId"];
+            Category? category = null;
+
+            if (categoryId != DBNull.Value) {
+                category = _categoryAccess.GetById((long)categoryId);
             }
+
+            materials.Add(new Material((long)row["Id"], (string)row["Name"], category));
         }
 
         return materials;
     }
 
+    public void RemoveAllNull()
+    {
+        var dataRowCollection = _dataSet.Tables["Material"]?.Select();
+        if (dataRowCollection == null)
+            return;
+
+        foreach (DataRow row in dataRowCollection)
+        {
+            if (row["CategoryId"] == DBNull.Value)
+            {
+                _dataSet.Tables["Material"]?.Rows.Remove(row);
+            }
+        }
+    }
     public Material? GetById(long id)
     {
         var materialTable = _dataSet.Tables["Material"];
@@ -61,8 +78,15 @@ public class MaterialAccess : IAccess<Material>
             return null;
         }
 
-        var category = _categoryAccess.GetById((long)row["CategoryId"]);
-        return category == null ? null : new Material((long)row["Id"], (string)row["Name"], category);
+        var categoryId = row["CategoryId"];
+        Category? category = null;
+
+        if (categoryId != DBNull.Value)
+        {
+            category = _categoryAccess.GetById((long)categoryId);
+        }
+
+        return new Material((long)row["Id"], (string)row["Name"], category);
     }
 
     long GetNextId()
@@ -96,45 +120,81 @@ public class MaterialAccess : IAccess<Material>
             }*/
 
         var rowsMat = rows;
-
-        var rowsMatCons = new List<DataRow>();
-        var rowsMatRec = new List<DataRow>();
-
-        if (rowsMat != null)
+        if (IsCascad)
         {
-            foreach (var rowMat in rowsMat)
+            var rowsMatCons = new List<DataRow>();
+            var rowsMatRec = new List<DataRow>();
+
+            if (rowsMat != null)
             {
-                var range = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {rowMat["Id"]}");
-                if (range != null)
+                foreach (var rowMat in rowsMat)
                 {
-                    rowsMatCons.AddRange(range);
+                    var range = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        rowsMatCons.AddRange(range);
+                    }
+                }
+
+
+                foreach (var rowMat in rowsMat)
+                {
+                    var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        rowsMatRec.AddRange(range);
+                    }
+                }
+
+                foreach (var row in rowsMat)
+                {
+                    _dataSet.Tables["Material"]?.Rows.Remove(row);
                 }
             }
 
-
-            foreach (var rowMat in rowsMat)
+            foreach (var rowMatCon in rowsMatCons)
             {
-                var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {rowMat["Id"]}");
-                if (range != null)
+                _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
+            }
+
+            foreach (var rowMatRec in rowsMatRec)
+            {
+                _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
+            }
+        } else
+        {
+            if (rowsMat != null)
+            {
+                foreach (var rowMat in rowsMat)
                 {
-                    rowsMatRec.AddRange(range);
+                    var range = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        foreach (var ra in range)
+                        {
+                            ra["MaterialId"] = DBNull.Value;
+                        }
+                    }
+                }
+
+
+                foreach (var rowMat in rowsMat)
+                {
+                    var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        foreach (var ra in range)
+                        {
+                            ra["MaterialId"] = DBNull.Value;
+                        }
+                    }
+                }
+
+                foreach (var row in rowsMat)
+                {
+                    _dataSet.Tables["Material"]?.Rows.Remove(row);
                 }
             }
-
-            foreach (var row in rowsMat)
-            {
-                _dataSet.Tables["Material"]?.Rows.Remove(row);
-            }
-        }
-
-        foreach (var rowMatCon in rowsMatCons)
-        {
-            _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
-        }
-
-        foreach (var rowMatRec in rowsMatRec)
-        {
-            _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
         }
 
         DataAccess.SaveDataToXml(_dataSet);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -40,17 +41,44 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
             return materialReceipts;
         foreach (DataRow row in dataRowCollection)
         {
-            var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
-            var material = _materialAccess.GetById((long)row["MaterialId"]);
-            if (invoice != null && material != null)
+            /*var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
+            var material = _materialAccess.GetById((long)row["MaterialId"]);*/
+
+            var invoiceId = row["InvoiceId"];
+            var materialId = row["MaterialId"];
+            Invoice? invoice = null;
+            Material? material = null;
+
+            if (invoiceId != DBNull.Value)
             {
-                materialReceipts.Add(new MaterialReceipt((long)row["Id"], (long)row["Count"], invoice, material));
+                invoice = _invoiceAccess.GetById((long)invoiceId);
             }
+
+            if (materialId != DBNull.Value)
+            {
+                material = _materialAccess.GetById((long)materialId);
+            }
+
+            materialReceipts.Add(new MaterialReceipt((long)row["Id"], (long)row["Count"], invoice, material));
         }
 
         return materialReceipts;
     }
-    
+
+    public void RemoveAllNull()
+    {
+        var dataRowCollection = _dataSet.Tables["MaterialReceipt"]?.Select();
+        if (dataRowCollection == null)
+            return;
+
+        foreach (DataRow row in dataRowCollection)
+        {
+            if (row["MaterialId"] == DBNull.Value || row["InvoiceId"] == DBNull.Value)
+            {
+                _dataSet.Tables["MaterialReceipt"]?.Rows.Remove(row);
+            }
+        }
+    }
     public MaterialReceipt? GetById(long id)
     {
         var materialReceiptTable = _dataSet.Tables["MaterialReceipt"];
@@ -59,14 +87,25 @@ public class MaterialReceiptAccess : IAccess<MaterialReceipt>
             .FirstOrDefault(row => (long)row["Id"] == id);
         if (row == null) 
             return null;
-        
-        var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
-        var material = _materialAccess.GetById((long)row["MaterialId"]);
-        if (invoice != null && material != null)
+
+        /*var invoice = _invoiceAccess.GetById((long)row["InvoiceId"]);
+        var material = _materialAccess.GetById((long)row["MaterialId"]);*/
+        var invoiceId = row["InvoiceId"];
+        var materialId = row["MaterialId"];
+        Invoice? invoice = null;
+        Material? material = null;
+
+        if (invoiceId != DBNull.Value)
         {
-            return new MaterialReceipt((long)row["Id"], (long)row["Count"], invoice, material);
+            invoice = _invoiceAccess.GetById((long)invoiceId);
         }
-        return null;
+
+        if (materialId != DBNull.Value)
+        {
+            material = _materialAccess.GetById((long)materialId);
+        }
+
+        return new MaterialReceipt((long)row["Id"], (long)row["Count"], invoice, material);
     }
 
     long GetNextId()

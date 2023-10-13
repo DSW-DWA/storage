@@ -8,6 +8,7 @@ namespace storage.Data;
 public class InvoiceAccess : IAccess<Invoice>
 {
     readonly DataSet _dataSet;
+    public bool IsCascad { get; set; }
     public InvoiceAccess(DataSet dataSet)
     {
         _dataSet = dataSet;
@@ -79,44 +80,81 @@ public class InvoiceAccess : IAccess<Invoice>
 
         var rowsInv = rows;
 
-        var rowsMatCons = new List<DataRow>();
-        var rowsMatRec = new List<DataRow>();
-
-        if (rowsInv != null)
+        if (IsCascad)
         {
-            foreach (var rowMat in rowsInv)
+            var rowsMatCons = new List<DataRow>();
+            var rowsMatRec = new List<DataRow>();
+
+            if (rowsInv != null)
             {
-                var range = _dataSet.Tables["MaterialConsumption"]?.Select($"InvoiceId = {rowMat["Id"]}");
-                if (range != null)
+                foreach (var rowMat in rowsInv)
                 {
-                    rowsMatCons.AddRange(range);
+                    var range = _dataSet.Tables["MaterialConsumption"]?.Select($"InvoiceId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        rowsMatCons.AddRange(range);
+                    }
+                }
+
+
+                foreach (var rowMat in rowsInv)
+                {
+                    var range = _dataSet.Tables["MaterialReceipt"]?.Select($"InvoiceId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        rowsMatRec.AddRange(range);
+                    }
+                }
+
+                foreach (var row in rowsInv)
+                {
+                    _dataSet.Tables["Invoice"]?.Rows.Remove(row);
                 }
             }
 
-
-            foreach (var rowMat in rowsMatRec)
+            foreach (var rowMatCon in rowsMatCons)
             {
-                var range = _dataSet.Tables["MaterialReceipt"]?.Select($"InvoiceId = {rowMat["Id"]}");
-                if (range != null)
+                _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
+            }
+
+            foreach (var rowMatRec in rowsMatRec)
+            {
+                _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
+            }
+        } else
+        {
+            if (rowsInv != null)
+            {
+                foreach (var rowMat in rowsInv)
                 {
-                    rowsMatRec.AddRange(range);
+                    var range = _dataSet.Tables["MaterialConsumption"]?.Select($"InvoiceId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        foreach (var ra in range)
+                        {
+                            ra["InvoiceId"] = DBNull.Value;
+                        }
+                    }   
+                }
+
+
+                foreach (var rowMat in rowsInv)
+                {
+                    var range = _dataSet.Tables["MaterialReceipt"]?.Select($"InvoiceId = {rowMat["Id"]}");
+                    if (range != null)
+                    {
+                        foreach (var ra in range)
+                        {
+                            ra["InvoiceId"] = DBNull.Value;
+                        }
+                    }
+                }
+
+                foreach (var row in rowsInv)
+                {
+                    _dataSet.Tables["Invoice"]?.Rows.Remove(row);
                 }
             }
-
-            foreach (var row in rowsInv)
-            {
-                _dataSet.Tables["Invoice"]?.Rows.Remove(row);
-            }
-        }
-
-        foreach (var rowMatCon in rowsMatCons)
-        {
-            _dataSet.Tables["MaterialConsumption"]?.Rows.Remove(rowMatCon);
-        }
-
-        foreach (var rowMatRec in rowsMatRec)
-        {
-            _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
         }
 
         DataAccess.SaveDataToXml(_dataSet);

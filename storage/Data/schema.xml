@@ -8,8 +8,8 @@
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element name="Id" type="xs:integer"/>
-							<xs:element name="Name" type="xs:string"/>
-							<xs:element name="MeasureUnit" type="xs:string"/>
+							<xs:element name="Name" type="xs:string" nillable="true"/>
+							<xs:element name="MeasureUnit" type="xs:string" nillable="true"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -20,8 +20,8 @@
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element name="Id" type="xs:integer"/>
-							<xs:element name="Name" type="xs:string"/>
-							<xs:element name="CategoryId" type="xs:integer"/>
+							<xs:element name="Name" type="xs:string" nillable="true"/>
+							<xs:element name="CategoryId" type="xs:integer" nillable="true"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -31,7 +31,7 @@
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element name="Id" type="xs:integer"/>
-							<xs:element name="CreatedAt" type="xs:dateTime"/>
+							<xs:element name="CreatedAt" type="xs:dateTime" nillable="true"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -41,9 +41,9 @@
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element name="Id" type="xs:integer"/>
-							<xs:element name="Count" type="xs:integer"/>
-							<xs:element name="InvoiceId" type="xs:integer"/>
-							<xs:element name="MaterialId" type="xs:integer"/>
+							<xs:element name="Count" type="xs:integer" nillable="true"/>
+							<xs:element name="InvoiceId" type="xs:integer" nillable="true"/>
+							<xs:element name="MaterialId" type="xs:integer" nillable="true"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -53,9 +53,9 @@
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element name="Id" type="xs:integer"/>
-							<xs:element name="Count" type="xs:integer"/>
-							<xs:element name="InvoiceId" type="xs:integer"/>
-							<xs:element name="MaterialId" type="xs:integer"/>
+							<xs:element name="Count" type="xs:integer" nillable="true"/>
+							<xs:element name="InvoiceId" type="xs:integer" nillable="true"/>
+							<xs:element name="MaterialId" type="xs:integer" nillable="true"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>

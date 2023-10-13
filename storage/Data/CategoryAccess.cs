@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -11,14 +12,12 @@ namespace storage.Data;
 public class CategoryAccess : IAccess<Category>
 {
     readonly DataSet _dataSet;
+    public bool IsCascad { get; set; }
     public CategoryAccess(DataSet dataSet)
     {
         _dataSet = dataSet;
     }
-    public bool IsCascad()
-    {
-        return true;
-    }
+
     public void Save(Category element)
     {
         var newRow = _dataSet.Tables["Category"]?.NewRow();
@@ -85,7 +84,7 @@ public class CategoryAccess : IAccess<Category>
                 _dataSet.Tables["Category"]?.Rows.Remove(row);
             }
 
-        if (IsCascad())
+        if (IsCascad)
         {
             var rowsMat = _dataSet.Tables["Material"]?.Select($"CategoryId = {categoryId}");
 
@@ -136,7 +135,7 @@ public class CategoryAccess : IAccess<Category>
             {
                 foreach (var row in rowsMat)
                 {
-                    row["CategoryId"] = null;
+                    row["CategoryId"] = DBNull.Value;
                 }
             }
         }

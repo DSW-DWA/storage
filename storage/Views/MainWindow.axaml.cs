@@ -10,20 +10,20 @@ using MsBox.Avalonia;
 using storage.Data;
 using storage.Models;
 using storage.ViewModels;
+using System.Threading;
 
 namespace storage.Views;
 
 public partial class MainWindow : Window
 {
     readonly MainViewModel _model;
-
+    private bool _askCascad = true;
     public MainWindow()
     {
         InitializeComponent();
         _model = new MainViewModel();
         DataContext = _model;
     }
-
     void UpdateAllGrids()
     {
         CategoryGrid.ItemsSource = _model.Categories;
@@ -35,6 +35,26 @@ public partial class MainWindow : Window
 
     async void DeleteElementClick(object sender, RoutedEventArgs e)
     {
+        if (_askCascad)
+        {
+            var box1 = MessageBoxManager
+            .GetMessageBoxStandard("Внимание", "Выключить каскадное удланение?",
+                ButtonEnum.YesNo);
+
+            var result1 = await box1.ShowAsync();
+
+            if (result1 == ButtonResult.Yes)
+            {
+                _model.SetCascad(false);
+            }
+            else
+            {
+                _model.SetCascad(true);
+            }
+
+            _askCascad = false;
+        }
+
         var btn = (Button)sender;
 
         var box = MessageBoxManager

@@ -75,7 +75,19 @@ public class MainViewModel : ReactiveObject
         ReportGenerateDateAt = new DateTimeOffset(DateTime.Now);
         ReportGenerateTimeAt = DateTime.Now.TimeOfDay;
     }
+    public void SetCascad(bool res)
+    {
+        CategoryAccess.IsCascad = res;
+        InvoiceAccess.IsCascad = res;
+        MaterialAccess.IsCascad = res;
 
+        if (res)
+        {
+            MaterialAccess.RemoveAllNull();
+            MaterialConsumptionAccess.RemoveAllNull();
+            MaterialReceiptAccess.RemoveAllNull();
+        }
+    }
     public void ExportToWord(DateTimeOffset reportGenerateDateAt, TimeSpan reportGenerateTimeAt)
     {
         var outputpath = @"./report.docx";
