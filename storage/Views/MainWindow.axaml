@@ -163,6 +163,14 @@
                     </StackPanel>
                 </StackPanel>
             </TabItem>
+            
+            <TabItem Header="Прочее">
+                <StackPanel>
+                    <StackPanel Margin="20,5,20,0">
+                        <Button Content="Сохранить текущие данные" Click="SaveSchemaClick" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
         </TabControl>
     </StackPanel>
 </Window>
