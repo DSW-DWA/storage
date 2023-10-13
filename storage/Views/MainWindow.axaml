@@ -7,7 +7,6 @@
         x:Class="storage.Views.MainWindow"
         x:DataType="vm:MainViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        CanResize="False"
         Title="Управление складом"
         WindowStartupLocation="CenterScreen">
     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">

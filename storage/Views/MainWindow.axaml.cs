@@ -38,7 +38,7 @@ public partial class MainWindow : Window
         if (_askCascad)
         {
             var box1 = MessageBoxManager
-            .GetMessageBoxStandard("Внимание", "Выключить каскадное удланение?",
+            .GetMessageBoxStandard("Внимание", "Удалить не используя каскадное удаление?",
                 ButtonEnum.YesNo);
 
             var result1 = await box1.ShowAsync();
