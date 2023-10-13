@@ -164,7 +164,7 @@ public partial class MainView : UserControl
 
         await Task.Run(() =>
         {
-            _model.ExportToExcel();
+            /*_model.ExportToExcel();*/
         });
 
         excelButton.IsEnabled = true;
@@ -177,7 +177,7 @@ public partial class MainView : UserControl
 
         await Task.Run(() =>
         {
-            _model.ExportToWord();
+            /*_model.ExportToWord();*/
         });
 
         wordButton.IsEnabled = true;

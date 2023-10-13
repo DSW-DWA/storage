@@ -83,10 +83,17 @@ public partial class MainWindow : Window
         var excelButton = (Button)sender!;
         excelButton.IsEnabled = false;
 
-        await Task.Run(() =>
+
+        var date = ReportDate.SelectedDate;
+        var time = ReportTime.SelectedTime;
+
+        if (date != null && time != null)
         {
-            _model.ExportToExcel();
-        });
+            await Task.Run(() =>
+            {
+                _model.ExportToExcel((DateTimeOffset)date, (TimeSpan)time);
+            });
+        }
 
         excelButton.IsEnabled = true;
     }
@@ -95,10 +102,16 @@ public partial class MainWindow : Window
         var wordButton = (Button)sender!;
         wordButton.IsEnabled = false;
 
-        await Task.Run(() =>
+        var date = ReportDate.SelectedDate;
+        var time = ReportTime.SelectedTime;
+
+        if (date != null && time != null)
         {
-            _model.ExportToWord();
-        });
+            await Task.Run(() =>
+            {
+                _model.ExportToWord((DateTimeOffset)date, (TimeSpan)time);
+            });
+        }
 
         wordButton.IsEnabled = true;
     }

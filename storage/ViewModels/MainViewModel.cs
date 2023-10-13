@@ -58,8 +58,8 @@ public class MainViewModel : ReactiveObject
         }
     }
     
-    DateTimeOffset ReportGenerateDateAt { get; set; }
-    TimeSpan ReportGenerateTimeAt { get; set; }
+    public DateTimeOffset ReportGenerateDateAt { get; set; }
+    public TimeSpan ReportGenerateTimeAt { get; set; }
     
     static readonly DataAccess DataAccess = new DataAccess();
     public readonly CategoryAccess CategoryAccess = new CategoryAccess(DataAccess.GetDataSet());
@@ -70,12 +70,12 @@ public class MainViewModel : ReactiveObject
 
     public MainViewModel()
     {
-        var lastDateTime = InvoiceAccess.GetAll().OrderBy(x => x.CreatedAt).Select(x => x.CreatedAt).FirstOrDefault();
-        ReportGenerateDateAt = new DateTimeOffset(lastDateTime);
-        ReportGenerateTimeAt = lastDateTime.TimeOfDay;
+       // var lastDateTime = InvoiceAccess.GetAll().OrderBy(x => x.CreatedAt).Select(x => x.CreatedAt).FirstOrDefault();
+        ReportGenerateDateAt = new DateTimeOffset(DateTime.Now);
+        ReportGenerateTimeAt = DateTime.Now.TimeOfDay;
     }
 
-    public void ExportToWord()
+    public void ExportToWord(DateTimeOffset reportGenerateDateAt, TimeSpan reportGenerateTimeAt)
     {
         var outputpath = @"./report.docx";
         using (var doc = DocX.Create(outputpath))
@@ -96,8 +96,8 @@ public class MainViewModel : ReactiveObject
             {
                 var time = RecTable
                     .Where(x => x.Material.Id == MatTable[rowIndex].Id &&
-                        x.Invoice.CreatedAt.Date >= ReportGenerateDateAt.Date && // Filter by date
-                        x.Invoice.CreatedAt.TimeOfDay >= ReportGenerateTimeAt)
+                        x.Invoice.CreatedAt.Date >= reportGenerateDateAt.Date && // Filter by date
+                        x.Invoice.CreatedAt.TimeOfDay >= reportGenerateTimeAt)
                     .OrderBy(x => x.Invoice.CreatedAt)
                     .Select(x => x.Invoice.CreatedAt)
                     .FirstOrDefault();
@@ -119,7 +119,7 @@ public class MainViewModel : ReactiveObject
         }
     }
 
-    public void ExportToExcel()
+    public void ExportToExcel(DateTimeOffset reportGenerateDateAt, TimeSpan reportGenerateTimeAt)
     {
         var outputPath = @"./report.xlsx";
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -139,8 +139,8 @@ public class MainViewModel : ReactiveObject
             {
                 var time = RecTable
                     .Where(x => x.Material.Id == MatTable[rowIndex].Id &&
-                        x.Invoice.CreatedAt.Date >= ReportGenerateDateAt.Date && // Filter by date
-                        x.Invoice.CreatedAt.TimeOfDay >= ReportGenerateTimeAt)
+                        x.Invoice.CreatedAt.Date >= reportGenerateDateAt.Date && // Filter by date
+                        x.Invoice.CreatedAt.TimeOfDay >= reportGenerateTimeAt)
                     .OrderBy(x => x.Invoice.CreatedAt)
                     .Select(x => x.Invoice.CreatedAt)
                     .FirstOrDefault();
