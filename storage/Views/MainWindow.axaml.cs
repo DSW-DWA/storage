@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -226,5 +227,12 @@ public partial class MainWindow : Window
         var editWindow = new MaterialReceiptEditWindow(availableInvoices, availableMaterials, _model);
         await editWindow.ShowDialog(this);
         UpdateAllGrids();
+    }
+    async void SaveSchemaClick(object? sender, RoutedEventArgs e)
+    {
+        string filename = "./Data/saved_data_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".xml";
+        _model.DataSet.WriteXml(filename);
+        string path = Path.GetFullPath(filename);
+        await MessageBoxManager.GetMessageBoxStandard("Внимание", "Data saved to " + path + "").ShowAsync();
     }
 }

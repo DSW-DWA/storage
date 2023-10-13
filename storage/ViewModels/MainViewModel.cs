@@ -61,7 +61,8 @@ public class MainViewModel : ReactiveObject
     DateTimeOffset ReportGenerateDateAt { get; set; }
     TimeSpan ReportGenerateTimeAt { get; set; }
     
-    static readonly DataAccess DataAccess = new DataAccess();
+    public static readonly DataAccess DataAccess = new DataAccess();
+    public readonly DataSet DataSet = DataAccess.GetDataSet();
     public readonly CategoryAccess CategoryAccess = new CategoryAccess(DataAccess.GetDataSet());
     public readonly MaterialAccess MaterialAccess = new MaterialAccess(DataAccess.GetDataSet());
     public readonly InvoiceAccess InvoiceAccess = new InvoiceAccess(DataAccess.GetDataSet());
