@@ -10,10 +10,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)"/>
+        <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.12" />
+        <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\storage\storage.csproj"/>
+        <ProjectReference Include="..\storage\storage.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="storage.db">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 </Project>

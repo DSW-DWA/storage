@@ -9,11 +9,11 @@ public class DataAccess
 
     readonly DataSet _dataSet;
 
-    public DataAccess()
+    public DataAccess(DataSet ds)
     {
-        _dataSet = new DataSet();
-        _dataSet.ReadXmlSchema(DataSchemaPath);
-        _dataSet.ReadXml(DataPath);
+        _dataSet = ds;
+        /*_dataSet.ReadXmlSchema(DataSchemaPath);
+        _dataSet.ReadXml(DataPath);*/
     }
 
     public DataSet GetDataSet()

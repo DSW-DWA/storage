@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -62,19 +63,53 @@ public class MainViewModel : ReactiveObject
     public DateTimeOffset ReportGenerateDateAt { get; set; }
     public TimeSpan ReportGenerateTimeAt { get; set; }
     
-    public static readonly DataAccess DataAccess = new DataAccess();
-    public readonly DataSet DataSet = DataAccess.GetDataSet();
-    public readonly CategoryAccess CategoryAccess = new CategoryAccess(DataAccess.GetDataSet());
-    public readonly MaterialAccess MaterialAccess = new MaterialAccess(DataAccess.GetDataSet());
-    public readonly InvoiceAccess InvoiceAccess = new InvoiceAccess(DataAccess.GetDataSet());
-    public readonly MaterialConsumptionAccess MaterialConsumptionAccess = new MaterialConsumptionAccess(DataAccess.GetDataSet());
-    public readonly MaterialReceiptAccess MaterialReceiptAccess = new MaterialReceiptAccess(DataAccess.GetDataSet());
-
+    public readonly DataAccess DataAccess;
+    public readonly DataSet DataSet;
+    public readonly CategoryAccess CategoryAccess;
+    public readonly MaterialAccess MaterialAccess;
+    public readonly InvoiceAccess InvoiceAccess;
+    public readonly MaterialConsumptionAccess MaterialConsumptionAccess;
+    public readonly MaterialReceiptAccess MaterialReceiptAccess;
     public MainViewModel()
     {
        // var lastDateTime = InvoiceAccess.GetAll().OrderBy(x => x.CreatedAt).Select(x => x.CreatedAt).FirstOrDefault();
         ReportGenerateDateAt = new DateTimeOffset(DateTime.Now);
         ReportGenerateTimeAt = DateTime.Now.TimeOfDay;
+
+        DataAccess = new DataAccess(GetDataSet());
+        DataSet = DataAccess.GetDataSet();
+        CategoryAccess = new CategoryAccess(DataAccess.GetDataSet());
+        MaterialAccess = new MaterialAccess(DataAccess.GetDataSet());
+        InvoiceAccess = new InvoiceAccess(DataAccess.GetDataSet());
+        MaterialConsumptionAccess = new MaterialConsumptionAccess(DataAccess.GetDataSet());
+        MaterialReceiptAccess = new MaterialReceiptAccess(DataAccess.GetDataSet());
+    }
+    public DataSet GetDataSet()
+    {
+        var ds = new DataSet();
+
+        var connectionString = "Data Source=storage.db;Foreign Keys=True;Mode=ReadWrite";
+        using (var connection = new SQLiteConnection(connectionString))
+        {
+            connection.Open();
+
+            var adapter = new SQLiteDataAdapter("SELECT * FROM Material", connection);
+            adapter.Fill(ds, "Material");
+
+            adapter = new SQLiteDataAdapter("SELECT * FROM Category", connection);
+            adapter.Fill(ds, "Category");
+
+            adapter = new SQLiteDataAdapter("SELECT * FROM Invoice", connection);
+            adapter.Fill(ds, "Invoice");
+
+            adapter = new SQLiteDataAdapter("SELECT * FROM MaterialConsumption", connection);
+            adapter.Fill(ds, "MaterialConsumption");
+
+            adapter = new SQLiteDataAdapter("SELECT * FROM MaterialReceipt", connection);
+            adapter.Fill(ds, "MaterialReceipt");
+        }
+
+        return ds;
     }
     public void SetCascad(bool res)
     {

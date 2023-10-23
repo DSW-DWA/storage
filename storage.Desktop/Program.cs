@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls.Shapes;
 using Avalonia.ReactiveUI;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
