@@ -11,6 +11,8 @@ using storage.Data;
 using storage.Models;
 using storage.ViewModels;
 using System.Threading;
+using Avalonia.Controls.Shapes;
+using Path = System.IO.Path;
 
 namespace storage.Views;
 
@@ -263,9 +265,9 @@ public partial class MainWindow : Window
     }
     async void SaveSchemaClick(object? sender, RoutedEventArgs e)
     {
-        string filename = "./Data/saved_data_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".xml";
-        _model.DataSet.WriteXml(filename);
+        string filename = "./Data/saved_data_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".db";
         string path = Path.GetFullPath(filename);
+        File.Copy("storage.db", filename, true);
         await MessageBoxManager.GetMessageBoxStandard("Внимание", "Data saved to " + path + "").ShowAsync();
     }
 }

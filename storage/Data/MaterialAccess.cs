@@ -58,10 +58,31 @@ public class MaterialAccess : IAccess<Material>
         if (dataRowCollection == null)
             return;
 
+        var rowsMatCons = new List<DataRow>();
+        var rowsMatRec = new List<DataRow>();
+
         foreach (DataRow row in dataRowCollection)
         {
+
             if (row["CategoryId"] == DBNull.Value)
             {
+                var range1 = _dataSet.Tables["MaterialConsumption"]?.Select($"MaterialId = {row["Id"]}");
+                if (range1 != null)
+                {
+                    foreach (var ra in range1)
+                    {
+                        ra["MaterialId"] = DBNull.Value;
+                    }
+                }
+                var range = _dataSet.Tables["MaterialReceipt"]?.Select($"MaterialId = {row["Id"]}");
+                if (range != null)
+                {
+                    foreach (var ra in range)
+                    {
+                        ra["MaterialId"] = DBNull.Value;
+                    }
+                }
+
                 _dataSet.Tables["Material"]?.Rows.Remove(row);
             }
         }
