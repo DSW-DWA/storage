@@ -21,7 +21,7 @@
 
     <ItemGroup>
       <None Update="storage.db">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 </Project>

@@ -125,7 +125,7 @@ public class CategoryAccess : IAccess<Category>
 
             foreach (var rowMatRec in rowsMatRec)
             {
-                _dataSet.Tables["MateriallReceipt"]?.Rows.Remove(rowMatRec);
+                _dataSet.Tables["MaterialReceipt"]?.Rows.Remove(rowMatRec);
             }
         } else
         {

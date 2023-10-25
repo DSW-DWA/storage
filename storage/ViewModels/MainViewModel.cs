@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Animation.Easings;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -83,9 +84,11 @@ public class MainViewModel : ReactiveObject
         InvoiceAccess = new InvoiceAccess(DataAccess.GetDataSet());
         MaterialConsumptionAccess = new MaterialConsumptionAccess(DataAccess.GetDataSet());
         MaterialReceiptAccess = new MaterialReceiptAccess(DataAccess.GetDataSet());
+
     }
     public DataSet GetDataSet()
     {
+
         var ds = new DataSet();
 
         var connectionString = "Data Source=storage.db;Foreign Keys=True;Mode=ReadWrite";
@@ -122,6 +125,88 @@ public class MainViewModel : ReactiveObject
             MaterialAccess.RemoveAllNull();
             MaterialConsumptionAccess.RemoveAllNull();
             MaterialReceiptAccess.RemoveAllNull();
+
+            var connectionString = "Data Source=storage.db;Foreign Keys=False;Mode=ReadWrite";
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                var cmd = new SQLiteCommand(connection);
+
+                cmd.CommandText = "CREATE TABLE IF NOT EXISTS Material_temp (\r\n    Id INTEGER PRIMARY KEY,\r\n    Name TEXT,\r\n    CategoryId INTEGER,\r\n    CONSTRAINT fk_material\r\n    \tFOREIGN KEY (CategoryId) \r\n    \tREFERENCES Category(Id)\r\n    \tON DELETE CASCADE\r\n);\r\n\r\n\r\n\r\n\r\n";
+
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "INSERT OR IGNORE INTO Material_temp (Id, Name, CategoryId)\r\nSELECT Id, Name, CategoryId \r\nFROM Material;\r\n\r\nDROP TABLE Material;";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "ALTER TABLE Material_temp RENAME TO Material;";
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                var cmd = new SQLiteCommand(connection);
+
+                cmd.CommandText = "CREATE TABLE IF NOT EXISTS MaterialConsumption_temp (\r\n    Id INTEGER PRIMARY KEY,\r\n    Count INTEGER,\r\n    InvoiceId INTEGER,\r\n    MaterialId INTEGER,\r\n    CONSTRAINT fk_MaterialConsumprion_Invoice\r\n    \tFOREIGN KEY (InvoiceId) \r\n    \tREFERENCES Invoice(Id)\r\n    \tON DELETE CASCADE\r\n\tCONSTRAINT fk_MaterialConsumprion_Material\r\n    \tFOREIGN KEY (MaterialId) \r\n    \tREFERENCES Material(Id)\r\n    \tON DELETE CASCADE\r\n);\r\n\r\n\r\nINSERT INTO MaterialConsumption_temp (Id, Count, InvoiceId, MaterialId)\r\nSELECT Id, Count, InvoiceId, MaterialId\r\nFROM MaterialConsumption;\r\n\r\nDROP TABLE MaterialConsumption;\r\n\r\nALTER TABLE MaterialConsumption_temp RENAME TO MaterialConsumption;";
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                var cmd = new SQLiteCommand(connection);
+
+                cmd.CommandText = "CREATE TABLE IF NOT EXISTS MaterialReceipt_temp (\r\n    Id INTEGER PRIMARY KEY,\r\n    Count INTEGER,\r\n    InvoiceId INTEGER,\r\n    MaterialId INTEGER,\r\n    CONSTRAINT fk_MaterialReceipt_Invoice\r\n    \tFOREIGN KEY (InvoiceId) \r\n    \tREFERENCES Invoice(Id)\r\n    \tON DELETE CASCADE\r\n\tCONSTRAINT fk_MaterialReceipt_Material\r\n    \tFOREIGN KEY (MaterialId) \r\n    \tREFERENCES Material(Id)\r\n    \tON DELETE CASCADE\r\n);\r\n\r\n\r\nINSERT INTO MaterialReceipt_temp (Id, Count, InvoiceId, MaterialId)\r\nSELECT Id, Count, InvoiceId, MaterialId\r\nFROM MaterialReceipt;\r\n\r\nDROP TABLE MaterialReceipt;\r\n\r\nALTER TABLE MaterialReceipt_temp RENAME TO MaterialReceipt;";
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
+        } else
+        {
+            var connectionString = "Data Source=storage.db;Foreign Keys=True;Mode=ReadWrite";
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                var cmd = new SQLiteCommand(connection);
+
+                cmd.CommandText = "CREATE TABLE IF NOT EXISTS Material_temp (\r\n    Id INTEGER PRIMARY KEY,\r\n    Name TEXT,\r\n    CategoryId INTEGER,\r\n    CONSTRAINT fk_material\r\n    \tFOREIGN KEY (CategoryId) \r\n    \tREFERENCES Category(Id)\r\n    \r\n);\r\n\r\n\r\nINSERT INTO Material_temp (Id, Name, CategoryId)\r\nSELECT Id, Name, CategoryId \r\nFROM Material;\r\n\r\nDROP TABLE Material;\r\n\r\nALTER TABLE Material_temp RENAME TO Material;";
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                var cmd = new SQLiteCommand(connection);
+
+                cmd.CommandText = "CREATE TABLE IF NOT EXISTS MaterialConsumption_temp (\r\n    Id INTEGER PRIMARY KEY,\r\n    Count INTEGER,\r\n    InvoiceId INTEGER,\r\n    MaterialId INTEGER,\r\n    CONSTRAINT fk_MaterialConsumprion_Invoice\r\n    \tFOREIGN KEY (InvoiceId) \r\n    \tREFERENCES Invoice(Id)\r\n    \r\n\tCONSTRAINT fk_MaterialConsumprion_Material\r\n    \tFOREIGN KEY (MaterialId) \r\n    \tREFERENCES Material(Id)\r\n    \r\n);\r\n\r\n\r\nINSERT INTO MaterialConsumption_temp (Id, Count, InvoiceId, MaterialId)\r\nSELECT Id, Count, InvoiceId, MaterialId\r\nFROM MaterialConsumption;\r\n\r\nDROP TABLE MaterialConsumption;\r\n\r\nALTER TABLE MaterialConsumption_temp RENAME TO MaterialConsumption;";
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                var cmd = new SQLiteCommand(connection);
+
+                cmd.CommandText = "CREATE TABLE IF NOT EXISTS MaterialReceipt_temp (\r\n    Id INTEGER PRIMARY KEY,\r\n    Count INTEGER,\r\n    InvoiceId INTEGER,\r\n    MaterialId INTEGER,\r\n    CONSTRAINT fk_MaterialReceipt_Invoice\r\n    \tFOREIGN KEY (InvoiceId) \r\n    \tREFERENCES Invoice(Id)\r\n    \r\n\tCONSTRAINT fk_MaterialReceipt_Material\r\n    \tFOREIGN KEY (MaterialId) \r\n    \tREFERENCES Material(Id)\r\n    \r\n);\r\n\r\n\r\nINSERT INTO MaterialReceipt_temp (Id, Count, InvoiceId, MaterialId)\r\nSELECT Id, Count, InvoiceId, MaterialId\r\nFROM MaterialReceipt;\r\n\r\nDROP TABLE MaterialReceipt;\r\n\r\nALTER TABLE MaterialReceipt_temp RENAME TO MaterialReceipt;";
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
         }
     }
     public void ExportToWord(DateTimeOffset reportGenerateDateAt, TimeSpan reportGenerateTimeAt)
